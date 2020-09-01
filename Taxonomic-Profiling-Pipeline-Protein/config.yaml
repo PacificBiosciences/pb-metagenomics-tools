@@ -1,0 +1,11 @@
+diamond:
+  db: "/pbi/dept/appslab/datasets/dp_databases/diamond_nr_db.dmnd"
+  block_size: "12"
+  threads: 24
+  
+sam2rma:
+  path: "/home/dportik/programs/megan/tools/sam2rma"
+  db: "/home/dportik/programs/megan/db/megan-map-Jul2020.db"
+  threads: 24
+  readassignmentmode: "readCount"
+  # possible values = readCount, readLength, alignedBases, readMagnitude

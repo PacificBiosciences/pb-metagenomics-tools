@@ -1,0 +1,115 @@
+# must load anaconda, snakemake, exonerate, minimap, jdk, graphviz
+# typically executed using:
+# snakemake --snakefile minimap-snake --cluster "qsub -q sequel-farm -pe smp {threads} 
+# -V -cwd -S /bin/bash -o HPC_logs/ -e HPC_logs/" -j 15 --jobname "{rule}.{wildcards}.{jobid}" 
+# --configfile configs/SOMETHING.yaml --latency-wait 60 --use-conda
+
+localrules: SplitFasta, MergeSam
+
+configfile: "config.yaml"
+
+import os
+SAMPLES = config['samplenames']
+
+rule all:
+    input:
+        expand("6-rma/{sample}.nucleotide.{mode}.rma", sample = SAMPLES, mode = config['sam2rma']['readassignmentmode'])
+
+rule SortFasta:
+    input:
+        "samples/{sample}.fasta"
+    output:
+        "1-fasta-sort/{sample}.sorted.fasta"
+    conda:
+        "envs/general.yml"
+    threads: 4
+    log: 
+        "logs/{sample}.SortFasta.log"
+    benchmark: 
+        "benchmarks/{sample}.SortFasta.tsv"
+    shell:
+        "python scripts/Sort-Fasta-Records-BioPython.py -f {input} -o {output} -l {log}"
+
+rule SplitFasta:
+    input: 
+        "1-fasta-sort/{sample}.sorted.fasta"
+    output: 
+        temp(expand("2-chunks/{{sample}}.sorted.fasta_chunk_000000{piece}", piece = ["0", "1"]))
+    conda:
+        "envs/general.yml"
+    threads: 1
+    benchmark: 
+        "benchmarks/{sample}.SplitFasta.tsv"
+    shell:
+        "fastasplit -c 2 -f {input} -o 2-chunks/"
+
+rule RunMinimap:
+    input:
+        "2-chunks/{sample}.sorted.fasta_chunk_000000{piece}"
+    output:
+        temp("3-minimap/{sample}.{piece}.sam")
+    conda:
+        "envs/general.yml"
+    threads: config['minimap']['threads']
+    params:
+        db = config['minimap']['db']
+    log: 
+        "logs/{sample}.{piece}.RunMinimap.log"
+    benchmark: 
+        "benchmarks/{sample}.{piece}.RunMinimap.tsv"
+    shell:
+        "minimap2 -a -k 19 -w 10 -I 10G -g 5000 -r 2000 -N 100 --lj-min-ratio 0.5 "
+        "-A 2 -B 5 -O 5,56 -E 4,1 -z 400,50 --sam-hit-only -t {threads} "
+        "{params.db} {input} 1> {output} 2> {log}"
+        
+rule SortSam:
+    input:
+        "3-minimap/{sample}.{piece}.sam"
+    output:
+        temp("4-sorted/{sample}.{piece}.sorted.sam")
+    conda:
+        "envs/general.yml"
+    threads: 8
+    log:
+        "logs/{sample}.{piece}.SortSam.log"
+    benchmark: 
+        "benchmarks/{sample}.{piece}.SortSam.tsv"
+    shell:
+        "sort -T /scratch --parallel=8 -V -k1,1 {input} 1> {output} 2> {log}"
+
+rule MergeSam:
+    input:
+        expand("4-sorted/{{sample}}.{piece}.sorted.sam", piece = ["0", "1"])
+    output:
+        "5-merged/{sample}.merged.sam"
+    conda:
+        "envs/general.yml"
+    threads: 1
+    log: 
+        "logs/{sample}.MergeSam.log"
+    benchmark: 
+        "benchmarks/{sample}.MergeSam.tsv"
+    shell:
+        "python scripts/sam-merger-minimap.py -i {input} -o {output} -l {log}"
+
+rule MakeRMA:
+    input:
+        sam = "5-merged/{sample}.merged.sam",
+        reads = "1-fasta-sort/{sample}.sorted.fasta"
+    output:
+        expand("6-rma/{{sample}}.nucleotide.{mode}.rma", mode = config['sam2rma']['readassignmentmode'])
+    conda:
+        "envs/general.yml"
+    threads: config['sam2rma']['threads']
+    params:
+        sam2rma = config['sam2rma']['path'],
+        db = config['sam2rma']['db'],
+        ram = config['sam2rma']['readassignmentmode']
+    log: 
+        f"logs/{sample}.MakeRMA.{config['sam2rma']['readassignmentmode']}.log"
+    benchmark: 
+        f"benchmarks/{sample}.MakeRMA.{config['sam2rma']['readassignmentmode']}.tsv"
+    shell:
+        "{params.sam2rma} -i {input.sam} -r {input.reads} -o {output} -lg -alg longReads "
+        "-t {threads} -mdb {params.db} -ram {params.ram} -v 2> {log}"
+

@@ -1,0 +1,16 @@
+minimap:
+  threads: 24
+metabat:
+  threads: 12
+checkm:
+  threads: 24
+  pplacer_threads: 12
+  datapath: "/dept/appslab/datasets/dp_checkm/"
+gtdbtk:
+  min_completeness: 70
+  max_contamination: 10
+  max_contigs: 10
+  threads: 32
+  pplacer_threads: 24
+  gtdbtk_data: "/dept/appslab/datasets/dp_gtdb/release95/"
+  gtdb_full_label: "All"

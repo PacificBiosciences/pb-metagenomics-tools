@@ -1,0 +1,8 @@
+name: general_env
+channels:
+- bioconda
+- conda-forge
+- defaults
+dependencies:
+- exonerate == 2.4.0
+- diamond == 2.0.4

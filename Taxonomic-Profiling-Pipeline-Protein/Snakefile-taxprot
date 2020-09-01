@@ -1,0 +1,79 @@
+configfile: "config.yaml"
+
+import os
+SAMPLES = config['samplenames']
+
+rule all:
+    input:
+        expand("4-rma/{sample}.protein.{mode}.rma", sample = SAMPLES, mode = config['sam2rma']['readassignmentmode'])
+
+rule SplitFasta:
+    input: 
+        "samples/{sample}.fasta"
+    output: 
+        temp(expand("1-chunks/{{sample}}.fasta_chunk_000000{piece}", piece = ["0", "1", "2", "3"]))
+    conda:
+        "envs/general.yml"
+    threads: 2
+    benchmark: 
+        "benchmarks/{sample}.SplitFasta.tsv"
+    run:
+        if not os.path.exists("1-chunks"):
+            os.mkdir("1-chunks")
+        shell("fastasplit -c 4 -f {input} -o 1-chunks/")
+
+rule RunDiamond:
+    input:
+        "1-chunks/{sample}.fasta_chunk_000000{piece}"
+    output:
+        temp("2-diamond/{sample}.{piece}.sam")
+    conda:
+        "envs/general.yml"
+    threads: config['diamond']['threads']
+    params:
+        db = config['diamond']['db'],
+        block = config['diamond']['block_size']
+    log: 
+        "logs/{sample}.{piece}.RunDiamond.log"
+    benchmark: 
+        "benchmarks/{sample}.{piece}.RunDiamond.tsv"
+    shell:
+        "diamond blastx -d {params.db} -q {input} -o {output} -f 101 -F 5000 "
+        "--range-culling --top 5 -b {params.block} -p {threads} 2> {log}"
+
+rule MergeSam:
+    input:
+        expand("2-diamond/{{sample}}.{piece}.sam", piece = ["0", "1", "2", "3"])
+    output:
+        "3-merged/{sample}.merged.sam"
+    conda:
+        "envs/general.yml"
+    threads: 1
+    log: 
+        "logs/{sample}.MergeSam.log"
+    benchmark: 
+        "benchmarks/{sample}.MergeSam.tsv"
+    shell:
+        "python scripts/sam-merger-screen-cigar.py -i {input} -o {output} -l {log}"
+        
+rule MakeRMA:
+    input:
+        sam = "3-merged/{sample}.merged.sam",
+        reads = "samples/{sample}.fasta"
+    output:
+        expand("4-rma/{{sample}}.protein.{mode}.rma", mode = config['sam2rma']['readassignmentmode'])
+    conda:
+        "envs/general.yml"
+    threads: config['sam2rma']['threads']
+    params:
+        sam2rma = config['sam2rma']['path'],
+        db = config['sam2rma']['db']
+        ram = config['sam2rma']['readassignmentmode']
+    log: 
+        f"logs/{sample}.MakeRMA.{config['sam2rma']['readassignmentmode']}.log"
+    benchmark: 
+        f"benchmarks/{sample}.MakeRMA.{config['sam2rma']['readassignmentmode']}.tsv"
+    shell:
+        "{params.sam2rma} -i {input.sam} -r {input.reads} -o {output} -lg -alg longReads "
+        "-t {threads} -mdb {params.db} -ram {params.ram} -v 2> {log}"
+

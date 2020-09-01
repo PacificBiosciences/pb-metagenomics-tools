@@ -1,0 +1,237 @@
+# must load anaconda, snakemake
+# typically executed using:
+# snakemake --snakefile genome-binning-snake --cluster "qsub -q sequel-farm -pe smp {threads} 
+# -V -cwd -S /bin/bash -o HPC_logs/ -e HPC_logs/" -j 15 --jobname "{rule}.{wildcards}.{jobid}" 
+# --configfile configs/SOMETHING.yaml --latency-wait 60 --use-conda
+
+localrules: BamDepth, SummarizeCheckM, PlotCheckM, PrepBatchFile, FullBatchFile, SummarizeResults, all
+
+configfile: "config.yaml"
+
+import os
+SAMPLES = config['samplenames']
+
+rule all:
+    input:
+        expand("5-gtdb-individual/{sample}/{dir}/", sample = SAMPLES, dir = ["align", "classify", "identify"]),
+        expand("6-gtdb-combined-{label}/{dir}/", dir = ["align", "classify", "identify"], label = config['gtdbtk']['gtdb_full_label']),
+        expand("7-summary/{sample}/binplots/{sample}-{filt}-compl-vs-{type}.pdf", sample = SAMPLES, filt = ["unfiltered", "filtered"], type = ["contam", "contam-contigNums", "contam-Bins"]),
+        expand("7-summary/{sample}/{sample}.genomebinning.summary.txt", sample = SAMPLES)
+
+rule MinimapToBam:
+    input:
+        reads = "inputs/{sample}.fasta",
+        contigs = "inputs/{sample}.contigs.fasta"
+    output:
+        "1-bam/{sample}.bam"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['minimap']['threads']
+    log: 
+        "logs/{sample}.MinimapToBam.log"
+    benchmark: 
+        "benchmarks/{sample}.MinimapToBam.tsv"
+    shell:
+        "minimap2 -a -k 19 -w 10 -I 10G -g 5000 -r 2000 -N 100 --lj-min-ratio 0.5 "
+        "-A 2 -B 5 -O 5,56 -E 4,1 -z 400,50 --sam-hit-only -t {threads} " 
+        "{input.contigs} {input.reads} 2> {log} | samtools sort -@ 22 -o {output}"
+        
+rule BamDepth:
+    input:
+        bam = "1-bam/{sample}.bam"
+    output:
+        "1-bam/{sample}.depth.txt"
+    conda:
+        "envs/general.yml"
+    log:
+        "logs/{sample}.BamDepth.log"
+    benchmark: 
+        "benchmarks/{sample}.BamDepth.tsv"
+    shell:
+        "jgi_summarize_bam_contig_depths --outputDepth {output} {input.bam} 2> {log}"
+
+rule RunMetabat:
+    input:
+        contigs = "inputs/{sample}.contigs.fasta",
+        depths = "1-bam/{sample}.depth.txt"
+    output:
+        file = "2-metabat-bins/{sample}/completed.txt",
+        outdir = "2-metabat-bins/{sample}/"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['metabat']['threads']
+    params:
+        prefix = "2-metabat-bins/{sample}/{sample}_bin"
+    log: 
+        "logs/{sample}.RunMetabat.log"
+    benchmark: 
+        "benchmarks/{sample}.RunMetabat.tsv"
+    shell:
+        "metabat2 -i {input.contigs} -a {input.depths} -o {params.prefix} -t {threads} "
+        "-v &> {log} && touch {output.file}"
+        
+rule RunCheckM:
+    input:
+        metaoutput = "2-metabat-bins/{sample}/completed.txt",
+    output:
+        "3-checkm/{sample}/lineage.ms"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['checkm']['threads']
+    params:
+        ppthreads = config['checkm']['pplacer_threads'],
+        indir = "2-metabat-bins/{sample}/",
+        outdir = "3-checkm/{sample}/",
+        datapath = config['checkm']['datapath']
+    log: 
+        root = "logs/{sample}.RunCheckM-Root.log",
+        run = "logs/{sample}.RunCheckM-Run.log"
+    benchmark: 
+        "benchmarks/{sample}.RunCheckM.tsv"
+    shell:
+        "checkm data setRoot {params.datapath} &> {log.root} && checkm lineage_wf -x fa -t {threads} "
+        "--pplacer_threads {params.ppthreads} --tmpdir /scratch {params.indir} "
+        "{params.outdir} &> {log.run}"
+        
+rule SummarizeCheckM:
+    input:
+        "3-checkm/{sample}/lineage.ms"
+    output:
+        "4-checkm-summary/{sample}.qa.txt"
+    conda:
+        "envs/general.yml"
+    params:
+        outdir = "3-checkm/{sample}/"
+    log: 
+        "logs/{sample}.SummarizeCheckM.log"
+    benchmark: 
+        "benchmarks/{sample}.SummarizeCheckM.tsv"
+    shell:
+        "checkm qa -o2 {input} {params.outdir} -f {output} --tab_table &> {log}"
+
+
+rule PrepBatchFile:
+    input:
+        sumfile = "4-checkm-summary/{sample}.qa.txt",
+        indir = "2-metabat-bins/{sample}/"
+    output:
+        batch = "4-checkm-summary/{sample}.batchfile.txt",
+        simple = "4-checkm-summary/{sample}.simple.txt"
+    params:
+        completeness = config['gtdbtk']['min_completeness'],
+        contamination = config['gtdbtk']['max_contamination'],
+        contigs = config['gtdbtk']['max_contigs']
+    log: 
+        "logs/{sample}.PrepBatchFile.log"
+    benchmark: 
+        "benchmarks/{sample}.PrepBatchFile.tsv"
+    shell:
+        "python scripts/CheckM-to-batch-GTDB.py -i {input.sumfile} -c {params.completeness} "
+        "-m {params.contamination} -g {params.contigs} -p {input.indir} -o {output.batch} "
+        "-l {output.simple} &> {log}"
+
+rule RunGTDBTkIndividual:
+    input:
+        "4-checkm-summary/{sample}.batchfile.txt"
+    output:
+        "5-gtdb-individual/{sample}/align/",
+        "5-gtdb-individual/{sample}/classify/",
+        "5-gtdb-individual/{sample}/identify/"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['gtdbtk']['threads']
+    params:
+        ppthreads = config['gtdbtk']['pplacer_threads'],
+        gtdbtk_data = config['gtdbtk']['gtdbtk_data'],
+        outdir = "5-gtdb-individual/{sample}/"
+    log: 
+        "logs/{sample}.RunGTDBTkIndividual.log"
+    benchmark: 
+        "benchmarks/{sample}.RunGTDBTkIndividual.tsv"
+    shell:
+        "GTDBTK_DATA_PATH={params.gtdbtk_data:q} gtdbtk classify_wf --batchfile {input} "
+        "--out_dir {params.outdir} -x fa --prefix {wildcards.sample} --cpus {threads} "
+        "--pplacer_cpus {params.ppthreads} --scratch_dir /scratch &> {log}"
+        
+rule FullBatchFile:
+    input:
+        expand("4-checkm-summary/{sample}.batchfile.txt", sample = SAMPLES)
+    output:
+        f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/Full.batchfile.txt"
+    log: 
+        "logs/FullBatchFile.log"
+    benchmark: 
+        "benchmarks/FullBatchFile.tsv"
+    shell:
+        "cat {input} 1> {output} 2> {log}"
+
+rule RunGTDBTkFull:
+    input:
+        f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/Full.batchfile.txt"
+    output:
+        f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/align/",
+        f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/classify/",
+        f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/identify/"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['gtdbtk']['threads']
+    params:
+        ppthreads = config['gtdbtk']['pplacer_threads'],
+        gtdbtk_data = config['gtdbtk']['gtdbtk_data'],
+        outdir = f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/
+    log: 
+        "logs/RunGTDBTkFull.log"
+    benchmark: 
+        "benchmarks/RunGTDBTkFull.tsv"
+    shell:
+        "GTDBTK_DATA_PATH={params.gtdbtk_data:q} gtdbtk classify_wf --batchfile {input} "
+        "--out_dir {params.outdir} -x fa --prefix Full --cpus {threads} "
+        "--pplacer_cpus {params.ppthreads} --scratch_dir /scratch &> {log}"
+
+rule PlotCheckM:
+    input:
+        "4-checkm-summary/{sample}.qa.txt"
+    output:
+        o1 = "7-summary/{sample}/binplots/{sample}-unfiltered-compl-vs-contam.pdf",
+        o2 = "7-summary/{sample}/binplots/{sample}-unfiltered-compl-vs-contam-contigNums.pdf",
+        o3 = "7-summary/{sample}/binplots/{sample}-unfiltered-compl-vs-contam-Bins.pdf",
+        o4 = "7-summary/{sample}/binplots/{sample}-filtered-compl-vs-contam.pdf",
+        o5 = "7-summary/{sample}/binplots/{sample}-filtered-compl-vs-contam-contigNums.pdf",
+        o6 = "7-summary/{sample}/binplots/{sample}-filtered-compl-vs-contam-Bins.pdf"
+    conda:
+        "envs/general.yml"
+    log: 
+        "logs/{sample}.PlotCheckM.log"
+    benchmark: 
+        "benchmarks/{sample}.PlotCheckM.tsv"
+    shell:
+        "python scripts/Metabat-Plot.py -i {input} -l {wildcards.sample} -o1 {output.o1} "
+        "-o2 {output.o2} -o3 {output.o3} -o4 {output.o4} -o5 {output.o5} -o6 {output.o6} "
+        "&> {log}"
+        
+rule SummarizeResults:
+    input:
+        depth = "1-bam/{sample}.depth.txt",
+        batch = "4-checkm-summary/{sample}.batchfile.txt",
+        checkm = "4-checkm-summary/{sample}.simple.txt",
+        gtdbdir = "5-gtdb-individual/{sample}/classify/"
+    output:
+        outfile = "7-summary/{sample}/{sample}.genomebinning.summary.txt"
+    conda:
+        "envs/general.yml"
+    params:
+        gtdbtk_data = config['gtdbtk']['gtdbtk_data'],
+        outdir = "7-summary/{sample}/bin-ref-pairs/"
+    log: 
+        "logs/{sample}.SummarizeResults.log"
+    benchmark: 
+        "benchmarks/{sample}.SummarizeResults.tsv"
+    shell:
+        "python scripts/genome-binning-summarizer.py -d {input.depth} -b {input.batch} "
+        "-c {input.checkm} -g {input.gtdbdir} -j {params.gtdbtk_data} -o {output.outfile} "
+        "-s {params.outdir} -l {log}"
