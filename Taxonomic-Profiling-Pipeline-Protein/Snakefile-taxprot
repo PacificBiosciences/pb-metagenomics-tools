@@ -1,6 +1,8 @@
+
+localrules: SplitFasta, MergeSam
+ 
 configfile: "config.yaml"
 
-import os
 SAMPLES = config['samplenames']
 
 rule all:
@@ -18,8 +20,6 @@ rule SplitFasta:
     benchmark: 
         "benchmarks/{sample}.SplitFasta.tsv"
     run:
-        if not os.path.exists("1-chunks"):
-            os.mkdir("1-chunks")
         shell("fastasplit -c 4 -f {input} -o 1-chunks/")
 
 rule RunDiamond:

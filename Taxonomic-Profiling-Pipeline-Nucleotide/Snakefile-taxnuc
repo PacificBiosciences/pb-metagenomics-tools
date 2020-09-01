@@ -1,14 +1,8 @@
-# must load anaconda, snakemake, exonerate, minimap, jdk, graphviz
-# typically executed using:
-# snakemake --snakefile minimap-snake --cluster "qsub -q sequel-farm -pe smp {threads} 
-# -V -cwd -S /bin/bash -o HPC_logs/ -e HPC_logs/" -j 15 --jobname "{rule}.{wildcards}.{jobid}" 
-# --configfile configs/SOMETHING.yaml --latency-wait 60 --use-conda
 
 localrules: SplitFasta, MergeSam
 
 configfile: "config.yaml"
 
-import os
 SAMPLES = config['samplenames']
 
 rule all:

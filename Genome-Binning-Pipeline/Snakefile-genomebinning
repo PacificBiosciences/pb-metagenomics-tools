@@ -1,14 +1,8 @@
-# must load anaconda, snakemake
-# typically executed using:
-# snakemake --snakefile genome-binning-snake --cluster "qsub -q sequel-farm -pe smp {threads} 
-# -V -cwd -S /bin/bash -o HPC_logs/ -e HPC_logs/" -j 15 --jobname "{rule}.{wildcards}.{jobid}" 
-# --configfile configs/SOMETHING.yaml --latency-wait 60 --use-conda
 
 localrules: BamDepth, SummarizeCheckM, PlotCheckM, PrepBatchFile, FullBatchFile, SummarizeResults, all
 
 configfile: "config.yaml"
 
-import os
 SAMPLES = config['samplenames']
 
 rule all:
@@ -111,7 +105,6 @@ rule SummarizeCheckM:
         "benchmarks/{sample}.SummarizeCheckM.tsv"
     shell:
         "checkm qa -o2 {input} {params.outdir} -f {output} --tab_table &> {log}"
-
 
 rule PrepBatchFile:
     input:
