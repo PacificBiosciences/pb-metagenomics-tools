@@ -176,7 +176,7 @@ rule RunGTDBTkFull:
     params:
         ppthreads = config['gtdbtk']['pplacer_threads'],
         gtdbtk_data = config['gtdbtk']['gtdbtk_data'],
-        outdir = f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/
+        outdir = f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/"
     log: 
         "logs/RunGTDBTkFull.log"
     benchmark: 
