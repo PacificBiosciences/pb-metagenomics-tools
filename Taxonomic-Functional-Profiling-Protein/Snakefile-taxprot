@@ -19,8 +19,8 @@ rule SplitFasta:
     threads: 2
     benchmark: 
         "benchmarks/{sample}.SplitFasta.tsv"
-    run:
-        shell("fastasplit -c 4 -f {input} -o 1-chunks/")
+    shell:
+        "fastasplit -c 4 -f {input} -o 1-chunks/"
 
 rule RunDiamond:
     input:
@@ -67,12 +67,12 @@ rule MakeRMA:
     threads: config['sam2rma']['threads']
     params:
         sam2rma = config['sam2rma']['path'],
-        db = config['sam2rma']['db']
+        db = config['sam2rma']['db'],
         ram = config['sam2rma']['readassignmentmode']
     log: 
-        f"logs/{sample}.MakeRMA.{config['sam2rma']['readassignmentmode']}.log"
+        f"logs/{{sample}}.MakeRMA.{config['sam2rma']['readassignmentmode']}.log"
     benchmark: 
-        f"benchmarks/{sample}.MakeRMA.{config['sam2rma']['readassignmentmode']}.tsv"
+        f"benchmarks/{{sample}}.MakeRMA.{config['sam2rma']['readassignmentmode']}.tsv"
     shell:
         "{params.sam2rma} -i {input.sam} -r {input.reads} -o {output} -lg -alg longReads "
         "-t {threads} -mdb {params.db} -ram {params.ram} -v 2> {log}"

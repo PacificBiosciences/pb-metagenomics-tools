@@ -100,9 +100,9 @@ rule MakeRMA:
         db = config['sam2rma']['db'],
         ram = config['sam2rma']['readassignmentmode']
     log: 
-        f"logs/{sample}.MakeRMA.{config['sam2rma']['readassignmentmode']}.log"
+        f"logs/{{sample}}.MakeRMA.{config['sam2rma']['readassignmentmode']}.log"
     benchmark: 
-        f"benchmarks/{sample}.MakeRMA.{config['sam2rma']['readassignmentmode']}.tsv"
+        f"benchmarks/{{sample}}.MakeRMA.{config['sam2rma']['readassignmentmode']}.tsv"
     shell:
         "{params.sam2rma} -i {input.sam} -r {input.reads} -o {output} -lg -alg longReads "
         "-t {threads} -mdb {params.db} -ram {params.ram} -v 2> {log}"
