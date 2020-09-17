@@ -4,11 +4,11 @@ Welcome! Here you can find a variety of tools and pipelines tailored to using Pa
 
 There are currently three pipelines available:
 
-+ **Genome-Binning-Pipeline**: Perform genome binning and MAG assessment on HiFi assemblies using a streamlined workflow.
++ **`Genome-Binning-Pipeline`**: Perform genome binning and MAG assessment on HiFi assemblies using a streamlined workflow.
 
-+ **Taxonomic-Functional-Profiling-Protein**: Align HiFi reads to a **protein** database and prepare inputs for MEGAN6, for the purpose of taxonomic and functional profiling.
++ **`Taxonomic-Functional-Profiling-Protein`**: Align HiFi reads to a **protein** database and prepare inputs for MEGAN6, for the purpose of taxonomic and functional profiling.
 
-+ **Taxonomic-Functional-Profiling-Nucelotide**: Align HiFi reads to a **nucleotide** database and prepare inputs for MEGAN6, for the purpose of taxonomic and functional profiling.
++ **`Taxonomic-Functional-Profiling-Nucelotide`**: Align HiFi reads to a **nucleotide** database and prepare inputs for MEGAN6, for the purpose of taxonomic and functional profiling.
 
 
 These pipelines can be found in their respective folders. They are available as Snakemake workflows.
