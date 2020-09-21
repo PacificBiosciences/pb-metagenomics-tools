@@ -183,23 +183,37 @@ def write_summary(depth_dict, batch_dict, gtdb_dict, checkm_dict, bin_list, outf
                                                            "other_related_references(genome_id,species_name,radius,ANI,AF)",
                                                            "GTDB_warnings"))
         for bin in bin_list:
-            fh.write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}\t{10}"
-                     "\t{11}\t{12}\t{13}\t{14}\t{15}\n".format(bin,
-                                                               checkm_dict[bin]["Contigs"],
-                                                               ", ".join(batch_dict[bin]),
-                                                               ", ".join([str(depth_dict[contig]["contigLen"]) for contig in batch_dict[bin]]),
-                                                               ", ".join([str(depth_dict[contig]["totalAvgDepth"]) for contig in batch_dict[bin]]),
-                                                               checkm_dict[bin]["Completeness"],
-                                                               checkm_dict[bin]["Contamination"],
-                                                               checkm_dict[bin]["StrainHeterogeneity"],
-                                                               checkm_dict[bin]["GenomeSize"],
-                                                               gtdb_dict[bin]["Species"],
-                                                               gtdb_dict[bin]["Taxonomy"],
-                                                               gtdb_dict[bin]["ReferenceGenome"],
-                                                               gtdb_dict[bin]["AvgNucleotideIdentity"],
-                                                               gtdb_dict[bin]["ClassificationMethod"],
-                                                               gtdb_dict[bin]["other_related_references"],
-                                                               gtdb_dict[bin]["GTDB_warnings"]))
+            #learned the hard way that some bins get filtered out using GTDB
+            #it isn't a guarantee they will be in the gtdb_dict
+            if bin in gtdb_dict:
+                fh.write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}\t{10}"
+                         "\t{11}\t{12}\t{13}\t{14}\t{15}\n".format(bin,
+                                                                   checkm_dict[bin]["Contigs"],
+                                                                   ", ".join(batch_dict[bin]),
+                                                                   ", ".join([str(depth_dict[contig]["contigLen"]) for contig in batch_dict[bin]]),
+                                                                   ", ".join([str(depth_dict[contig]["totalAvgDepth"]) for contig in batch_dict[bin]]),
+                                                                   checkm_dict[bin]["Completeness"],
+                                                                   checkm_dict[bin]["Contamination"],
+                                                                   checkm_dict[bin]["StrainHeterogeneity"],
+                                                                   checkm_dict[bin]["GenomeSize"],
+                                                                   gtdb_dict[bin]["Species"],
+                                                                   gtdb_dict[bin]["Taxonomy"],
+                                                                   gtdb_dict[bin]["ReferenceGenome"],
+                                                                   gtdb_dict[bin]["AvgNucleotideIdentity"],
+                                                                   gtdb_dict[bin]["ClassificationMethod"],
+                                                                   gtdb_dict[bin]["other_related_references"],
+                                                                   gtdb_dict[bin]["GTDB_warnings"]))
+            else:
+                fh.write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\tNA\tNA"
+                         "\tNA\tNA\tNA\tNA\tNA\n".format(bin, checkm_dict[bin]["Contigs"],
+                                                         ", ".join(batch_dict[bin]),
+                                                         ", ".join([str(depth_dict[contig]["contigLen"]) for contig in batch_dict[bin]]),
+                                                         ", ".join([str(depth_dict[contig]["totalAvgDepth"]) for contig in batch_dict[bin]]),
+                                                         checkm_dict[bin]["Completeness"],
+                                                         checkm_dict[bin]["Contamination"],
+                                                         checkm_dict[bin]["StrainHeterogeneity"],
+                                                         checkm_dict[bin]["GenomeSize"]))
+
 
 def make_target_query_pairs(bin_list, batch_paths, gtdb_dict, gtdb_db, home, outdir):
     if not os.path.exists(outdir):
