@@ -186,6 +186,7 @@ def write_summary(depth_dict, batch_dict, gtdb_dict, checkm_dict, bin_list, outf
             #learned the hard way that some bins get filtered out using GTDB
             #it isn't a guarantee they will be in the gtdb_dict
             if bin in gtdb_dict:
+                logging.info("Writing summary of bin {} to output file.".format(bin))
                 fh.write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}\t{10}"
                          "\t{11}\t{12}\t{13}\t{14}\t{15}\n".format(bin,
                                                                    checkm_dict[bin]["Contigs"],
@@ -204,6 +205,7 @@ def write_summary(depth_dict, batch_dict, gtdb_dict, checkm_dict, bin_list, outf
                                                                    gtdb_dict[bin]["other_related_references"],
                                                                    gtdb_dict[bin]["GTDB_warnings"]))
             else:
+                logging.info("Bin {} appears to have been filtered out by GTDB.".format(bin))
                 fh.write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\tNA\tNA"
                          "\tNA\tNA\tNA\tNA\tNA\n".format(bin, checkm_dict[bin]["Contigs"],
                                                          ", ".join(batch_dict[bin]),
@@ -220,24 +222,27 @@ def make_target_query_pairs(bin_list, batch_paths, gtdb_dict, gtdb_db, home, out
         os.mkdir(outdir)
     os.chdir(outdir)
     for bin in bin_list:
-        bindir = os.path.join(os.getcwd(), bin)
-        logging.info("Writing paired files to: {}.".format(bindir))
-        if not os.path.exists(bindir):
-            os.mkdir(bindir)
-        dest1 = os.path.join(bindir, "{}.fa".format(bin))
-        logging.info("Copying target file: {}.".format(batch_paths[bin]))
-        shutil.copyfile(batch_paths[bin], dest1)
+        if bin in gtdb_dict:
+            bindir = os.path.join(os.getcwd(), bin)
+            logging.info("Writing paired files to: {}.".format(bindir))
+            if not os.path.exists(bindir):
+                os.mkdir(bindir)
+            dest1 = os.path.join(bindir, "{}.fa".format(bin))
+            logging.info("Copying target file: {}.".format(batch_paths[bin]))
+            shutil.copyfile(batch_paths[bin], dest1)
 
-        fzip = os.path.join(gtdb_db, "fastani", "database", "{}_genomic.fna.gz".format(gtdb_dict[bin]["ReferenceGenome"]))
-        dest2 = os.path.join(bindir, "{}.fa".format(gtdb_dict[bin]["ReferenceGenome"]))
-        if os.path.isfile(fzip):
-            with gzip.open(fzip, 'rb') as fhin:
-                with open(dest2, 'wb') as fhout:
-                    shutil.copyfileobj(fhin, fhout)
-            #shutil.copyfile(fzip, dest2)
-            logging.info("Copying and decompressing query file: {}.".format(fzip))
+            fzip = os.path.join(gtdb_db, "fastani", "database", "{}_genomic.fna.gz".format(gtdb_dict[bin]["ReferenceGenome"]))
+            dest2 = os.path.join(bindir, "{}.fa".format(gtdb_dict[bin]["ReferenceGenome"]))
+            if os.path.isfile(fzip):
+                with gzip.open(fzip, 'rb') as fhin:
+                    with open(dest2, 'wb') as fhout:
+                        shutil.copyfileobj(fhin, fhout)
+                #shutil.copyfile(fzip, dest2)
+                logging.info("Copying and decompressing query file: {}.".format(fzip))
+            else:
+                logging.info("Unable to find query file: {}.".format(fzip))
         else:
-            logging.info("Unable to find query file: {}.".format(fzip))
+            logging.info("This bin appears to have been filtered out by GTDB: {}.".format(bin))
     os.chdir(home)
 
 def main():
