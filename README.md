@@ -2,7 +2,7 @@
 
 Welcome! Here you can find a variety of tools and pipelines tailored to using PacBio HiFi reads for metagenomics.
 
-## Available tools and pipelines:
+## Available tools and pipelines
 
 + **`Genome-Binning-Pipeline`**: Perform genome binning and MAG assessment on HiFi assemblies using a streamlined workflow.
 
