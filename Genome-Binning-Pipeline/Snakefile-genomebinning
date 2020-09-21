@@ -29,7 +29,7 @@ rule MinimapToBam:
     shell:
         "minimap2 -a -k 19 -w 10 -I 10G -g 5000 -r 2000 -N 100 --lj-min-ratio 0.5 "
         "-A 2 -B 5 -O 5,56 -E 4,1 -z 400,50 --sam-hit-only -t {threads} " 
-        "{input.contigs} {input.reads} 2> {log} | samtools sort -@ 22 -o {output}"
+        "{input.contigs} {input.reads} 2> {log} | samtools sort -@ {threads} -o {output}"
         
 rule BamDepth:
     input:
@@ -198,14 +198,18 @@ rule PlotCheckM:
         o6 = "7-summary/{sample}/binplots/{sample}-filtered-compl-vs-contam-Bins.pdf"
     conda:
         "envs/general.yml"
+    params:
+        completeness = config['gtdbtk']['min_completeness'],
+        contamination = config['gtdbtk']['max_contamination'],
+        contigs = config['gtdbtk']['max_contigs']
     log: 
         "logs/{sample}.PlotCheckM.log"
     benchmark: 
         "benchmarks/{sample}.PlotCheckM.tsv"
     shell:
-        "python scripts/Metabat-Plot.py -i {input} -l {wildcards.sample} -o1 {output.o1} "
-        "-o2 {output.o2} -o3 {output.o3} -o4 {output.o4} -o5 {output.o5} -o6 {output.o6} "
-        "&> {log}"
+        "python scripts/Metabat-Plot.py -i {input} -l {wildcards.sample} -c {params.completeness} "
+        "-m {params.contamination} -g {params.contigs} -o1 {output.o1} -o2 {output.o2} "
+        "-o3 {output.o3} -o4 {output.o4} -o5 {output.o5} -o6 {output.o6} &> {log}"
         
 rule SummarizeResults:
     input:
