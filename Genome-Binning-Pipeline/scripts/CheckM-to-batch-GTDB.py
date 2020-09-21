@@ -73,7 +73,7 @@ def parse_summary(infile, completeness, contamination, contigs, binpath, outfile
 
 def write_log(logfile, passed, failed):
     with open(logfile, 'a') as fh:
-        fh.write("Filter\tBin\tCompletenes\tContamination\tStrainHeterogeneity\tGenomeSize\tContigs\n")
+        fh.write("Filter\tBin\tCompleteness\tContamination\tStrainHeterogeneity\tGenomeSize\tContigs\n")
         for p in passed:
             fh.write(p)
         for f in failed:
