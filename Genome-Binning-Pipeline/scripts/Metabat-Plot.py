@@ -18,6 +18,18 @@ def get_args():
     parser.add_argument("-l", "--label",
                         required=True,
                         help="A label for the plot.")
+    parser.add_argument("-c", "--completeness",
+                        required=True,
+                        type=int,
+                        help="Completeness threshold.")
+    parser.add_argument("-m", "--contamination",
+                        required=True,
+                        type=int,
+                        help="Contamination threshold.")
+    parser.add_argument("-g", "--contigs",
+                        required=True,
+                        type=int,
+                        help="Contigs threshold.")
     parser.add_argument("-o1", "--output1",
                         required=True,
                         help="The name of the output file (a plot).")
@@ -105,7 +117,7 @@ def create_filtered_scatter_bins(df, label, output):
 def main():
     args = get_args()
     df = pd.read_csv(args.input, sep='\t')
-    scatfilt = (df['Completeness'] >= 70) & (df['Contamination'] <= 10) & (df['# contigs'] < 10)
+    scatfilt = (df['Completeness'] >= args.completeness) & (df['Contamination'] <= args.contamination) & (df['# contigs'] < args.contigs)
     filt = df[scatfilt]
     create_unfiltered_joint_scatter(df, args.output1)
     create_unfiltered_scatter_contigs(df, args.label, args.output2)
