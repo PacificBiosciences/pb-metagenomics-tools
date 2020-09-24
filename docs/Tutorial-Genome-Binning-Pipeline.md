@@ -91,11 +91,15 @@ The additional batOptions previously recommended for Canu 2.0 (`batOptions=-eg 0
 
 Two databases must be downloaded prior to running analyses, one for `CheckM` and one for `GTDB-Tk`.
 
+**CheckM database**
+
 Complete instructions for the CheckM database can be found at: https://github.com/Ecogenomics/CheckM/wiki/Installation
 
 Briefly, the CheckM database can be obtained from: https://data.ace.uq.edu.au/public/CheckM_databases/
 
 The downloaded file must be decompressed to use it. The contents will be ~1.7GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`distributions/`, `genome_tree/`, `hmms/`, `hmms_ssu/`, `img/`, `pfam/`, `test_data/`) and two tsv files.
+
+**GTDB-Tk database**
 
 Complete instructions for the GTDB-Tk database can be found at: https://ecogenomics.github.io/GTDBTk/installing/index.html
 
