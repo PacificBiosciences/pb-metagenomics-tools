@@ -1,6 +1,6 @@
 # Genome-Binning-Pipeline <a name="TOP"></a>
 
-### **Table of Contents**
+## **Table of Contents**
 
 + [1. Genome-Binning-Pipeline Overview](#PO)
 + [2. Snakemake Contents](#SMC)
@@ -12,7 +12,7 @@
 
 ---------------
 
-## **1. Genome-Binning-Pipeline Overview** <a name="PO"></a>
+# **1. Genome-Binning-Pipeline Overview** <a name="PO"></a>
 
 The purpose of this snakemake workflow is to obtain high-quality metagenome-assembled genomes (MAGs) from previously generated assemblies. The general steps of the Genome-Binning-Pipeline are shown below:
 
@@ -24,7 +24,7 @@ HiFi reads are mapped to contigs using minimap2 to generate BAM files. The BAM f
 
 ---------------
 
-## **2. Snakemake Contents** <a name="SMC"></a>
+# **2. Snakemake Contents** <a name="SMC"></a>
 
 To run the workflow, you will need to obtain all contents within the [Genome-Binning-Pipeline folder](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Genome-Binning-Pipeline). The default contents should look like this:
 
@@ -65,11 +65,11 @@ Finally, the `envs/` directory contains the `general.yml` file which is needed t
 
 ---------------
 
-## **3. Requirements for Running** <a name="RFR"></a>
+# **3. Requirements for Running** <a name="RFR"></a>
 
 There are a few steps that must be completed prior to running the snakemake workflow.
 
-### Dependencies
+## Dependencies
 
 In order to run a snakemake workflow, you will need to have an anaconda or conda installation. Conda is essential because it will be used to install the dependencies within the workflow and setup the correct environments. 
 
@@ -77,7 +77,7 @@ Snakemake will also need to be installed. Instructions for installing snakemake 
 
 If you intend to generate a graphic for the snakemake workflow graph, you will also need graphviz installed.
 
-### Generate assemblies
+## Generate assemblies
 
 For assembly of metagenomic samples with HiFi reads, we strongly recommend using Canu v2.1 with the following settings:
 
@@ -87,16 +87,20 @@ canu -d DIRECTORY -p OUTPUT_NAME -pacbio-hifi FQ_DATA genomeSize=100m maxInputCo
 
 The additional batOptions previously recommended for Canu 2.0 (`batOptions=-eg 0.0 -sb 0.001 -dg 0 -db 3 -dr 0 -ca 2000 -cp 200`) are no longer necessary if using Canu 2.1.
 
-### Download required databases
+## Download required databases
 
 Two databases must be downloaded prior to running analyses, one for `CheckM` and one for `GTDB-Tk`.
 
 Complete instructions for the CheckM database can be found at: https://github.com/Ecogenomics/CheckM/wiki/Installation
+
 Briefly, the CheckM database can be obtained from: https://data.ace.uq.edu.au/public/CheckM_databases/
+
 The downloaded file must be decompressed to use it. The contents will be ~1.7GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`distributions/`, `genome_tree/`, `hmms/`, `hmms_ssu/`, `img/`, `pfam/`, `test_data/`) and two tsv files.
 
 Complete instructions for the GTDB-Tk database can be found at: https://ecogenomics.github.io/GTDBTk/installing/index.html
+
 The current GTDB release can be downloaded from: https://data.ace.uq.edu.au/public/gtdb/data/releases/release95/95.0/auxillary_files/gtdbtk_r95_data.tar.gz
+
 It must also be decompressed prior to usage. The contents will be ~27GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`fastani/`, `markers/`, `masks/`, `metadata/`, `mrca_red/`, `msa/`, `pplacer/`, `radii/`, `taxonomy/`).
 
 
@@ -104,7 +108,7 @@ It must also be decompressed prior to usage. The contents will be ~27GB in size.
 
 ---------------
 
-## **4. Configuring the Analysis** <a name="CTA"></a>
+# **4. Configuring the Analysis** <a name="CTA"></a>
 
 To configure the analysis, the main configuration file (`config.yaml`) and sample configuration file (must be in the `configs/` directory) can be edited. 
 
@@ -118,19 +122,19 @@ For the Genome-Binning-Pipeline, all samples specified in the sample configurati
 
 ---------------
 
-## **5. Executing Snakemake** <a name="EXS"></a>
+# **5. Executing Snakemake** <a name="EXS"></a>
 
 Before attempting to run this snakemake analysis, please ensure that the pre-analysis requirements have been satisfied, the analysis has been configured properly (using the general and sample configuration files), and the input files are available in the `inputs/` folder. 
 
 There are several ways to execute the workflow.
 
-### Local execution
+## Local execution
 
 Snakemake can be run locally (e.g., without cluster configuration). Snakemake will automatically determine how many jobs can be run simultaneously based on the resources specified. 
 
 The workflow should be executed from within the directory containing all the snakemake contents for the genome-binning-pipeline. 
 
-**Test workflow:**
+### Test workflow
 It is a good idea to test the workflow for errors before running it. This can be done with the following command:
 ```
 snakemake -np --snakefile Snakefile-genomebinning -j 48 --use-conda
@@ -145,14 +149,14 @@ Let's unpack this command:
 
 The dry run command should result in the jobs being displayed on screen. 
 
-**Create workflow figure:**
+### Create workflow figure
 If there are no errors, you may wish to generate a figure of the directed acyclic graph (the workflow steps). You can do this using the following command:
 ```
 snakemake --dag --snakefile Snakefile-genomebinning -j 48 --use-conda | dot -Tsvg > genome-binning_analysis.svg
 ```
 Here the `--dag` flag creates an output that is piped to `dot`, and an svg file called `genome-binning_analysis.svg` is created. This will show the workflow visually.
 
-**Execute workflow:**
+### Execute workflow
 Finally, you can execute the workflow using:
 ```
 snakemake --snakefile Snakefile-genomebinning -j 48 --use-conda
@@ -163,17 +167,17 @@ The jobs should begin scheduling and running. You can see the progress on screen
 This type of snakemake analysis can be run on a local system, or it can be executed the same way using an HPC interactive session. For example, `qrsh -q default -pe smp 48` can be used to start an interactive session with 48 threads (replacing `default` with the name of your machine). If the snakemake directory and databases are set up on the cluster, snakemake can be executed the same way. Navigate to the directory and use the same commands as above. You may need to load anaconda, snakemake, and graphviz before running the workflow, depending on your system setup. You may also want to use a detachable screen so the analysis is not interrupted.
 
 
-### HPC execution
+## HPC execution
 
 Executing snakemake on HPC allows it schedule jobs and run steps in parallel. This is the preferred method.
 
-There are several ways to run snakemake on HPC. There are limited instructions on cluster execution in the snakemake documentation [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html), so a few examples of execution are shown below.
+There are several ways to run snakemake on HPC. There are limited instructions on cluster execution in the snakemake documentation [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html), so an example of execution are shown below.
 
-**Running on an interactive session:**
+### Executing with an interactive session
 
 One easy way to run snakemake is to start an interactive session, and execute snakemake with the relevant cluster settings. Snakemake will act as a job scheduler and also run local jobs from this location, until all jobs are complete. This can take a while, so it is best to use a detachable screen with the interactive session. 
 
-Here is an example (based on SGE) of starting an interactive session and preparing to run snakemake. This assumes you are already logged in:
+Here is an example (based on SGE configuration) of starting an interactive session and preparing to run snakemake. This assumes you are already logged in:
 
 ```
 # use a detachable screen
@@ -194,7 +198,7 @@ module load graphviz
 ```
 Now we are in the genome-binning snakemake directory, with everything ready.
 
-**Test workflow:** 
+## Test workflow
 It is best to test for any issues in the workflow before executing it. We can do this using the `-np` flag.
 ```
 snakemake -np --snakefile Snakefile-genomebinning --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash -o HPC_logs/ -e HPC_logs/" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --configfile configs/Twoplex.yaml --latency-wait 60 --use-conda 
@@ -213,14 +217,14 @@ Let's unpack this command:
 
 The dry run command should result in the jobs being displayed on screen. 
 
-**Create workflow figure:**
+### Create workflow figure
 If there are no errors, you may wish to generate a figure of the directed acyclic graph (the workflow steps). You can do this using the following command:
 ```
 snakemake --dag --snakefile Snakefile-genomebinning --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash -o HPC_logs/ -e HPC_logs/" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --configfile configs/Twoplex.yaml --latency-wait 60 --use-conda | dot -Tsvg > genome-binning_analysis.svg
 ```
 Here the `--dag` flag creates an output that is piped to `dot`, and an svg file called `genome-binning_analysis.svg` is created. This will show the workflow visually.
 
-**Execute workflow:**
+### Execute workflow
 Finally, you can execute the workflow using:
 ```
 snakemake --snakefile Snakefile-genomebinning --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash -o HPC_logs/ -e HPC_logs/" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --configfile configs/Twoplex.yaml --latency-wait 60 --use-conda
