@@ -10,7 +10,7 @@ checkm:
   # The number of threads to use for checkm.
   threads: 24
   
-  #Tthe number of threads to use for pplacer when it is called within checkm.
+  # The number of threads to use for pplacer when it is called within checkm.
   pplacer_threads: 12
   
   # A full path to the data downloaded from: https://data.ace.uq.edu.au/public/CheckM_databases/
