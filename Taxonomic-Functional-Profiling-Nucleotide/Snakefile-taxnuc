@@ -11,7 +11,7 @@ rule all:
 
 rule SortFasta:
     input:
-        "samples/{sample}.fasta"
+        "inputs/{sample}.fasta"
     output:
         "1-fasta-sort/{sample}.sorted.fasta"
     conda:

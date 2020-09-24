@@ -11,7 +11,7 @@ rule all:
 
 rule SplitFasta:
     input: 
-        "samples/{sample}.fasta"
+        "inputs/{sample}.fasta"
     output: 
         temp(expand("1-chunks/{{sample}}.fasta_chunk_000000{piece}", piece = ["0", "1", "2", "3"]))
     conda:
