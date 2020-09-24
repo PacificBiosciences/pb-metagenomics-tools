@@ -4,7 +4,7 @@ Welcome! Here you can find a variety of tools and pipelines tailored to using Pa
 
 ## Available tools and pipelines
 
-+ **`Genome-Binning-Pipeline`**: Perform genome binning and MAG assessment on HiFi assemblies with a streamlined workflow involving. Includes steps with minimap2, MetaBAT2, CheckM, and GTDB-Tk.
++ **`Genome-Binning-Pipeline`**: Perform genome binning and MAG assessment on HiFi assemblies with a streamlined workflow. Includes steps with minimap2, MetaBAT2, CheckM, and GTDB-Tk.
 
 + **`Taxonomic-Functional-Profiling-Protein`**: Align HiFi reads to a **protein** database using DIAMOND and prepare inputs for MEGAN6, for the purpose of taxonomic and functional profiling. 
 
@@ -15,7 +15,7 @@ These pipelines can be found in their respective folders. They are available as 
 
 ## Documentation 
 
-Documentation is currently being written. We intend to have all pipelines fully documented by the end of September 2020. Advanced Snakemake users can look in the snake files for a complete picture of the workflow, including the commands used to call all respective programs. For others, we encourage you to please check back soon!
+Documentation can be found in the `docs/` folder [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/docs/). Documentation is available for the Genome-Binning-Pipeline [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/docs/Tutorial-Genome-Binning-Pipeline.md), and currently being written for remaining pipelines. We intend to have all pipelines fully documented by the end of September 2020. Advanced Snakemake users can look in the snake files for a complete picture of the workflow, including the commands used to call all respective programs. For others, we encourage you to please check back soon!
 
 
 ## DISCLAIMER
