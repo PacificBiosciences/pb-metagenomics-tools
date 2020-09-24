@@ -1,50 +1,50 @@
 minimap:
-  # the number of threads to use for minimap2
+  # The number of threads to use for minimap2.
   threads: 24
   
 metabat:
-  # the number of threads to use for metabat2
+  # The number of threads to use for metabat2.
   threads: 12
   
 checkm:
-  # the number of threads to use for checkm
+  # The number of threads to use for checkm.
   threads: 24
   
-  # the number of threads to use for pplacer when it is called within checkm
+  #Tthe number of threads to use for pplacer when it is called within checkm.
   pplacer_threads: 12
   
-  # a full path to the data downloaded from: https://data.ace.uq.edu.au/public/CheckM_databases/
-  # the resulting file must be decompressed to use it
-  # this path is used for the "checkm data setRoot <checkm_data_dir>" command
-  # the path must point to the directory that contains the following folders:
-  # distributions, genome_tree, hmms, hmms_ssu, img, pfam, test_data, and the two tsv files
+  # A full path to the data downloaded from: https://data.ace.uq.edu.au/public/CheckM_databases/
+  # The resulting file must be decompressed to use it.
+  # This path is used for the "checkm data setRoot <checkm_data_dir>" command.
+  # The path below must point to the directory that contains the following folders:
+  # distributions, genome_tree, hmms, hmms_ssu, img, pfam, test_data, and the two tsv files.
   datapath: "/dept/appslab/datasets/dp_checkm/"
   
 gtdbtk:
-  # the minimum percent completeness for a genome bin
+  # The minimum percent completeness for a genome bin.
   min_completeness: 70
   
-  # the maximum percent contamination for a genome bin
+  # The maximum percent contamination for a genome bin.
   max_contamination: 10
   
-  #the maximum number of contigs allowed in a genome bin
+  # The maximum number of contigs allowed in a genome bin.
   max_contigs: 10
   
-  #the number of threads to use for gtdbtk
+  # The number of threads to use for gtdbtk.
   threads: 32
   
-  # the number of threads to use for pplacer when it is called within gtdbtk
+  # The number of threads to use for pplacer when it is called within gtdbtk.
   pplacer_threads: 24
   
-  # the path the database downloaded for gtdb
-  # for release 95, you can use:
+  # The path the database downloaded for gtdbtk.
+  # For release 95, you can use:
   # wget https://data.ace.uq.edu.au/public/gtdb/data/releases/release95/95.0/auxillary_files/gtdbtk_r95_data.tar.gz
-  # once downloaded, use: tar xvzf gtdbtk_r95_data.tar.gz
-  # these data are ~27GB in size
-  # the path below must point to the directory than contains the following folders:
+  # Once downloaded, use: tar -xvzf gtdbtk_r95_data.tar.gz
+  # Please note that these data are ~27GB in size.
+  # The path below must point to the directory than contains the following folders:
   # fastani, markers, masks, metadata, mrca_red, msa, pplacer, radii, taxonomy
   gtdbtk_data: "/dept/appslab/datasets/dp_gtdb/release95/"
   
-  # a label for the combined analysis of the samples included in a given run
-  # this is generally overriden by the Sample-Config.yaml
+  # A label for the combined analysis of the samples included in a given run;
+  # this is generally overriden by the Sample-Config.yaml.
   gtdb_full_label: "All"
