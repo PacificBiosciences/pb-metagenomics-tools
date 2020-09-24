@@ -4,7 +4,7 @@ Perform genome binning and MAG assessment on HiFi assemblies with a streamlined 
 
 This directory contains all the materials needed to run the snakemake workflow for genome binning. 
 
-Documentation for this pipeline is available [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/docs/Tutorial-Genome-Binning-Pipeline.md).
+Documentation for this pipeline is available [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Genome-Binning-Pipeline.md).
 
 
 ## DISCLAIMER

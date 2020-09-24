@@ -15,7 +15,11 @@ These pipelines can be found in their respective folders. They are available as 
 
 ## Documentation 
 
-Documentation can be found in the `docs/` folder [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/docs/). Documentation is available for the Genome-Binning-Pipeline [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/docs/Tutorial-Genome-Binning-Pipeline.md), and currently being written for remaining pipelines. We intend to have all pipelines fully documented by the end of September 2020. Advanced Snakemake users can look in the snake files for a complete picture of the workflow, including the commands used to call all respective programs. For others, we encourage you to please check back soon!
+Documentation can be found [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/docs/). 
+
+Documentation for the Genome-Binning-Pipeline can be found [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Genome-Binning-Pipeline.md).
+
+Tutorials for the remaining pipelines are currently being written. We intend to have all pipelines fully documented by the end of September 2020. Advanced Snakemake users can look in the snake files for a complete picture of the workflow, including the commands used to call all respective programs. For others, we encourage you to please check back soon!
 
 
 ## DISCLAIMER
