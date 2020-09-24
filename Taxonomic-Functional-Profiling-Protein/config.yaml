@@ -1,11 +1,34 @@
 diamond:
+  # Provide the full path to the diamond-indexed database.
+  # We recommend downloading the NCBI nr database from: ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz*
+  # Please note the gzipped nr database as of July 2020 was 82GB in size.
+  # The database can be indexed using: diamond makedb --in nr.gz --db diamond_nr_db --threads 24
+  # This can take several hours, and will result in a file that is ~150GB in size.
   db: "/pbi/dept/appslab/datasets/dp_databases/diamond_nr_db.dmnd"
+  
+  # The block_size sets how many billions of letters are loaded in from the database at once.
+  # Larger numbers are better, but the memory required is roughly 6x the block size.
+  # If you keep the value below of 12, this will require 96GB of memory to run.
   block_size: "12"
+  
+  #number of threads to use for diamond
   threads: 24
   
 sam2rma:
+  # The full path to the sam2rma tool.
+  # This tool is distributed as part of the MEGAN download, it is a binary.
   path: "/home/dportik/programs/megan/tools/sam2rma"
+  
+  # The full path to the MEGAN database file, which can be downloaded from:
+  # https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html
+  # please note that the name of this file will change depending on the version, 
+  # and that this must be the the version for the NCBI-nr accessions.
   db: "/home/dportik/programs/megan/db/megan-map-Jul2020.db"
+  
+  # Number of threads to use for sam2rma, 24 is generally sufficient
   threads: 24
+  
+  # Affects which type of RMA file to produce. When comparing taxa/functional counts, it
+  # is best to use the number or reads (readCount) or the total aligned bases (alignedBases). 
   readassignmentmode: "readCount"
   # possible values = readCount, readLength, alignedBases, readMagnitude

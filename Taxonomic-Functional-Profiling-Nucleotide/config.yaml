@@ -1,10 +1,30 @@
 minimap:
+  # Provide the full path to the minimap2-indexed database.
+  # We recommend downloading the NCBI nt database from: ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz*
+  # Please note the gzipped nt database as of July 2020 was 82GB in size.
+  # The database should be indexed using: minimap2 -k 19 -w 10 -d mm2_nt_db.mmi nt.gz
+  # The k and w settings are specific to this pipeline.
+  # This indexing can take several hours, and will result in a file that is ~860GB in size.
   db: "/pbi/dept/appslab/datasets/dp_databases/mm_nt_db.mmi"
+  
+  # The number of threads to use for minimap2 alignments.
   threads: 24
   
 sam2rma:
+  # The full path to the sam2rma tool.
+  # This tool is distributed as part of the MEGAN download, it is a binary.
   path: "/home/dportik/programs/megan/tools/sam2rma"
+
+  # The full path to the MEGAN database file, which can be downloaded from:
+  # https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html
+  # please note that the name of this file will change depending on the version, 
+  # and that this must be the the version for the NCBI-nr accessions.
   db: "/home/dportik/programs/megan/db/megan-nucl-map-Jul2020.db"
+
+  # Number of threads to use for sam2rma, 24 is generally sufficient
   threads: 24
+
+  # Affects which type of RMA file to produce. When comparing taxa/functional counts, it
+  # is best to use the number or reads (readCount) or the total aligned bases (alignedBases). 
   readassignmentmode: "readCount"
   # possible values = readCount, readLength, alignedBases, readMagnitude

@@ -1,4 +1,9 @@
 samplenames:
+  # the naming scheme for your samples must follow:
+  # SAMPLE.fasta
+  # where SAMPLE is a name provided below.
+  # For example, if "SP2" is given as a sample name, the workflow expects SP2.fasta and 
+  # to be present in the inputs/ directory.
   - "1103_V2_D1"
   - "1103_V6_D29"
   - "2103_V2_D1"
