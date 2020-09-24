@@ -10,8 +10,8 @@ def get_args():
     Get arguments from command line with argparse.
     """
     parser = argparse.ArgumentParser(
-        prog='Sort-Fasta-Records-Biopython.py',
-        description="""Sort all entries in a fasta file by order of record name.""")
+        prog='genome-binning-summarizer.py',
+        description="""Pulls together summary information from many sources to summarize MAGs for a given sample.""")
 
     parser.add_argument("-d", "--depth",
                         required=True,
