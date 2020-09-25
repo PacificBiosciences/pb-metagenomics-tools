@@ -36,7 +36,7 @@ This workflow requires Anaconda/Conda and Snakemake to be installed, and will re
 - Edit sample names in `Sample-Config.yaml` configuration file in `configs/` for your project. 
 - Execute snakemake using the general commands below: 
 ```
-snakemake --snakefile Snakefile-genomebinning --configfile configs/Sample-Config.yaml --use-conda [additional args for local setup or cluster configuration]
+snakemake --snakefile Snakefile-genomebinning --configfile configs/Sample-Config.yaml --use-conda [args for local/HPC execution]
 ```
 
 
