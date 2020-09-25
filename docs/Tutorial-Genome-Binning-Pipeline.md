@@ -116,11 +116,15 @@ It must also be decompressed prior to usage. The contents will be ~27GB in size.
 
 To configure the analysis, the main configuration file (`config.yaml`) and sample configuration file (must be in the `configs/` directory) can be edited. 
 
+## Main configuration file
 The main configuration file contains several parameters, each of which is described in the configuration file. Depending on your system resources, you may choose to change the number of threads used in the minimap, metabat, checkm, or gtdbtk settings. However, **you must specify the full paths to the databases that were downloaded for checkm and gtdbtk**. In the configuration file, this is the `datapath` parameter in the checkm settings, and the `gtdbtk_data` parameter in the gtdbtk settings. See above section for where to obtain these databases.
 
+You may also wish to change the thresholds for filtering in the gtdbtk settings: `min_completeness` (default 70), `max_contamination` (default 10), and `max_contigs` (default 10).
+
+## Sample configuration file
 The example sample configuration file is called `Sample-Config-Example.yaml` and is located in the `configs/` directory. You can rename this file if desired. Here you should specify the sample names that you wish to include in the analysis. 
 
-For the Genome-Binning-Pipeline, all samples specified in the sample configuration file must have two corresponding files in the `inputs/` folder. These include the fasta file of HiFi reads (`SAMPLE.fasta`) and the assembled contigs (`SAMPLE.contig.fasta`). Here, the `SAMPLE` component is a name included in the sample configuration file. The pipeline can be run for any number of samples. You can also configure the file to only run some of the samples present in the `inputs/` folder. Please note that if the input files do not follow these naming conventions (`SAMPLE.fasta`, `SAMPLE.contig.fasta`), they will not be recognized by the workflow. 
+For the Genome-Binning-Pipeline, all samples specified in the sample configuration file must have two corresponding files in the `inputs/` folder. These include the fasta file of HiFi reads (`SAMPLE.fasta`) and the assembled contigs (`SAMPLE.contig.fasta`). Here, the `SAMPLE` component is a name included in the sample configuration file. The pipeline can be run for any number of samples. You can also configure the file to only run some of the samples present in the `inputs/` folder. Please note that if the input files do not follow these naming conventions (`SAMPLE.fasta`, `SAMPLE.contig.fasta`), they will not be recognized by the workflow. Note that you can use the actual files or symlinks to those files, both are compatible with snakemake.
 
 [Back to top](#TOP)
 
