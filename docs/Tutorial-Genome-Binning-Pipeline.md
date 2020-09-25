@@ -7,7 +7,7 @@
 + [3. Requirements for Running](#RFR)
 + [4. Configuring the Analysis](#CTA)
 + [5. Executing Snakemake](#EXS)
-+ [6. Main Programs Usage](#MPU)
++ [6. Usage for Main Programs](#MPU)
 
 
 ---------------
@@ -243,7 +243,7 @@ The jobs should begin scheduling and running. You can see the progress on screen
 ---------------
 
 
-## **6. Main Programs Usage** <a name="MPU"></a>
+## **6. Usage for Main Programs** <a name="MPU"></a>
 
 In this section, additional details are provided for the main programs used in the workflow. The commands to call these programs are provided here for quick reference. Curly braces are sections filled automatically by snakemake. For additional details on other steps, please refer to the Snakefile-genomebinning file.
 
