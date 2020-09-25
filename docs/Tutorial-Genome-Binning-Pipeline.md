@@ -31,7 +31,7 @@ HiFi reads are mapped to contigs using minimap2 to generate BAM files. The BAM f
 This workflow requires [Anaconda](https://docs.conda.io/projects/conda/en/latest/index.html)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require 45-150GB memory and >250GB temporary disk space. All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps.
 
 - Clone the Genome-Binning-Pipeline directory.
-- Download and unpack the databases for CheckM and GTDB. Specify paths to each database in `config.yaml`.
+- Download and unpack the databases for CheckM (<2GB) and GTDB (~28GB). Specify paths to each database in `config.yaml`.
 - Include all input HiFi fasta files (`SAMPLE.fasta`) and contig fasta files (`SAMPLE.contigs.fasta`) in the `inputs/` folder. These can be files or symlinks. 
 - Edit sample names in `Sample-Config.yaml` configuration file in `configs/` for your project. 
 - Execute snakemake using the general commands below: 
@@ -127,7 +127,7 @@ Complete instructions for the GTDB-Tk database can be found at: https://ecogenom
 
 The current GTDB release can be downloaded from: https://data.ace.uq.edu.au/public/gtdb/data/releases/release95/95.0/auxillary_files/gtdbtk_r95_data.tar.gz
 
-It must also be decompressed prior to usage. The contents will be ~27GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`fastani/`, `markers/`, `masks/`, `metadata/`, `mrca_red/`, `msa/`, `pplacer/`, `radii/`, `taxonomy/`).
+It must also be decompressed prior to usage. The contents will be ~28GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`fastani/`, `markers/`, `masks/`, `metadata/`, `mrca_red/`, `msa/`, `pplacer/`, `radii/`, `taxonomy/`).
 
 
 [Back to top](#TOP)
