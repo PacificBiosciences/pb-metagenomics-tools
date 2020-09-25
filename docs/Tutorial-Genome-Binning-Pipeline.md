@@ -52,7 +52,7 @@ To run the workflow, you will need to obtain all contents within the [Genome-Bin
 Genome-Binning-Pipeline
 │
 ├── configs/
-│	└── Sample-Config-Example.yaml
+│	└── Sample-Config.yaml
 │
 ├── envs/
 │	└── general.yml
