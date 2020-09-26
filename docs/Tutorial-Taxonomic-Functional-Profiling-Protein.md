@@ -288,10 +288,9 @@ Chunks are named as `SAMPLE.fasta_chunk_0000000`, `SAMPLE.fasta_chunk_0000001`, 
 
 DIAMOND is used to perform translation alignment of HiFi reads to the NCBI-nr database, using long-read settings. In particular, the `--range-culling` and `--top 5` options are used. Here is an explanation of the `--range-culling` feature from the [DIAMOND website](http://www.diamondsearch.org/index.php?pages/command_line_options/):
 
-```
---range-culling
-This feature is designed for long query DNA sequences that may span several genes. In these cases, reporting the overall top N hits can cause hits to a lower-scoring gene to be superseded by a higher-scoring gene. Using this option, hit culling will be performed locally with respect to a hit’s query range, thus reporting the locally top N hits while allowing more hits that span a different region of the query.
-```
+> --range-culling 
+
+> This feature is designed for long query DNA sequences that may span several genes. In these cases, reporting the overall top N hits can cause hits to a lower-scoring gene to be superseded by a higher-scoring gene. Using this option, hit culling will be performed locally with respect to a hit’s query range, thus reporting the locally top N hits while allowing more hits that span a different region of the query.
 
 Using this feature along with `--top 5`, a hit will only be deleted if its score is more than 5% lower than that of a higher scoring hit over at least 50% of its query range. This allows more hits to be reported along the full length of the HiFi reads, and is more representative of our data.
 
