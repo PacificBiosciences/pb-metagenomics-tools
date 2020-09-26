@@ -252,6 +252,9 @@ Genome-Binning-Pipeline
 ├── Snakefile-genomebinning
 ├── config.yaml
 │
+├── benchmarks/
+├── logs/
+│
 ├── 1-bam/
 │
 ├── 2-metabat-bins/
@@ -267,6 +270,8 @@ Genome-Binning-Pipeline
 └── 7-summary/
 ```
 
+- `benchmarks/` contains benchmark information on memory usage and I/O for each rule executed.
+- `logs/` contains log files for each rule executed.
 - `1-bam/` contains the sorted bam files from mapping reads to contigs using minimap2.
 - `2-metabat-bins/` contains the outputs from metabat2, per sample.
 - `3-checkm/` contains outputs from checkm, per sample.
