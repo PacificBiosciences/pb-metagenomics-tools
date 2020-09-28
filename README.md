@@ -8,7 +8,7 @@ Welcome! Here you can find a variety of tools and pipelines tailored to using Pa
 
 + **`Taxonomic-Functional-Profiling-Protein`**: Align HiFi reads to a **protein** database using DIAMOND and prepare inputs for MEGAN6, for the purpose of taxonomic and functional profiling. Provides access to NCBI and GTDB taxonomic analysis, and allows functional analyses based on annotations from several databases (SEED, InterPro2GO, eggNOG). 
 
-+ **`Taxonomic-Functional-Profiling-Nucelotide`**: Align HiFi reads to a **nucleotide** database using minimap2 and prepare inputs for MEGAN6, for the purpose of taxonomic profiling. Only provides access to NCBI taxonomic analysis, but may give higher matching resolution than with protein alignments. The GTDB taxonomy and functional annotations are not accessible in MEGAN using nucleotide alignments.
++ **`Taxonomic-Functional-Profiling-Nucelotide`**: Align HiFi reads to a **nucleotide** database using minimap2 and prepare inputs for MEGAN6, for the purpose of taxonomic profiling. Only provides access to NCBI taxonomic analysis, but may give higher resolution than with protein alignments. The GTDB taxonomy and functional annotations are not accessible in MEGAN using nucleotide alignments.
 
 
 These pipelines can be found in their respective folders. They are available as Snakemake workflows.
