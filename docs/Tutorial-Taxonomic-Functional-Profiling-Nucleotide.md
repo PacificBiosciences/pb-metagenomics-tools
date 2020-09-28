@@ -30,7 +30,7 @@ To make an RMA file, it is required to have the reads and alignments in the exac
 
 # **Quick Start** <a name="QS"></a>
 
-This workflow requires [Anaconda](https://docs.conda.io/projects/conda/en/latest/index.html)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require ~60GB memory and up to 400GB disk space per sample for very large HiFi fasta files (>2 million reads @ 10kb, see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps.
+This workflow requires [Anaconda](https://docs.conda.io/projects/conda/en/latest/index.html)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require ~60GB memory and 50-400GB disk space per sample (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps.
 
 - Clone the Taxonomic-Functional-Profiling-Nucleotide directory.
 - Download MEGAN6 community edition from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html) to obtain `sam2rma`. 
@@ -44,7 +44,7 @@ This workflow requires [Anaconda](https://docs.conda.io/projects/conda/en/latest
 ```
 snakemake --snakefile Snakefile-taxnuc --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]
 ```
-The choice of additional arguments to include depends on where and how you choose to run snakemake. Please refer to the [4. Executing Snakemake](#EXS) section for more details.
+The choice of additional arguments to include depends on where and how you choose to run snakemake. Please refer to the [Executing Snakemake](#EXS) section for more details.
 
 [Back to top](#TOP)
 
@@ -84,7 +84,7 @@ The `inputs/` directory should contain all of the required input files for each 
 
 The `scripts/` directory contains two Python scripts required for the workflow. `Sort-Fasta-Records-BioPython.py` is used to sort the HiFi reads fasta by read names, and `sam-merger-minimap.py` is used to merge SAM files.
 
-Finally, the `envs/` directory contains the `general.yml` file which is needed to install all dependencies through conda. This environment is activated for each step of the workflow. The dependencies are installed from bioconda and conda-forge and include `exonerate 2.4.0` and `minimap2 2.17`.
+Finally, the `envs/` directory contains the `general.yml` file which is needed to install all dependencies through conda. This environment is activated for each step of the workflow. The dependencies are installed from bioconda and conda-forge and include `exonerate 2.4.0`, `minimap2 2.17`, and several packages for Python3.
 
 [Back to top](#TOP)
 
@@ -99,7 +99,7 @@ Running this pipeline using the default settings should require <60GB of memory.
 - Very large HiFi reads fasta files (>2 million reads @ 10kb) can produce SAM outputs 200-350GB in size, which can result in RMA files 15-30GB in size (**200-400GB total**).
 - Smaller HiFi reads fasta files (<1 million reads @ 8kb) can produce SAM outputs 50-120GB in size, which can result in RMA files 3-10GB in size (**50-130GB total**).
 
-After completion, the very large SAM files and the sorted HiFi reads fasta files can be deleted. These files are not removed automatically in case different formats of RMA files need to be produced by the user, as sam2rma requires both the sorted reads and the SAM files.
+After completion, the very large SAM files and the sorted HiFi reads fasta files can be deleted. These files are not removed automatically in case different formats of RMA files need to be produced by the user, as sam2rma requires both the sorted reads and the SAM files. If disk space is an issue, you may choose to run one sample at a time.
 
 ## Dependencies
 
@@ -113,13 +113,13 @@ If you intend to generate a graphic for the snakemake workflow graph, you will a
 
 MEGAN6 community edition should be downloaded from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). The `sam2rma` binary is required for this pipeline. The `sam2rma` binary should be present in the `tools` bin distributed with MEGAN. **The full path to `sam2rma` must be specified in `config.yaml`.**
 
-The newest MEGAN mapping file for genomic DNA accessions should also be downloaded from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). It must be unpacked to use it. The current file is ~4.5GB. **The full path to the unpacked database file (ending with `.db`) must be specified in `config.yaml`.**
+The newest MEGAN mapping file for genomic DNA accessions should also be downloaded from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). It must be unpacked to use it. The current unpacked file is ~4.5GB. **The full path to the unpacked database file (ending with `.db`) must be specified in `config.yaml`.**
 
 ## Download and index the NCBI-nt database
 
 The NCBI-nt database is available at: ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz*
 
-The gzipped database is ~82GB in size.
+The gzipped database (`nt.gz`) is ~82GB in size.
 
 The database must be indexed with minimap2 prior to running the pipeline. This can be accomplished using the following command:
 `minimap2 -k 19 -w 10 -d mm2_nt_db.mmi nt.gz`. 
@@ -127,6 +127,8 @@ The database must be indexed with minimap2 prior to running the pipeline. This c
 Note that only 3 threads can be used for this step and that it will take a couple hours. Please also note that the `-k` and `-w` settings used here will override settings used during alignment, if they are not the same. The alignments use `-k 19 -w 10` and these values must be used here for correct indexing. 
 
 This command will result in a `mm2_nt_db.mmi` file that is ~860GB. **The full path to the `mm2_nt_db.mmi` file must be specified in `config.yaml`.**
+
+You can always use a customized nt database, for example a subset of the NCBI nt database. 
 
 
 [Back to top](#TOP)
@@ -175,7 +177,7 @@ Let's unpack this command:
 - `--snakefile Snakefile-taxnuc` tells snakemake to run this particular snakefile.
 - `--configfile configs/Sample-Config.yaml` tells snakemake to include the samples listed in the sample configuration file.
 
-The dry run command should result in the jobs being displayed on screen. 
+The dry run command should result in a sequence of jobs being displayed on screen. 
 
 ### Create workflow figure
 If there are no errors, you may wish to generate a figure of the directed acyclic graph (the workflow steps). You can do this using the following command:
@@ -280,7 +282,7 @@ If no additional RMA files are to be generated, you should remove all the sorted
 
 ## **6. Usage Details for Main Programs** <a name="UDMP"></a>
 
-In this section, additional details are provided for the main programs used in the workflow. The commands to call these programs are provided here for quick reference. Curly braces are sections filled automatically by snakemake. For additional details on other steps, please refer to the Snakefile-taxprot file.
+In this section, additional details are provided for the main programs used in the workflow. The commands to call these programs are provided here for quick reference. Curly braces are sections filled automatically by snakemake. For additional details on other steps, please refer to the Snakefile-taxnuc file.
 
 
 ### exonerate

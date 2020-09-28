@@ -29,7 +29,7 @@ Translation alignments of the HiFi reads to the protein database are performed u
 
 # **Quick Start** <a name="QS"></a>
 
-This workflow requires [Anaconda](https://docs.conda.io/projects/conda/en/latest/index.html)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require ~60GB memory and up to 200GB disk space per sample for very large HiFi fasta files (>2 million reads @ 10kb). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps.
+This workflow requires [Anaconda](https://docs.conda.io/projects/conda/en/latest/index.html)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require ~60GB memory and 40-200GB disk space per sample (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps.
 
 - Clone the Taxonomic-Functional-Profiling-Protein directory.
 - Download MEGAN6 community edition from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html) to obtain `sam2rma`. 
@@ -43,7 +43,7 @@ This workflow requires [Anaconda](https://docs.conda.io/projects/conda/en/latest
 ```
 snakemake --snakefile Snakefile-taxprot --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]
 ```
-The choice of additional arguments to include depends on where and how you choose to run snakemake. Please refer to the [4. Executing Snakemake](#EXS) section for more details.
+The choice of additional arguments to include depends on where and how you choose to run snakemake. Please refer to the [Executing Snakemake](#EXS) section for more details.
 
 [Back to top](#TOP)
 
@@ -82,7 +82,7 @@ The `inputs/` directory should contain all of the required input files for each 
 
 The `scripts/` directory contains a Python script required for the workflow. It is used to filter and merge the protein-SAM files.
 
-Finally, the `envs/` directory contains the `general.yml` file which is needed to install all dependencies through conda. This environment is activated for each step of the workflow. The dependencies are installed from bioconda and conda-forge and include `exonerate 2.4.0` and `diamond 2.0.4`.
+Finally, the `envs/` directory contains the `general.yml` file which is needed to install all dependencies through conda. This environment is activated for each step of the workflow. The dependencies are installed from bioconda and conda-forge and include `exonerate 2.4.0`, `diamond 2.0.4`, and several packages for Python3.
 
 [Back to top](#TOP)
 
@@ -97,7 +97,7 @@ Running this pipeline using the default settings should require <60GB of memory.
 - Very large HiFi reads fasta files (>2 million reads @ 10kb) can produce protein-SAM outputs 100-180GB in size, which can result in RMA files 20-35GB in size (**150-215GB total**).
 - Smaller HiFi reads fasta files (<1 million reads @ 8kb) can produce protein-SAM outputs 40-80GB in size, which can result in RMA files 6-11GB in size (**40-90GB total**).
 
-After completion, the large protein-SAM files can be deleted. The protein-SAM files are not removed automatically in case different formats of RMA files need to be produced by the user.
+After completion, the large protein-SAM files can be deleted. The protein-SAM files are not removed automatically in case different formats of RMA files need to be produced by the user. If disk space is an issue, you may choose to run one sample at a time.
 
 ## Dependencies
 
@@ -111,19 +111,20 @@ If you intend to generate a graphic for the snakemake workflow graph, you will a
 
 MEGAN6 community edition should be downloaded from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). The `sam2rma` binary is required for this pipeline. The `sam2rma` binary should be present in the `tools` bin distributed with MEGAN. **The full path to `sam2rma` must be specified in `config.yaml`.**
 
-The newest MEGAN mapping file for NCBI-nr accessions should also be downloaded from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). It must be unpacked to use it. The current file is ~7GB. **The full path to the unpacked database file (ending with `.db`) must be specified in `config.yaml`.**
+The newest MEGAN mapping file for NCBI-nr accessions should also be downloaded from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). It must be unpacked to use it. The current unpacked file is ~7GB. **The full path to the unpacked database file (ending with `.db`) must be specified in `config.yaml`.**
 
 ## Download and index the NCBI-nr database
 
 The NCBI-nr protein database is available at: ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz*
 
-The gzipped database is ~80GB in size.
+The gzipped database (`nr.gz`) is ~80GB in size.
 
 The database must be indexed with DIAMOND prior to running the pipeline. This can be accomplished using the following command:
 `diamond makedb --in nr.gz --db diamond_nr_db --threads 24`. 
 
 This command will result in a `diamond_nr_db.dmnd` file that is ~150GB. **The full path to the `diamond_nr_db.dmnd` file must be specified in `config.yaml`.**
 
+You can always use a customized protein database, for example a subset of the NCBI nr database. 
 
 [Back to top](#TOP)
 
@@ -171,7 +172,7 @@ Let's unpack this command:
 - `--snakefile Snakefile-taxprot` tells snakemake to run this particular snakefile.
 - `--configfile configs/Sample-Config.yaml` tells snakemake to include the samples listed in the sample configuration file.
 
-The dry run command should result in the jobs being displayed on screen. 
+The dry run command should result in a sequence of jobs being displayed on screen. 
 
 ### Create workflow figure
 If there are no errors, you may wish to generate a figure of the directed acyclic graph (the workflow steps). You can do this using the following command:
