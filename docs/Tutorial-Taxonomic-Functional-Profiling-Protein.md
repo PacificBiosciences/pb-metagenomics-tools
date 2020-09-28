@@ -54,7 +54,7 @@ The choice of additional arguments to include depends on where and how you choos
 To run the workflow, you will need to obtain all contents within the [Taxonomic-Functional-Profiling-Protein folder](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Functional-Profiling-Protein). The default contents should look like this:
 
 ```
-Genome-Binning-Pipeline
+Taxonomic-Functional-Profiling-Protein
 │
 ├── configs/
 │	└── Sample-Config.yaml
@@ -80,7 +80,7 @@ The `configs/` directory contains an example configuration file for specifying w
 
 The `inputs/` directory should contain all of the required input files for each sample. In this workflow there must be a `SAMPLE.fasta` file of HiFi reads per sample. These can be the actual files, or symbolic links to the files (for example using `ln -s source_file symbolic_name`). 
 
-The `scripts/` directory contains a Python scripts required for the workflow. It is used to filter and merge the protein-SAM files.
+The `scripts/` directory contains a Python script required for the workflow. It is used to filter and merge the protein-SAM files.
 
 Finally, the `envs/` directory contains the `general.yml` file which is needed to install all dependencies through conda. This environment is activated for each step of the workflow. The dependencies are installed from bioconda and conda-forge and include `exonerate 2.4.0` and `diamond 2.0.4`.
 
@@ -90,13 +90,14 @@ Finally, the `envs/` directory contains the `general.yml` file which is needed t
 
 # **2. Requirements for Running** <a name="RFR"></a>
 
-Running this pipeline using the default setting should require <60GB of memory. Approximately 150GB disk space is required for the DIAMOND-indexed NCBI-nr database. Additionally, depending on the size of the HiFi reads fasta file, up to 200GB disk space may be required per sample: 
+
+## Memory and disk space requirements
+
+Running this pipeline using the default settings should require <60GB of memory. Approximately 150GB disk space is required for the DIAMOND-indexed NCBI-nr database. Additionally, depending on the size of the HiFi reads fasta file, 40-200GB disk space may be required per sample: 
 - Very large HiFi reads fasta files (>2 million reads @ 10kb) can produce protein-SAM outputs 100-180GB in size, which can result in RMA files 20-35GB in size (**150-215GB total**).
 - Smaller HiFi reads fasta files (<1 million reads @ 8kb) can produce protein-SAM outputs 40-80GB in size, which can result in RMA files 6-11GB in size (**40-90GB total**).
 
 After completion, the large protein-SAM files can be deleted. The protein-SAM files are not removed automatically in case different formats of RMA files need to be produced by the user.
-
-There are also a few steps that must be completed prior to running the snakemake workflow.
 
 ## Dependencies
 
@@ -110,7 +111,7 @@ If you intend to generate a graphic for the snakemake workflow graph, you will a
 
 MEGAN6 community edition should be downloaded from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). The `sam2rma` binary is required for this pipeline. The `sam2rma` binary should be present in the `tools` bin distributed with MEGAN. **The full path to `sam2rma` must be specified in `config.yaml`.**
 
-The newest MEGAN mapping file for NCBI-nr accessions should also be downloaded from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). It must be unpacked to use it. The current file is ~4.4GB. **The full path to the unpacked database file (ending with `.db`) must be specified in `config.yaml`.**
+The newest MEGAN mapping file for NCBI-nr accessions should also be downloaded from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). It must be unpacked to use it. The current file is ~7GB. **The full path to the unpacked database file (ending with `.db`) must be specified in `config.yaml`.**
 
 ## Download and index the NCBI-nr database
 
@@ -154,11 +155,9 @@ There are several ways to execute the workflow. The easiest way is to run snakem
 
 ## Local execution
 
-**Given the large memory requirements for several programs used in the workflow, execution of this mode is only recommended with interactive HPC sessions.**
-
 Snakemake can be run "locally" (e.g., without cluster configuration). Snakemake will automatically determine how many jobs can be run simultaneously based on the resources specified. This type of snakemake analysis can be run on a local system, but ideally it should be executed using an interactive HPC session (for example, `qrsh` with SGE or the SLURM equivalent).
 
-The workflow must be executed from within the directory containing all the snakemake contents for the genome-binning-pipeline. 
+The workflow must be executed from within the directory containing all the snakemake contents for the Taxonomic-Functional-Profiling-Protein pipeline. 
 
 ### Test workflow
 It is a good idea to test the workflow for errors before running it. This can be done with the following command:
@@ -260,8 +259,8 @@ Genome-Binning-Pipeline
 - `logs/` contains log files for each rule executed. 
 - `1-chunks/` temporarily holds the four chunks of an input reads file. Will be empty if no errors occur.
 - `2-diamond/` temporarily holds the four protein-SAM files generated per sample. Will be empty if no errors occur.
-- `3-merged/` contains the filtered and merged protein-SAM files for each sample.
-- `4-rma/` contains final RMA files for MEGAN.
+- `3-merged/` contains the filtered and merged protein-SAM files for each sample. *These can be deleted if no other RMA files will be created.*
+- `4-rma/` contains final RMA files for MEGAN. **These are the main files of interest.**
 
 If no additional RMA files are to be generated, you should remove all the large protein-SAM files from the `3-merged/` folder. 
 
@@ -294,9 +293,9 @@ DIAMOND is used to perform translation alignment of HiFi reads to the NCBI-nr da
 
 Using this feature along with `--top 5`, a hit will only be deleted if its score is more than 5% lower than that of a higher scoring hit over at least 50% of its query range. This allows more hits to be reported along the full length of the HiFi reads, and is more representative of our data.
 
-Unfortunately, in the current version of DIAMOND (2.0.4) the `--range-culling` is only available if frameshifts (`-F` flag) are allowed. The frameshift characters are what create serious problems during the conversion to RMA format. The frameshift feature was intended for long, noisy reads (such as ONT), and not for HiFi reads. HiFi reads are 99% accurate, and although indels do occur, enabling frameshifts is not particularly beneficial (most hits will be reported anyways). So, the current workaround is to set an extraordinarily high frameshift penalty (`-F 5000` vs. default of `-F 15`) to prevent them. This allows the `--range-culling` feature to be used, while mostly preventing frameshift inferences. 
+Unfortunately, in the current version of DIAMOND (2.0.4) the `--range-culling` is only available if frameshifts (`-F` flag) are allowed. The frameshift characters are what create serious problems during the conversion to RMA format. The frameshift feature was intended for long, noisy reads (such as ONT), and not for HiFi reads. HiFi reads are 99% accurate, and although indels do occur, enabling frameshifts is not particularly beneficial (most hits will be reported anyways). So, the current workaround is to set an extraordinarily high frameshift penalty (`-F 5000` vs. default of `-F 15`) to prevent them. This allows the `--range-culling` feature to be used, while mostly preventing frameshift inferences. However, a small amount of frameshifts are still inferred and these hits must be filtered out prior to conversion to RMA.  
 
-During the filter and merge step using `sam-merger-screen-cigar.py`, the CIGAR strings of all hits are checked for the illegal frameshift characters. If they are found, the hit is removed. This is generally <1% of hits with the current settings. 
+During the filter and merge step using `sam-merger-screen-cigar.py`, the CIGAR strings of all hits are checked for the illegal frameshift characters. If they are found, the hit is removed. This is generally <0.01% of hits with the current settings.
 
 NOTE - `sam2rma` may accept silently accept illegal protein CIGAR strings in a future release. However, these frameshift CIGAR strings will still prevent alignment features and many calculations from being performed in MEGAN. Thus, allowing frameshifts in DIAMOND for HiFi data is still not recommended. For more information, see discussion [here](http://megan.informatik.uni-tuebingen.de/t/does-sam2rma-work-for-converting-sam-protein-alignments/1595/11).
 
@@ -313,6 +312,8 @@ Run the sam2rma tool with long read settings (`-alg longReads`). The default rea
 ```
 sam2rma -i {input.sam} -r {input.reads} -o {output} -lg -alg longReads -t {threads} -mdb {params.db} -ram {params.ram} -v 2> {log}
 ```
+
+In this case, we are using a MEGAN database that maps NCBI-nr accessions to taxonomic and functional classes (NCBI, GTDB, eggNOG, InterPro2GO, SEED).
 
 [Back to top](#TOP)
 
