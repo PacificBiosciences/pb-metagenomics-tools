@@ -6,9 +6,9 @@ Welcome! Here you can find a variety of tools and pipelines tailored to using Pa
 
 + **`Genome-Binning-Pipeline`**: Perform genome binning and MAG assessment on HiFi assemblies with a streamlined workflow. Includes steps with minimap2, MetaBAT2, CheckM, and GTDB-Tk.
 
-+ **`Taxonomic-Functional-Profiling-Protein`**: Align HiFi reads to a **protein** database using DIAMOND and prepare inputs for MEGAN6, for the purpose of taxonomic and functional profiling. 
++ **`Taxonomic-Functional-Profiling-Protein`**: Align HiFi reads to a **protein** database using DIAMOND and prepare inputs for MEGAN6, for the purpose of taxonomic and functional profiling. Provides access to NCBI and GTDB taxonomic analysis, and allows functional analyses based on annotations from several databases (SEED, InterPro2GO, eggNOG). 
 
-+ **`Taxonomic-Functional-Profiling-Nucelotide`**: Align HiFi reads to a **nucleotide** database using minimap2 and prepare inputs for MEGAN6, for the purpose of taxonomic and functional profiling.
++ **`Taxonomic-Functional-Profiling-Nucelotide`**: Align HiFi reads to a **nucleotide** database using minimap2 and prepare inputs for MEGAN6, for the purpose of taxonomic and functional profiling. Only provides access to NCBI taxonomic analysis, but may give higher matching resolution than with protein alignments. The GTDB taxonomy and functional annotations are not accessible in MEGAN using nucleotide alignments.
 
 
 These pipelines can be found in their respective folders. They are available as Snakemake workflows.
@@ -20,8 +20,8 @@ All documentation can be found in the `docs/` folder located [here](https://gith
 Currently available documentation: 
 - [Genome-Binning-Pipeline tutorial](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Genome-Binning-Pipeline.md)
 - [Taxonomic-Functional-Profiling-Protein tutorial](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Functional-Profiling-Protein.md)
+- [Taxonomic-Functional-Profiling-Nucelotide tutorial](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Functional-Profiling-Nucleotide.md)
 
-Tutorials for the remaining pipelines are currently being written. We intend to have all pipelines fully documented by the end of September 2020. Advanced Snakemake users can look in the snake files for a complete picture of the workflow, including the commands used to call all respective programs. For others, we encourage you to please check back soon!
 
 
 ## DISCLAIMER
