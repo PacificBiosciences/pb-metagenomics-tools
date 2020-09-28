@@ -1,8 +1,8 @@
-# Taxonomic-Functional-Profiling-Nucleotide <a name="TOP"></a>
+# Tutorial for Taxonomic-Profiling-Nucleotide <a name="TOP"></a>
 
 ## **Table of Contents**
 
-+ [Taxonomic-Functional-Profiling-Nucleotide Overview](#PO)
++ [Taxonomic-Profiling-Nucleotide Overview](#PO)
 + [Quick Start](#QS)
 + [1. Snakemake Contents](#SMC)
 + [2. Requirements for Running](#RFR)
@@ -14,11 +14,11 @@
 
 ---------------
 
-# **Taxonomic-Functional-Profiling-Nucleotide Overview** <a name="PO"></a>
+# **Taxonomic-Profiling-Nucleotide Overview** <a name="PO"></a>
 
-The purpose of this snakemake workflow is to perform alignment of HiFi reads to a nucleotide database, and convert the resulting alignments to RMA input files for MEGAN6. This allows interactive taxonomic analyses to be performed across samples. The general steps of the Taxonomic-Functional-Profiling-Nucleotide pipeline are shown below:
+The purpose of this snakemake workflow is to perform alignment of HiFi reads to a nucleotide database, and convert the resulting alignments to RMA input files for MEGAN6. This allows interactive taxonomic analyses to be performed across samples. The general steps of the Taxonomic-Profiling-Nucleotide pipeline are shown below:
 
-![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Taxonomic-Functional-Profiling-Nucleotide-Steps.png)
+![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Taxonomic-Profiling-Nucleotide-Steps.png)
 
 To make an RMA file, it is required to have the reads and alignments in the exact same order. To prevent errors, the first step is to sort the HiFi reads fasta file by read name. The sorted reads fasta file is then split into two chunks for parallel processing. This allows a speedup when jobs are run simultaneously, and also reduces the resources required to run the alignments sequentially. Minimap2 is used to align the HiFi reads files to a nucleotide database. The two resulting SAM files (per sample) are then sorted by read names, and subsequently merged. The resulting sorted SAM file is converted into long-read RMA format using the sam2rma tool distributed with MEGAN6. Each input file of HiFi reads will produce a corresponding output RMA file, ready to use with MEGAN6.  
 
@@ -32,7 +32,7 @@ To make an RMA file, it is required to have the reads and alignments in the exac
 
 This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require ~60GB memory and 50-400GB disk space per sample (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps.
 
-- Clone the Taxonomic-Functional-Profiling-Nucleotide directory.
+- Clone the Taxonomic-Profiling-Nucleotide directory.
 - Download MEGAN6 community edition from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html) to obtain `sam2rma`. 
 - Download and unpack the newest MEGAN mapping file for genomic DNA accessions from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html).
 - Download the NCBI-nt database from: ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz*
@@ -52,10 +52,10 @@ The choice of additional arguments to include depends on where and how you choos
 
 # **1. Snakemake Contents** <a name="SMC"></a>
 
-To run the workflow, you will need to obtain all contents within the [Taxonomic-Functional-Profiling-Nucleotide folder](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Functional-Profiling-Nucleotide). The default contents should look like this:
+To run the workflow, you will need to obtain all contents within the [Taxonomic-Profiling-Nucleotide folder](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Nucleotide). The default contents should look like this:
 
 ```
-Taxonomic-Functional-Profiling-Nucleotide
+Taxonomic-Profiling-Nucleotide
 │
 ├── configs/
 │	└── Sample-Config.yaml
@@ -147,7 +147,7 @@ The main configuration file contains several parameters, each of which is descri
 #### Sample configuration file (`configs/Sample-Config.yaml`)
 The example sample configuration file is called `Sample-Config.yaml` and is located in the `configs/` directory. Here you should specify the sample names that you wish to include in the analysis. 
 
-For the Taxonomic-Functional-Profiling-Nucleotide pipeline, all samples specified in the sample configuration file must have a fasta file of HiFi reads (`SAMPLE.fasta`) in the `inputs/` folder. The pipeline can be run for any number of samples (though be aware of disk space requirements). You can also configure the file to only run for a subset of the samples present in the `inputs/` folder. Please note that if the input files do not follow the naming convention (`SAMPLE.fasta`), they will not be recognized by the workflow. You can use the actual files or symlinks to those files, both are compatible with snakemake.
+For the Taxonomic-Profiling-Nucleotide pipeline, all samples specified in the sample configuration file must have a fasta file of HiFi reads (`SAMPLE.fasta`) in the `inputs/` folder. The pipeline can be run for any number of samples (though be aware of disk space requirements). You can also configure the file to only run for a subset of the samples present in the `inputs/` folder. Please note that if the input files do not follow the naming convention (`SAMPLE.fasta`), they will not be recognized by the workflow. You can use the actual files or symlinks to those files, both are compatible with snakemake.
 
 [Back to top](#TOP)
 
@@ -163,7 +163,7 @@ There are several ways to execute the workflow. The easiest way is to run snakem
 
 Snakemake can be run "locally" (e.g., without cluster configuration). Snakemake will automatically determine how many jobs can be run simultaneously based on the resources specified. This type of snakemake analysis can be run on a local system, but ideally it should be executed using an interactive HPC session (for example, `qrsh` with SGE or the SLURM equivalent).
 
-The workflow must be executed from within the directory containing all the snakemake contents for the Taxonomic-Functional-Profiling-Nucleotide pipeline. 
+The workflow must be executed from within the directory containing all the snakemake contents for the Taxonomic-Profiling-Nucleotide pipeline. 
 
 ### Test workflow
 It is a good idea to test the workflow for errors before running it. This can be done with the following command:
@@ -240,7 +240,7 @@ For information on how to run snakemake with AWS (Amazon Web Services), Google C
 Successful runs will result in several new directories:
 
 ```
-Genome-Binning-Pipeline
+Taxonomic-Profiling-Nucleotide
 │
 ├── configs/
 ├── envs/
