@@ -28,7 +28,7 @@ HiFi reads are mapped to contigs using minimap2 to generate BAM files. The BAM f
 
 # **Quick Start** <a name="QS"></a>
 
-This workflow requires [Anaconda](https://docs.conda.io/projects/conda/en/latest/index.html)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require 45-150GB memory and >250GB temporary disk space. All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps.
+This workflow requires [Anaconda](https://docs.conda.io/projects/conda/en/latest/index.html)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require 45-150GB memory and >250GB temporary disk space (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps.
 
 - Clone the Genome-Binning-Pipeline directory.
 - Download and unpack the databases for CheckM (<2GB) and GTDB (~28GB). Specify paths to each database in `config.yaml`.
@@ -87,9 +87,9 @@ Finally, the `envs/` directory contains the `general.yml` file which is needed t
 
 # **2. Requirements for Running** <a name="RFR"></a>
 
-Running certain steps in this pipeline will require ~45GB of memory. There is a step in GTDB-Tk (pplacer) that can require large amounts memory (~150GB) and disk space (~250GB). This workflow allows writing temporary files in GTDB-Tk using the `--scratch_dir /scratch` setting, which reduces the memory requirements drastically (e.g., 150GB rather than 1TB). These are known issues with pplacer. If run into memory issues with this step please see the discussion [here](https://github.com/Ecogenomics/GTDBTk/issues/124) for potential solutions.
+## Memory and disk space requirements
 
-There are also a few steps that must be completed prior to running the snakemake workflow.
+Running certain steps in this pipeline will require ~45GB of memory. There is a step in GTDB-Tk (pplacer) that can require large amounts memory (~150GB) and temporary disk space (~250GB). This workflow allows writing temporary files in GTDB-Tk using the `--scratch_dir /scratch` setting, which reduces the memory requirements drastically (e.g., 150GB rather than 1TB). These are known issues with pplacer. If run into memory issues with this step please see the discussion [here](https://github.com/Ecogenomics/GTDBTk/issues/124) for potential solutions.
 
 ## Dependencies
 
@@ -107,7 +107,9 @@ For assembly of metagenomic samples with HiFi reads, we strongly recommend using
 canu -d DIRECTORY -p OUTPUT_NAME -pacbio-hifi FQ_DATA genomeSize=100m maxInputCoverage=1000 batMemory=200
 ```
 
-The additional batOptions previously recommended for Canu 2.0 (`batOptions=-eg 0.0 -sb 0.001 -dg 0 -db 3 -dr 0 -ca 2000 -cp 200`) are no longer necessary if using Canu 2.1.
+The additional batOptions previously recommended for Canu 2.0 (`batOptions=-eg 0.0 -sb 0.001 -dg 0 -db 3 -dr 0 -ca 2000 -cp 200`) are apparently no longer necessary if using Canu 2.1.
+
+For a discussion on these metagenomics assembly settings, please see [here](https://github.com/marbl/canu/issues/1796).
 
 ## Download required databases
 
@@ -119,7 +121,7 @@ Complete instructions for the CheckM database can be found at: https://github.co
 
 Briefly, the CheckM database can be obtained from: https://data.ace.uq.edu.au/public/CheckM_databases/
 
-The downloaded file must be decompressed to use it. The contents will be ~1.7GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`distributions/`, `genome_tree/`, `hmms/`, `hmms_ssu/`, `img/`, `pfam/`, `test_data/`) and two tsv files.
+The downloaded file must be decompressed to use it. The unpacked contents will be ~1.7GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`distributions/`, `genome_tree/`, `hmms/`, `hmms_ssu/`, `img/`, `pfam/`, `test_data/`) and two tsv files.
 
 **GTDB-Tk database**
 
@@ -127,7 +129,7 @@ Complete instructions for the GTDB-Tk database can be found at: https://ecogenom
 
 The current GTDB release can be downloaded from: https://data.ace.uq.edu.au/public/gtdb/data/releases/release95/95.0/auxillary_files/gtdbtk_r95_data.tar.gz
 
-It must also be decompressed prior to usage. The contents will be ~28GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`fastani/`, `markers/`, `masks/`, `metadata/`, `mrca_red/`, `msa/`, `pplacer/`, `radii/`, `taxonomy/`).
+It must also be decompressed prior to usage. The unpacked contents will be ~28GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`fastani/`, `markers/`, `masks/`, `metadata/`, `mrca_red/`, `msa/`, `pplacer/`, `radii/`, `taxonomy/`).
 
 
 [Back to top](#TOP)
@@ -162,11 +164,11 @@ There are several ways to execute the workflow. The easiest way is to run snakem
 
 ## Local execution
 
-**Given the large memory requirements for several programs used in the workflow, execution of this mode is only recommended with interactive HPC sessions.**
+**Given the large memory requirements for some programs used in the workflow, execution of this mode is only recommended with interactive HPC sessions.**
 
 Snakemake can be run "locally" (e.g., without cluster configuration). Snakemake will automatically determine how many jobs can be run simultaneously based on the resources specified. This type of snakemake analysis can be run on a local system, but ideally it should be executed using an interactive HPC session (for example, `qrsh` with SGE or the SLURM equivalent).
 
-The workflow must be executed from within the directory containing all the snakemake contents for the genome-binning-pipeline. 
+The workflow must be executed from within the directory containing all the snakemake contents for the Genome-Binning-Pipeline. 
 
 ### Test workflow
 It is a good idea to test the workflow for errors before running it. This can be done with the following command:
@@ -278,12 +280,12 @@ Genome-Binning-Pipeline
 - `4-checkm-summary/` contains intermediate files.
 - `5-gtdb-individual/` contains gtdb-tk results for each sample as run independently.
 - `6-gtdb-combined-[Full]/` contains the gtdb-tk results for the combined sample set.
-- `7-summary/` contains the main output files of interest.
+- `7-summary/` **contains the main output files of interest**.
 
-Within `7-summary/`, there are folders for each sample. Within a sample folder there is:
-+ A main summary file that brings together information from metabats2, checkm, and gtdb-tk for all MAGs that pass the filtering step. 
-+ A folder `binplots` that contains several plots. One set of plots is for the unfiltered genome bins (e.g., all bins from metabat2), and the other is for the filtered high-quality MAGs. These plots compare % genome completeness vs. % contamination, with variations including bin name labels or the number of contigs per bin labeled.
-+ A folder `bin-ref-pairs` which contains a subfolder for each high-quality MAG. Inside each is a MAG fasta file and the closest reference fasta file (inferred by GTDK-Tk). This can be useful for downstream genome alignments or further characterization.
+Within `7-summary/`, there will be a folder for each sample. Within a sample folder there are several items:
++ `SAMPLE.genomebinning.summary.txt`: A main summary file that brings together information from metabat2, checkm, and gtdb-tk for all MAGs that pass the filtering step. 
++ `binplots/`: A folder that contains several plots. One set of plots is for the unfiltered genome bins (e.g., all bins from metabat2), and the other is for the filtered high-quality MAGs. These plots compare % genome completeness vs. % contamination, with variations including bin name labels or the number of contigs per bin labeled.
++ `bin-ref-pairs/`: A folder which contains a subfolder for each high-quality MAG. These folders are named using the bin numbers from metabat2. Inside each folder is a fasta file of the MAG and the closest reference (as inferred by GTDK-Tk). These two files can be useful for performing whole genome alignments or further characterization of the MAG.
 
 
 [Back to top](#TOP)
