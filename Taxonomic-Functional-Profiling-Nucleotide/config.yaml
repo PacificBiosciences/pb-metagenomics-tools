@@ -18,7 +18,7 @@ sam2rma:
   # The full path to the MEGAN database file, which can be downloaded from:
   # https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html
   # please note that the name of this file will change depending on the version, 
-  # and that this must be the the version for the NCBI-nr accessions.
+  # and that this must be the the version for the genomic DNA accessions.
   db: "/home/dportik/programs/megan/db/megan-nucl-map-Jul2020.db"
 
   # Number of threads to use for sam2rma, 24 is generally sufficient
