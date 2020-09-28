@@ -1,4 +1,4 @@
-# Taxonomic-Functional-Profiling-Protein <a name="TOP"></a>
+# Tutorial for Taxonomic-Functional-Profiling-Protein <a name="TOP"></a>
 
 ## **Table of Contents**
 
@@ -235,7 +235,7 @@ For information on how to run snakemake with AWS (Amazon Web Services), Google C
 Successful runs will result in several new directories:
 
 ```
-Genome-Binning-Pipeline
+Taxonomic-Functional-Profiling-Protein
 │
 ├── configs/
 ├── envs/

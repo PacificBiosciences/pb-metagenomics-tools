@@ -1,4 +1,4 @@
-# Genome-Binning-Pipeline <a name="TOP"></a>
+# Tutorial for Genome-Binning-Pipeline <a name="TOP"></a>
 
 ## **Table of Contents**
 
