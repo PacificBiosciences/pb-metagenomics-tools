@@ -4,7 +4,7 @@ Align HiFi reads to a protein database using DIAMOND and prepare inputs for MEGA
 
 This directory contains all the materials needed to run this snakemake workflow.
 
-Documentation for this pipeline is available [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Functional-Profiling-Protein.md).
+[Documentation for the Taxonomic-Functional-Profiling-Protein pipeline is available here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Functional-Profiling-Protein.md).
 
 
 ## DISCLAIMER

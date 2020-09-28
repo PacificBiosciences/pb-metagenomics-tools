@@ -4,7 +4,7 @@ Align HiFi reads to a nucleotide database using minimap2 and prepare inputs for 
 
 This directory contains all the materials needed to run this snakemake workflow.
 
-Documentation for this pipeline is available [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Functional-Profiling-Nucleotide.md).
+[Documentation for the Taxonomic-Functional-Profiling-Nucleotide pipeline is available here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Functional-Profiling-Nucleotide.md).
 
 
 ## DISCLAIMER
