@@ -59,7 +59,7 @@ rule MergeSam:
 rule MakeRMA:
     input:
         sam = "3-merged/{sample}.merged.sam",
-        reads = "samples/{sample}.fasta"
+        reads = "inputs/{sample}.fasta"
     output:
         expand("4-rma/{{sample}}.protein.{mode}.rma", mode = config['sam2rma']['readassignmentmode'])
     conda:
