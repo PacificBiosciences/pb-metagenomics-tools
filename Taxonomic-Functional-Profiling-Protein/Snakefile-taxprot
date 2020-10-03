@@ -32,14 +32,15 @@ rule RunDiamond:
     threads: config['diamond']['threads']
     params:
         db = config['diamond']['db'],
-        block = config['diamond']['block_size']
+        block = config['diamond']['block_size'],
+        hits = config['diamond']['hit_limit']
     log: 
         "logs/{sample}.{piece}.RunDiamond.log"
     benchmark: 
         "benchmarks/{sample}.{piece}.RunDiamond.tsv"
     shell:
         "diamond blastx -d {params.db} -q {input} -o {output} -f 101 -F 5000 "
-        "--range-culling --top 5 -b {params.block} -p {threads} 2> {log}"
+        "--range-culling {params.hits} -b {params.block} -p {threads} 2> {log}"
 
 rule MergeSam:
     input:
