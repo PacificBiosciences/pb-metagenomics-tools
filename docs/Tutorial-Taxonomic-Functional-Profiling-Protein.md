@@ -20,7 +20,7 @@ The purpose of this snakemake workflow is to perform translation alignment of Hi
 
 ![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Taxonomic-Functional-Profiling-Protein-Steps.png)
 
-Translation alignments of the HiFi reads to the protein database are performed using long-read settings in DIAMOND, resulting in a protein-SAM file. The specific long-read settings involve the `--range-culling --top 5` options. DIAMOND can take a very long time to run with large files. In this pipeline, the process is parallelized by splitting each file of HiFi reads into four chunks. This allows a 4x speedup when jobs are run simultaneously, and also reduces the resources required to run the four jobs sequentially. The four protein-SAM files per sample are filtered for illegal CIGAR strings (frameshift characters) and merged into a single protein-SAM file. The resulting protein-SAM file is converted into long-read RMA format using the sam2rma tool distributed with MEGAN6. Each input file of HiFi reads will produce a corresponding output RMA file, ready to use with MEGAN6.  
+Translation alignments of the HiFi reads to the protein database are performed using long-read settings in DIAMOND, resulting in a protein-SAM file. The specific long-read settings involve the `--range-culling` option. DIAMOND can take a very long time to run with large files. In this pipeline, the process is parallelized by splitting each file of HiFi reads into four chunks. This allows a 4x speedup when jobs are run simultaneously, and also reduces the resources required to run the four jobs sequentially. The four protein-SAM files per sample are filtered for illegal CIGAR strings (frameshift characters) and merged into a single protein-SAM file. The resulting protein-SAM file is converted into long-read RMA format using the sam2rma tool distributed with MEGAN6. Each input file of HiFi reads will produce a corresponding output RMA file, ready to use with MEGAN6.  
 
 
 [Back to top](#TOP)
@@ -93,11 +93,11 @@ Finally, the `envs/` directory contains the `general.yml` file which is needed t
 
 ## Memory and disk space requirements
 
-Running this pipeline using the default settings should require <60GB of memory. Approximately 150GB disk space is required for the DIAMOND-indexed NCBI-nr database. Additionally, depending on the size of the HiFi reads fasta file, 40-200GB disk space may be required per sample: 
+Running this pipeline using the default settings should require <60GB of memory. Approximately 150GB disk space is required for the DIAMOND-indexed NCBI-nr database. Additionally, depending on the size of the HiFi reads fasta file, 40-200GB disk space may be required per sample (using the default setting for `hit_limit`:`--top 5`): 
 - Very large HiFi reads fasta files (>2 million reads @ 10kb) can produce protein-SAM outputs 100-180GB in size, which can result in RMA files 20-35GB in size (**150-215GB total**).
 - Smaller HiFi reads fasta files (<1 million reads @ 8kb) can produce protein-SAM outputs 40-80GB in size, which can result in RMA files 6-11GB in size (**40-90GB total**).
 
-After completion, the large protein-SAM files can be deleted. The protein-SAM files are not removed automatically in case different formats of RMA files need to be produced by the user. If disk space is an issue, you may choose to run one sample at a time.
+After completion, the large protein-SAM files can be deleted. The protein-SAM files are not removed automatically in case different formats of RMA files need to be produced by the user.** The run time and the size of output protein-SAM files can be greatly reduced by changing the `hit_limit` setting to `-k 5` instead (see [Configuring the Analysis](#CTA) section below)** .
 
 ## Dependencies
 
