@@ -50,8 +50,8 @@ rule RunMetabat:
         contigs = "inputs/{sample}.contigs.fasta",
         depths = "1-bam/{sample}.depth.txt"
     output:
-        file = "2-metabat-bins/{sample}/completed.txt",
-        outdir = "2-metabat-bins/{sample}/"
+        file = "2-metabat-bins/{sample}.completed.txt",
+        outdir = directory("2-metabat-bins/{sample}/")
     conda:
         "envs/general.yml"
     threads: 
@@ -68,7 +68,7 @@ rule RunMetabat:
         
 rule RunCheckM:
     input:
-        metaoutput = "2-metabat-bins/{sample}/completed.txt",
+        metaoutput = "2-metabat-bins/{sample}.completed.txt"
     output:
         "3-checkm/{sample}/lineage.ms"
     conda:
@@ -130,9 +130,9 @@ rule RunGTDBTkIndividual:
     input:
         "4-checkm-summary/{sample}.batchfile.txt"
     output:
-        "5-gtdb-individual/{sample}/align/",
-        "5-gtdb-individual/{sample}/classify/",
-        "5-gtdb-individual/{sample}/identify/"
+        directory("5-gtdb-individual/{sample}/align/"),
+        directory("5-gtdb-individual/{sample}/classify/"),
+        directory("5-gtdb-individual/{sample}/identify/")
     conda:
         "envs/general.yml"
     threads: 
@@ -166,9 +166,9 @@ rule RunGTDBTkFull:
     input:
         f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/Full.batchfile.txt"
     output:
-        f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/align/",
-        f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/classify/",
-        f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/identify/"
+        directory(f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/align/"),
+        directory(f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/classify/"),
+        directory(f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/identify/")
     conda:
         "envs/general.yml"
     threads: 
