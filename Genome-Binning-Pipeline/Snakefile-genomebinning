@@ -79,7 +79,8 @@ rule RunCheckM:
         ppthreads = config['checkm']['pplacer_threads'],
         indir = "2-metabat-bins/{sample}/",
         outdir = "3-checkm/{sample}/",
-        datapath = config['checkm']['datapath']
+        datapath = config['checkm']['datapath'],
+        tmpdir = config['checkm']['tmpdir']
     log: 
         root = "logs/{sample}.RunCheckM-Root.log",
         run = "logs/{sample}.RunCheckM-Run.log"

@@ -33,7 +33,7 @@ This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](h
 - Clone the Genome-Binning-Pipeline directory.
 - Download and unpack the databases for CheckM (<2GB) and GTDB (~28GB). Specify paths to each database in `config.yaml`.
 - Include all input HiFi fasta files (`SAMPLE.fasta`) and contig fasta files (`SAMPLE.contigs.fasta`) in the `inputs/` folder. These can be files or symlinks. 
-- Edit sample names in `Sample-Config.yaml` configuration file in `configs/` for your project. 
+- Edit sample names in `Sample-Config.yaml` configuration file in `configs/` for your project. Check also the `tmpdir` argument under `checkm` to ensure a valid directory is used.
 - Execute snakemake using the general commands below: 
 ```
 snakemake --snakefile Snakefile-genomebinning --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]
@@ -142,6 +142,8 @@ To configure the analysis, the main configuration file (`config.yaml`) and sampl
 
 #### Main configuration file (`config.yaml`)
 The main configuration file contains several parameters, each of which is described in the configuration file. Depending on your system resources, you may choose to change the number of threads used in the minimap, metabat, checkm, or gtdbtk settings. In particular, the use of `pplacer` in gtdbtk can cause very high memory/disk usage depending on the threads used (see [here](https://github.com/Ecogenomics/GTDBTk/issues/124)). You may wish to change this setting if you encounter issues.
+
+Please also check that the `checkm`:`tmpdir` argument is set correctly. The default is `/scratch`, which may be available to most users on HPC. This can be changed if `/scratch` is not available, or if you are running snakemake locally. Change it to a valid output directory that can be used to write many large files.
 
 **You must specify the full paths to the databases that were downloaded for checkm and gtdbtk**. In the configuration file, this is the `datapath` parameter in the checkm settings, and the `gtdbtk_data` parameter in the gtdbtk settings. See above section for where to obtain these databases.
 
