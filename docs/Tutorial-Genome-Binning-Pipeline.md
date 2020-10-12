@@ -143,7 +143,7 @@ To configure the analysis, the main configuration file (`config.yaml`) and sampl
 #### Main configuration file (`config.yaml`)
 The main configuration file contains several parameters, each of which is described in the configuration file. Depending on your system resources, you may choose to change the number of threads used in the minimap, metabat, checkm, or gtdbtk settings. In particular, the use of `pplacer` in gtdbtk can cause very high memory/disk usage depending on the threads used (see [here](https://github.com/Ecogenomics/GTDBTk/issues/124)). You may wish to change this setting if you encounter issues.
 
-Please also check that the `checkm`:`tmpdir` argument is set correctly. The default is `/scratch`, which may be available to most users on HPC. This can be changed if `/scratch` is not available, or if you are running snakemake locally. Change it to a valid output directory that can be used to write many large files.
+Please also check that the `tmpdir` argument is set correctly. The default is `/scratch`, which may be available to most users on HPC. This can be changed if `/scratch` is not available, or if you are running snakemake locally. Change it to a valid output directory that can be used to write many large files. This is used in conjunction with the `--tmpdir` flag in CheckM and the `--scratch_dir` flag in GTDB-Tk. If you would rather not use these flags, you can edit the `RunCheckM`, `RunGTDBTkIndividual`, and `RunGTDBTkFull` rules.
 
 **You must specify the full paths to the databases that were downloaded for checkm and gtdbtk**. In the configuration file, this is the `datapath` parameter in the checkm settings, and the `gtdbtk_data` parameter in the gtdbtk settings. See above section for where to obtain these databases.
 

@@ -1,3 +1,10 @@
+# The path to use as the temporary directory to write large files to, which is used with the
+# --tmpdir flag in checkm, and the --scratch_dir flag in gtdb. If using HPC, use "/scratch" 
+# if you have access. If you do not have access to "/scratch" on HPC or are running 
+# snakemake locally, change to a valid directory.
+tmpdir: "/scratch"
+
+
 minimap:
   # The number of threads to use for minimap2.
   threads: 24
@@ -20,11 +27,6 @@ checkm:
   # distributions, genome_tree, hmms, hmms_ssu, img, pfam, test_data, and the two tsv files.
   datapath: "/dept/appslab/datasets/dp_checkm/"
   
-  # The path to use as the temporary directory to write files to, which is used with the
-  # --tmpdir flag in checkm. If using HPC, use "/scratch" if you have access. If you do not 
-  # have access to "/scratch" on HPC or are running snakemake locally, change to a valid 
-  # directory.
-  tmpdir: "/scratch"
   
 gtdbtk:
   # The minimum percent completeness for a genome bin.

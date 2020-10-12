@@ -80,7 +80,7 @@ rule RunCheckM:
         indir = "2-metabat-bins/{sample}/",
         outdir = "3-checkm/{sample}/",
         datapath = config['checkm']['datapath'],
-        tmpdir = config['checkm']['tmpdir']
+        tmpdir = config['tmpdir']
     log: 
         root = "logs/{sample}.RunCheckM-Root.log",
         run = "logs/{sample}.RunCheckM-Run.log"
@@ -141,7 +141,8 @@ rule RunGTDBTkIndividual:
     params:
         ppthreads = config['gtdbtk']['pplacer_threads'],
         gtdbtk_data = config['gtdbtk']['gtdbtk_data'],
-        outdir = "5-gtdb-individual/{sample}/"
+        outdir = "5-gtdb-individual/{sample}/",
+        tmpdir = config['tmpdir']
     log: 
         "logs/{sample}.RunGTDBTkIndividual.log"
     benchmark: 
@@ -149,7 +150,7 @@ rule RunGTDBTkIndividual:
     shell:
         "GTDBTK_DATA_PATH={params.gtdbtk_data:q} gtdbtk classify_wf --batchfile {input} "
         "--out_dir {params.outdir} -x fa --prefix {wildcards.sample} --cpus {threads} "
-        "--pplacer_cpus {params.ppthreads} --scratch_dir /scratch &> {log}"
+        "--pplacer_cpus {params.ppthreads} --scratch_dir {tmpdir} &> {log}"
         
 rule FullBatchFile:
     input:
@@ -177,7 +178,8 @@ rule RunGTDBTkFull:
     params:
         ppthreads = config['gtdbtk']['pplacer_threads'],
         gtdbtk_data = config['gtdbtk']['gtdbtk_data'],
-        outdir = f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/"
+        outdir = f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/",
+        tmpdir = config['tmpdir']
     log: 
         "logs/RunGTDBTkFull.log"
     benchmark: 
@@ -185,7 +187,7 @@ rule RunGTDBTkFull:
     shell:
         "GTDBTK_DATA_PATH={params.gtdbtk_data:q} gtdbtk classify_wf --batchfile {input} "
         "--out_dir {params.outdir} -x fa --prefix Full --cpus {threads} "
-        "--pplacer_cpus {params.ppthreads} --scratch_dir /scratch &> {log}"
+        "--pplacer_cpus {params.ppthreads} --scratch_dir {tmpdir} &> {log}"
 
 rule PlotCheckM:
     input:
