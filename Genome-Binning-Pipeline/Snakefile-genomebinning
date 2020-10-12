@@ -88,7 +88,7 @@ rule RunCheckM:
         "benchmarks/{sample}.RunCheckM.tsv"
     shell:
         "checkm data setRoot {params.datapath} &> {log.root} && checkm lineage_wf -x fa -t {threads} "
-        "--pplacer_threads {params.ppthreads} --tmpdir /scratch {params.indir} "
+        "--pplacer_threads {params.ppthreads} --tmpdir {tmpdir} {params.indir} "
         "{params.outdir} &> {log.run}"
         
 rule SummarizeCheckM:
