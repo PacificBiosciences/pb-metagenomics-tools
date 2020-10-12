@@ -88,7 +88,7 @@ rule RunCheckM:
         "benchmarks/{sample}.RunCheckM.tsv"
     shell:
         "checkm data setRoot {params.datapath} &> {log.root} && checkm lineage_wf -x fa -t {threads} "
-        "--pplacer_threads {params.ppthreads} --tmpdir {tmpdir} {params.indir} "
+        "--pplacer_threads {params.ppthreads} --tmpdir {params.tmpdir} {params.indir} "
         "{params.outdir} &> {log.run}"
         
 rule SummarizeCheckM:
@@ -150,7 +150,7 @@ rule RunGTDBTkIndividual:
     shell:
         "GTDBTK_DATA_PATH={params.gtdbtk_data:q} gtdbtk classify_wf --batchfile {input} "
         "--out_dir {params.outdir} -x fa --prefix {wildcards.sample} --cpus {threads} "
-        "--pplacer_cpus {params.ppthreads} --scratch_dir {tmpdir} &> {log}"
+        "--pplacer_cpus {params.ppthreads} --scratch_dir {params.tmpdir} &> {log}"
         
 rule FullBatchFile:
     input:
@@ -187,7 +187,7 @@ rule RunGTDBTkFull:
     shell:
         "GTDBTK_DATA_PATH={params.gtdbtk_data:q} gtdbtk classify_wf --batchfile {input} "
         "--out_dir {params.outdir} -x fa --prefix Full --cpus {threads} "
-        "--pplacer_cpus {params.ppthreads} --scratch_dir {tmpdir} &> {log}"
+        "--pplacer_cpus {params.ppthreads} --scratch_dir {params.tmpdir} &> {log}"
 
 rule PlotCheckM:
     input:
