@@ -33,7 +33,8 @@ This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](h
 - Clone the Genome-Binning-Pipeline directory.
 - Download and unpack the databases for CheckM (<2GB) and GTDB (~28GB). Specify paths to each database in `config.yaml`.
 - Include all input HiFi fasta files (`SAMPLE.fasta`) and contig fasta files (`SAMPLE.contigs.fasta`) in the `inputs/` folder. These can be files or symlinks. 
-- Edit sample names in `Sample-Config.yaml` configuration file in `configs/` for your project. Check also the `tmpdir` argument under `checkm` to ensure a valid directory is used.
+- Edit sample names in `Sample-Config.yaml` configuration file in `configs/` for your project. 
+- Check that the `tmpdir` argument is set correctly in `config.yaml`. The default is `/scratch`.
 - Execute snakemake using the general commands below: 
 ```
 snakemake --snakefile Snakefile-genomebinning --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]
