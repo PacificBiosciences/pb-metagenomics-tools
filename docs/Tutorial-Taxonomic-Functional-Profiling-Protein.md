@@ -32,13 +32,13 @@ Translation alignments of the HiFi reads to the protein database are performed u
 This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require ~60GB memory and 40-200GB disk space per sample (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps. Snakemake v5+ is required, and the workflows have been tested using v5.19.3.
 
 - Clone the Taxonomic-Functional-Profiling-Protein directory.
-- Download MEGAN6 community edition from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html) to obtain `sam2rma`. 
+- Download MEGAN6 community edition from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html) to obtain `sam2rma`. **Ensure you have at least version 6.19.+**
 - Download and unpack the newest MEGAN mapping file for NCBI-nr accessions from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html).
 - Download the NCBI-nr database from: ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz*
 - Index the NCBI-nr database with DIAMOND using `diamond makedb --in nr.gz --db diamond_nr_db --threads 24`. This will result in a `diamond_nr_db.dmnd` file that is ~150GB.
-- Specify the full path to `sam2rma`, full path to the MEGAN database file , and full path to the indexed NCBI-nr database in `config.yaml`.
 - Include all input HiFi fasta files (`SAMPLE.fasta`) in the `inputs/` folder. These can be files or symlinks. 
-- Edit sample names in `Sample-Config.yaml` configuration file in `configs/` for your project. 
+- Edit sample names in `Sample-Config.yaml` the configuration file in `configs/` for your project. 
+- Specify the full path to `sam2rma`, full path to the MEGAN database file , and full path to the indexed NCBI-nr database in `config.yaml`. Ensure the `hit_limit` argument (under `diamond`) and `readassignmentmode` (under `sam2rma`) are set correctly for your analysis.
 - Execute snakemake using the general commands below: 
 ```
 snakemake --snakefile Snakefile-taxprot --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]

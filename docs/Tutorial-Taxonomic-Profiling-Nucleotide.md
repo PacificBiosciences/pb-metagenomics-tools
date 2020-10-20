@@ -33,7 +33,7 @@ To make an RMA file, it is required to have the reads and alignments in the exac
 This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require ~60GB memory and 50-400GB disk space per sample (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps. Snakemake v5+ is required, and the workflows have been tested using v5.19.3.
 
 - Clone the Taxonomic-Profiling-Nucleotide directory.
-- Download MEGAN6 community edition from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html) to obtain `sam2rma`. 
+- Download MEGAN6 community edition from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html) to obtain `sam2rma`. **Ensure you have at least version 6.19.+**
 - Download and unpack the newest MEGAN mapping file for genomic DNA accessions from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html).
 - Download the NCBI-nt database from: ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz*
 - Index the NCBI-nt database with minimap2 using `minimap2 -k 19 -w 10 -d mm2_nt_db.mmi nt.gz`. This will result in a `mm_nt_db.mmi` file that is ~850GB.
