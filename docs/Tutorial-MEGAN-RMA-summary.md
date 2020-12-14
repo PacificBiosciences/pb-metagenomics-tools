@@ -333,39 +333,39 @@ Within the `Plots-Summaries/` folder are figures showing the number of classes f
 
 Finally, the `RMA-Full-Summary.prot.txt` contains a detailed summary of all of this information. Here is an example of the contents of this file:
 ```
-Category				Database				FP103		HL103		TD324
-Total reads assigned	Combined_Functional		964,533		656,271		1,327,626
-Total reads assigned	EC						496,449		304,421		490,897
-Total reads assigned	EGGNOG					693,518		468,010		857,796
-Total reads assigned	INTERPRO2GO				736,706		491,967		847,996
-Total reads assigned	SEED					715,636	4	86,654		1,030,114
-Total reads assigned	Combined_Taxonomic		1,063,364	733,291		1,590,226
-Total reads assigned	GTDB					1,048,622	723,418		1,565,263
-Total reads assigned	NCBI					1,060,129	731,385		1,576,219
-Percent reads assigned	Combined_Functional		90.5		89.2		82.9
-Percent reads assigned	EC						46.6		41.4		30.6
-Percent reads assigned	EGGNOG					65.1		63.6		53.5
-Percent reads assigned	INTERPRO2GO				69.1		66.9		52.9
-Percent reads assigned	SEED					67.1		66.1		64.3
-Percent reads assigned	Combined_Taxonomic		99.8		99.7		99.3
-Percent reads assigned	GTDB					98.4		98.3		97.7
-Percent reads assigned	NCBI					99.5		99.4		98.4
-Number of unique classes	EC					1,676		1,652		1,499
-Number of unique classes	EGGNOG				4,087		4,081		3,939
-Number of unique classes	INTERPRO2GO			13,184		12,836		12,949
-Number of unique classes	SEED				596			583			572
-Number of unique classes	GTDB				188			190			235
-Number of unique classes	NCBI				117			159			147
-Total assignments to classes	EC				776,380		466,575		732,219
-Total assignments to classes	EGGNOG			1,244,316	833,497		1,479,322
-Total assignments to classes	INTERPRO2GO		2,941,071	1,904,750	3,304,754
-Total assignments to classes	SEED			1,190,914	805,433		1,697,989
-Total assignments to classes	GTDB			1,048,622	723,418		1,565,263
-Total assignments to classes	NCBI			1,060,129	731,385		1,576,219
-Average annotations per read	EC				2.1			2			1.9
-Average annotations per read	EGGNOG			3			3			2.8
-Average annotations per read	INTERPRO2GO		3.9			4			3.8
-Average annotations per read	SEED			2.2			2.1			2.1
+Category	Database	FP103	HL103	TD324
+Total reads assigned	Combined_Functional	964,533	656,271	1,327,626
+Total reads assigned	EC	496,449	304,421	490,897
+Total reads assigned	EGGNOG	693,518	468,010	857,796
+Total reads assigned	INTERPRO2GO	736,706	491,967	847,996
+Total reads assigned	SEED	715,636	486,654	1,030,114
+Total reads assigned	Combined_Taxonomic	1,063,364	733,291	1,590,226
+Total reads assigned	GTDB	1,048,622	723,418	1,565,263
+Total reads assigned	NCBI	1,060,129	731,385	1,576,219
+Percent reads assigned	Combined_Functional	90.5	89.2	82.9
+Percent reads assigned	EC	46.6	41.4	30.6
+Percent reads assigned	EGGNOG	65.1	63.6	53.5
+Percent reads assigned	INTERPRO2GO	69.1	66.9	52.9
+Percent reads assigned	SEED	67.1	66.1	64.3
+Percent reads assigned	Combined_Taxonomic	99.8	99.7	99.3
+Percent reads assigned	GTDB	98.4	98.3	97.7
+Percent reads assigned	NCBI	99.5	99.4	98.4
+Number of unique classes	EC	1,676	1,652	1,499
+Number of unique classes	EGGNOG	4,087	4,081	3,939
+Number of unique classes	INTERPRO2GO	13,184	12,836	12,949
+Number of unique classes	SEED	596	583	572
+Number of unique classes	GTDB	188	190	235
+Number of unique classes	NCBI	117	159	147
+Total assignments to classes	EC	776,380	466,575	732,219
+Total assignments to classes	EGGNOG	1,244,316	833,497	1,479,322
+Total assignments to classes	INTERPRO2GO	2,941,071	1,904,750	3,304,754
+Total assignments to classes	SEED	1,190,914	805,433	1,697,989
+Total assignments to classes	GTDB	1,048,622	723,418	1,565,263
+Total assignments to classes	NCBI	1,060,129	731,385	1,576,219
+Average annotations per read	EC	2.1	2	1.9
+Average annotations per read	EGGNOG	3	3	2.8
+Average annotations per read	INTERPRO2GO	3.9	4	3.8
+Average annotations per read	SEED	2.2	2.1	2.1
 ```
 
 
@@ -391,10 +391,10 @@ Within the `Plots-Summaries/` folder are figures showing the number of classes f
 
 Finally, the `RMA-Full-Summary.prot.txt` contains a detailed summary of all of this information. Here is an example of the contents of this file:
 ```
-Category				Database	FP103		HL103		TD324
-Total reads assigned	NCBI		967,057		651,956		1,331,839
-Percent reads assigned	NCBI		90.7		88.6		83.1
-Number of classes		NCBI		167			184			175
+Category	Database	FP103	HL103	TD324
+Total reads assigned	NCBI	967,057	651,956	1,331,839
+Percent reads assigned	NCBI	90.7	88.6	83.1
+Number of classes	NCBI	167	184	175
 ```
 
 [Back to top](#TOP)
