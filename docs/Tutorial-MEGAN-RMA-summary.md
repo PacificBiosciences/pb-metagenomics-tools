@@ -379,9 +379,9 @@ Upon successful completion, the following main output files will be available in
 ├── Absolute.NCBI.counts.nuc.txt
 ├── Normalized.NCBI.counts.nuc.txt
 ├── Plots-Summaries/
-│   ├── SummaryPlot-Taxonomic_Classes_Assigned.prot.pdf
-│   ├── SummaryPlot-Taxonomic_Percent_Reads_Assigned.prot.pdf
-│	└── SummaryPlot-Taxonomic_Total_Reads_Assigned.prot.pdf
+│   ├── SummaryPlot-Taxonomic_Classes_Assigned.nuc.pdf
+│   ├── SummaryPlot-Taxonomic_Percent_Reads_Assigned.nuc.pdf
+│	└── SummaryPlot-Taxonomic_Total_Reads_Assigned.nuc.pdf
 └── RMA-Full-Summary.nuc.txt
 ```
 
