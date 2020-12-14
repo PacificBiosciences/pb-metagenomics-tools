@@ -1,0 +1,11 @@
+name: general_env
+channels:
+- bioconda
+- conda-forge
+- defaults
+dependencies:
+- numpy
+- pandas
+- seaborn == 0.11.0
+- matplotlib 
+- biopython

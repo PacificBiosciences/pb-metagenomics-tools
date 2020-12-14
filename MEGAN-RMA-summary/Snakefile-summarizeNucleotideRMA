@@ -1,0 +1,97 @@
+#localrules: 
+
+configfile: "config.yaml"
+
+SAMPLES = config['samplenames']
+
+rule all:
+    input:               
+        expand("2-c2c/{sample}.NCBI.counts.nuc.txt", sample = SAMPLES),
+                
+        "3-summaries/Absolute.NCBI.counts.nuc.txt",
+        "3-summaries/RMA-Full-Summary.nuc.txt",
+        "3-summaries/Normalized.NCBI.counts.nuc.txt",
+
+        "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Total_Reads_Assigned.nuc.pdf",
+        "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Percent_Reads_Assigned.nuc.pdf",
+        "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Classes_Assigned.nuc.pdf"
+        
+rule RunR2CforNCBI:
+    input:
+        f"inputs/{{sample}}{config['rma']['fill']}.rma"
+    output:
+        temp("1-r2c/{sample}.NCBI.reads.nuc.txt")
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        "logs/{sample}.RunR2CforNCBI.nuc.log"
+    benchmark: 
+        "benchmarks/{sample}.RunR2CforNCBI.nuc.tsv"
+    shell:
+        "{params.rma2info} -i {input} -o {output} -r2c Taxonomy -n &> {log}"
+
+rule RunC2CforNCBI:
+    input:
+        f"inputs/{{sample}}{config['rma']['fill']}.rma"
+    output:
+        "2-c2c/{sample}.NCBI.counts.nuc.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        "logs/{sample}.RunC2CforNCBI.nuc.log"
+    benchmark: 
+        "benchmarks/{sample}.RunC2CforNCBI.nuc.tsv"
+    shell:
+        "{params.rma2info} -i {input} -o {output} -c2c Taxonomy -n -r &> {log}"
+
+
+rule SummarizeNCBI:
+    input:
+        expand("2-c2c/{sample}.NCBI.counts.nuc.txt", sample = SAMPLES)
+    output:
+        "3-summaries/Absolute.NCBI.counts.nuc.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    log: 
+        "logs/SummarizeNCBI.nuc.log"
+    benchmark: 
+        "benchmarks/SummarizeNCBI.nuc.tsv"
+    shell:
+        "python scripts/RMA-taxonomy-join.py -c {input} -o {output}  &> {log}"
+
+rule SummarizeAllRMA:
+    input:
+        read_files = expand("1-r2c/{sample}.NCBI.reads.nuc.txt", sample = SAMPLES),
+        sum_files = expand("3-summaries/Absolute.NCBI.counts.nuc.txt")
+    output:
+        summary = "3-summaries/RMA-Full-Summary.nuc.txt",
+        norm_files = expand("3-summaries/Normalized.NCBI.counts.nuc.txt"),
+        p2 = "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Total_Reads_Assigned.nuc.pdf",
+        p4 = "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Percent_Reads_Assigned.nuc.pdf",
+        p6 = "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Classes_Assigned.nuc.pdf",
+        
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['summary_threads']
+    params:
+        rcfile = config['readcounts'],
+        outdir = "3-summaries/"
+    log: 
+        "logs/SummarizeAllRMA.nuc.log"
+    benchmark: 
+        "benchmarks/SummarizeAllRMA.nuc.tsv"
+    shell:
+        "python scripts/RMA-Summarizer-nuc.py -c {input.read_files} -s {input.sum_files} "
+        "-r {params.rcfile} -o {output.summary} -p {params.outdir} &> {log}"
+

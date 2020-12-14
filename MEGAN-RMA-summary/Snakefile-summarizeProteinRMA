@@ -1,0 +1,376 @@
+#localrules: 
+
+configfile: "config.yaml"
+
+SAMPLES = config['samplenames']
+
+rule all:
+    input:
+        expand("2-c2c/{sample}.{type}.counts.prot.txt", sample = SAMPLES, 
+                type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "GTDB"]),
+                
+        expand("3-summaries/Absolute.{type}.counts.prot.txt", 
+                type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "GTDB"]),
+                
+        "3-summaries/RMA-Full-Summary.prot.txt",
+        
+        expand("3-summaries/Normalized.{type}.counts.prot.txt", 
+                 type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "GTDB"]),
+                 
+        expand("3-summaries/Plots-Samples/{sample}.{type}.histo.prot.pdf", sample = SAMPLES, 
+                 type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED"]),
+                 
+        "3-summaries/Plots-Summaries/SummaryPlot-Functional_Total_Reads_Assigned.prot.pdf",
+        "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Total_Reads_Assigned.prot.pdf",
+        "3-summaries/Plots-Summaries/SummaryPlot-Functional_Percent_Reads_Assigned.prot.pdf",
+        "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Percent_Reads_Assigned.prot.pdf",
+        "3-summaries/Plots-Summaries/SummaryPlot-Functional_Classes_Assigned.prot.pdf",
+        "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Classes_Assigned.prot.pdf",
+        "3-summaries/Plots-Summaries/SummaryPlot-Functional_Average_Annotations_Assigned.prot.pdf"
+        
+
+rule RunR2CforEC:
+    input:
+        f"inputs/{{sample}}{config['rma']['fill']}.rma"
+    output:
+        "1-r2c/{sample}.EC.reads.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        "logs/{sample}.RunR2CforEC.prot.log"
+    benchmark: 
+        "benchmarks/{sample}.RunR2CforEC.prot.tsv"
+    shell:
+        "{params.rma2info} -i {input} -o {output} -r2c EC &> {log}"
+        
+rule RunR2CforEGGNOG:
+    input:
+        f"inputs/{{sample}}{config['rma']['fill']}.rma"
+    output:
+        "1-r2c/{sample}.EGGNOG.reads.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        "logs/{sample}.RunR2CforEGGNOG.prot.log"
+    benchmark: 
+        "benchmarks/{sample}.RunR2CforEGGNOG.prot.tsv"
+    shell:
+        "{params.rma2info} -i {input} -o {output} -r2c EGGNOG &> {log}"
+
+rule RunR2CforINTERPRO2GO:
+    input:
+        f"inputs/{{sample}}{config['rma']['fill']}.rma"
+    output:
+        "1-r2c/{sample}.INTERPRO2GO.reads.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        "logs/{sample}.RunR2CforINTERPRO2GO.prot.log"
+    benchmark: 
+        "benchmarks/{sample}.RunR2CforINTERPRO2GO.prot.tsv"
+    shell:
+        "{params.rma2info} -i {input} -o {output} -r2c INTERPRO2GO &> {log}"
+
+rule RunR2CforSEED:
+    input:
+        f"inputs/{{sample}}{config['rma']['fill']}.rma"
+    output:
+        "1-r2c/{sample}.SEED.reads.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        "logs/{sample}.RunR2CforSEED.prot.log"
+    benchmark: 
+        "benchmarks/{sample}.RunR2CforSEED.prot.tsv"
+    shell:
+        "{params.rma2info} -i {input} -o {output} -r2c SEED &> {log}"     
+
+rule RunR2CforNCBI:
+    input:
+        f"inputs/{{sample}}{config['rma']['fill']}.rma"
+    output:
+        "1-r2c/{sample}.NCBI.reads.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        "logs/{sample}.RunR2CforNCBI.prot.log"
+    benchmark: 
+        "benchmarks/{sample}.RunR2CforNCBI.prot.tsv"
+    shell:
+        "{params.rma2info} -i {input} -o {output} -r2c Taxonomy -n &> {log}"
+
+rule RunR2CforGTDB:
+    input:
+        f"inputs/{{sample}}{config['rma']['fill']}.rma"
+    output:
+        "1-r2c/{sample}.GTDB.reads.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        "logs/{sample}.RunR2CforGTDB.prot.log"
+    benchmark: 
+        "benchmarks/{sample}.RunR2CforGTDB.prot.tsv"
+    shell:
+        "{params.rma2info} -i {input} -o {output} -r2c GTDB -n &> {log}"
+
+rule RunC2CforEC:
+    input:
+        f"inputs/{{sample}}{config['rma']['fill']}.rma"
+    output:
+        "2-c2c/{sample}.EC.counts.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        "logs/{sample}.RunC2CforEC.prot.log"
+    benchmark: 
+        "benchmarks/{sample}.RunC2CforEC.prot.tsv"
+    shell:
+        "{params.rma2info} -i {input} -o {output} -c2c EC -p &> {log}"
+
+rule RunC2CforEGGNOG:
+    input:
+        f"inputs/{{sample}}{config['rma']['fill']}.rma"
+    output:
+        "2-c2c/{sample}.EGGNOG.counts.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        "logs/{sample}.RunC2CforEGGNOG.prot.log"
+    benchmark: 
+        "benchmarks/{sample}.RunC2CforEGGNOG.prot.tsv"
+    shell:
+        "{params.rma2info} -i {input} -o {output} -c2c EGGNOG -p &> {log}"
+
+rule RunC2CforINTERPRO2GO:
+    input:
+        f"inputs/{{sample}}{config['rma']['fill']}.rma"
+    output:
+        "2-c2c/{sample}.INTERPRO2GO.counts.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        "logs/{sample}.RunC2CforINTERPRO2GO.prot.log"
+    benchmark: 
+        "benchmarks/{sample}.RunC2CforINTERPRO2GO.prot.tsv"
+    shell:
+        "{params.rma2info} -i {input} -o {output} -c2c INTERPRO2GO -p &> {log}"
+
+rule RunC2CforSEED:
+    input:
+        f"inputs/{{sample}}{config['rma']['fill']}.rma"
+    output:
+        "2-c2c/{sample}.SEED.counts.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        "logs/{sample}.RunC2CforSEED.prot.log"
+    benchmark: 
+        "benchmarks/{sample}.RunC2CforSEED.prot.tsv"
+    shell:
+        "{params.rma2info} -i {input} -o {output} -c2c SEED -p &> {log}"
+
+rule RunC2CforGTDB:
+    input:
+        f"inputs/{{sample}}{config['rma']['fill']}.rma"
+    output:
+        "2-c2c/{sample}.GTDB.counts.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        "logs/{sample}.RunC2CforGTDB.prot.log"
+    benchmark: 
+        "benchmarks/{sample}.RunC2CforGTDB.prot.tsv"
+    shell:
+        "{params.rma2info} -i {input} -o {output} -c2c GTDB -n &> {log}"
+
+rule RunC2CforNCBI:
+    input:
+        f"inputs/{{sample}}{config['rma']['fill']}.rma"
+    output:
+        "2-c2c/{sample}.NCBI.counts.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        "logs/{sample}.RunC2CforNCBI.prot.log"
+    benchmark: 
+        "benchmarks/{sample}.RunC2CforNCBI.prot.tsv"
+    shell:
+        "{params.rma2info} -i {input} -o {output} -c2c Taxonomy -n -r &> {log}"
+
+rule SummarizeEC:
+    input:
+        expand("2-c2c/{sample}.EC.counts.prot.txt", sample = SAMPLES)
+    output:
+        "3-summaries/Absolute.EC.counts.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    log: 
+        "logs/SummarizeEC.prot.log"
+    benchmark: 
+        "benchmarks/SummarizeEC.prot.tsv"
+    shell:
+        "python scripts/RMA-class-join.py -c {input} -o {output}  &> {log}"
+
+rule SummarizeEGGNOG:
+    input:
+        expand("2-c2c/{sample}.EGGNOG.counts.prot.txt", sample = SAMPLES)
+    output:
+        "3-summaries/Absolute.EGGNOG.counts.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    log: 
+        "logs/SummarizeEGGNOG.prot.log"
+    benchmark: 
+        "benchmarks/SummarizeEGGNOG.prot.tsv"
+    shell:
+        "python scripts/RMA-class-join.py -c {input} -o {output}  &> {log}"
+
+rule SummarizeINTERPRO2GO:
+    input:
+        expand("2-c2c/{sample}.INTERPRO2GO.counts.prot.txt", sample = SAMPLES)
+    output:
+        "3-summaries/Absolute.INTERPRO2GO.counts.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    log: 
+        "logs/SummarizeINTERPRO2GO.prot.log"
+    benchmark: 
+        "benchmarks/SummarizeINTERPRO2GO.prot.tsv"
+    shell:
+        "python scripts/RMA-class-join.py -c {input} -o {output}  &> {log}"
+
+rule SummarizeSEED:
+    input:
+        expand("2-c2c/{sample}.SEED.counts.prot.txt", sample = SAMPLES)
+    output:
+        "3-summaries/Absolute.SEED.counts.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    log: 
+        "logs/SummarizeSEED.prot.log"
+    benchmark: 
+        "benchmarks/SummarizeSEED.prot.tsv"
+    shell:
+        "python scripts/RMA-class-join.py -c {input} -o {output}  &> {log}"
+
+rule SummarizeGTDB:
+    input:
+        expand("2-c2c/{sample}.GTDB.counts.prot.txt", sample = SAMPLES)
+    output:
+        "3-summaries/Absolute.GTDB.counts.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    log: 
+        "logs/SummarizeGTDB.prot.log"
+    benchmark: 
+        "benchmarks/SummarizeGTDB.prot.tsv"
+    shell:
+        "python scripts/RMA-class-join.py -c {input} -o {output}  &> {log}"
+
+rule SummarizeNCBI:
+    input:
+        expand("2-c2c/{sample}.NCBI.counts.prot.txt", sample = SAMPLES)
+    output:
+        "3-summaries/Absolute.NCBI.counts.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    log: 
+        "logs/SummarizeNCBI.prot.log"
+    benchmark: 
+        "benchmarks/SummarizeNCBI.prot.tsv"
+    shell:
+        "python scripts/RMA-taxonomy-join.py -c {input} -o {output}  &> {log}"
+
+rule SummarizeAllRMA:
+    input:
+        read_files = expand("1-r2c/{sample}.{type}.reads.prot.txt", sample = SAMPLES, 
+                            type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "GTDB"]),
+        sum_files = expand("3-summaries/Absolute.{type}.counts.prot.txt", 
+                            type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "GTDB"])
+    output:
+        summary = "3-summaries/RMA-Full-Summary.prot.txt",
+        norm_files = expand("3-summaries/Normalized.{type}.counts.prot.txt", 
+                            type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "GTDB"]),
+        sample_histos = expand("3-summaries/Plots-Samples/{sample}.{type}.histo.prot.pdf", 
+                            sample = SAMPLES, 
+                            type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED"]),
+        p1 = "3-summaries/Plots-Summaries/SummaryPlot-Functional_Total_Reads_Assigned.prot.pdf",
+        p2 = "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Total_Reads_Assigned.prot.pdf",
+        p3 = "3-summaries/Plots-Summaries/SummaryPlot-Functional_Percent_Reads_Assigned.prot.pdf",
+        p4 = "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Percent_Reads_Assigned.prot.pdf",
+        p5 = "3-summaries/Plots-Summaries/SummaryPlot-Functional_Classes_Assigned.prot.pdf",
+        p6 = "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Classes_Assigned.prot.pdf",
+        p7 = "3-summaries/Plots-Summaries/SummaryPlot-Functional_Average_Annotations_Assigned.prot.pdf"
+        
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['summary_threads']
+    params:
+        rcfile = config['readcounts'],
+        outdir = "3-summaries/"
+    log: 
+        "logs/SummarizeAllRMA.prot.log"
+    benchmark: 
+        "benchmarks/SummarizeAllRMA.prot.tsv"
+    shell:
+        "python scripts/RMA-Summarizer-prot.py -c {input.read_files} -s {input.sum_files} "
+        "-r {params.rcfile} -o {output.summary} -p {params.outdir} &> {log}"
+
