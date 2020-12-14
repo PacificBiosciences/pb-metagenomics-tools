@@ -4,14 +4,7 @@ samplenames:
   # where SAMPLE is a name provided below.
   # For example, if "SP2" is given as a sample name, the workflow expects SP2.fasta and 
   # to be present in the inputs/ directory.
-  - "1103_V2_D1"
-  - "1103_V6_D29"
-  - "2103_V2_D1"
-  - "2103_V6_D29"
-  - "2202_V2_D1"
-  - "2202_V5_D22"
-  - "3204_V2_D1"
-  - "3204_V6_D29"
-  - "3216_V2_D1"
-  - "3216_V6_D29"
-  - "3218_V2_D1"
+  - "FP103"
+  - "HL103"
+  - "TD324"
+  
