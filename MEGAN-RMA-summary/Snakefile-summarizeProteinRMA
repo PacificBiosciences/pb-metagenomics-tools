@@ -357,8 +357,7 @@ rule SummarizeAllRMA:
         p4 = "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Percent_Reads_Assigned.prot.pdf",
         p5 = "3-summaries/Plots-Summaries/SummaryPlot-Functional_Classes_Assigned.prot.pdf",
         p6 = "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Classes_Assigned.prot.pdf",
-        p7 = "3-summaries/Plots-Summaries/SummaryPlot-Functional_Average_Annotations_Assigned.prot.pdf"
-        
+        p7 = "3-summaries/Plots-Summaries/SummaryPlot-Functional_Average_Annotations_Assigned.prot.pdf"        
     conda:
         "envs/general.yml"
     threads: 

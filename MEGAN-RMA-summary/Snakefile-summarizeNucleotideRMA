@@ -78,8 +78,7 @@ rule SummarizeAllRMA:
         norm_files = expand("3-summaries/Normalized.NCBI.counts.nuc.txt"),
         p2 = "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Total_Reads_Assigned.nuc.pdf",
         p4 = "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Percent_Reads_Assigned.nuc.pdf",
-        p6 = "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Classes_Assigned.nuc.pdf",
-        
+        p6 = "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Classes_Assigned.nuc.pdf"
     conda:
         "envs/general.yml"
     threads: 
