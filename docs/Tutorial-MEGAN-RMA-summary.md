@@ -27,7 +27,7 @@ For protein RMA files, this workflow will output absolute and normalized read co
 
 For nucleotide RMA files, this workflow will output absolute and normalized read counts of the NCBI taxonomy classes across samples. A summary file and plots will be created showing the number of reads assigned to the NCBI taxonomic database and the total NCBI classes represented. A visual depiction of the nucleotide-RMA workflow is shown below:
 
-![rmanucleotide](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/MEGAN-RMA-summary-nucleotide.png)
+![rmanucleotide](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/MEGAN-RMA-summary-nucleotide-fix.png)
 
 
 [Back to top](#TOP)
