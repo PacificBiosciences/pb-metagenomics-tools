@@ -34,7 +34,7 @@ sam2rma:
   # https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html
   # please note that the name of this file will change depending on the version, 
   # and that this must be the the version for the NCBI-nr accessions.
-  db: "/home/dportik/programs/megan/db/megan-map-Jul2020.db"
+  db: "/home/dportik/programs/megan/db/megan-map-Jul2020-2.db"
   
   # Number of threads to use for sam2rma, 24 is generally sufficient
   threads: 24
