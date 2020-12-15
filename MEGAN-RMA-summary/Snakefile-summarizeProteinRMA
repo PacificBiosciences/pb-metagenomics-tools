@@ -33,7 +33,7 @@ rule RunR2CforEC:
     input:
         f"inputs/{{sample}}{config['rma']['fill']}.rma"
     output:
-        "1-r2c/{sample}.EC.reads.prot.txt"
+        temp("1-r2c/{sample}.EC.reads.prot.txt")
     conda:
         "envs/general.yml"
     threads: config['rma2info']['threads']
@@ -50,7 +50,7 @@ rule RunR2CforEGGNOG:
     input:
         f"inputs/{{sample}}{config['rma']['fill']}.rma"
     output:
-        "1-r2c/{sample}.EGGNOG.reads.prot.txt"
+        temp("1-r2c/{sample}.EGGNOG.reads.prot.txt")
     conda:
         "envs/general.yml"
     threads: config['rma2info']['threads']
@@ -67,7 +67,7 @@ rule RunR2CforINTERPRO2GO:
     input:
         f"inputs/{{sample}}{config['rma']['fill']}.rma"
     output:
-        "1-r2c/{sample}.INTERPRO2GO.reads.prot.txt"
+        temp("1-r2c/{sample}.INTERPRO2GO.reads.prot.txt")
     conda:
         "envs/general.yml"
     threads: config['rma2info']['threads']
@@ -84,7 +84,7 @@ rule RunR2CforSEED:
     input:
         f"inputs/{{sample}}{config['rma']['fill']}.rma"
     output:
-        "1-r2c/{sample}.SEED.reads.prot.txt"
+        temp("1-r2c/{sample}.SEED.reads.prot.txt")
     conda:
         "envs/general.yml"
     threads: 
@@ -102,7 +102,7 @@ rule RunR2CforNCBI:
     input:
         f"inputs/{{sample}}{config['rma']['fill']}.rma"
     output:
-        "1-r2c/{sample}.NCBI.reads.prot.txt"
+        temp("1-r2c/{sample}.NCBI.reads.prot.txt")
     conda:
         "envs/general.yml"
     threads: 
@@ -120,7 +120,7 @@ rule RunR2CforGTDB:
     input:
         f"inputs/{{sample}}{config['rma']['fill']}.rma"
     output:
-        "1-r2c/{sample}.GTDB.reads.prot.txt"
+        temp("1-r2c/{sample}.GTDB.reads.prot.txt")
     conda:
         "envs/general.yml"
     threads: 
