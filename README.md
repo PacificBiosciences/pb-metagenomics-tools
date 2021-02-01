@@ -19,7 +19,7 @@ Each of these pipelines can be found in their respective folders. They are made 
 All available documentation can be found in the `docs/` folder above. 
 
 Currently available documentation: 
-- [Tutorial: HiFi-MAG-Pipeline](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Genome-Binning-Pipeline.md)
+- [Tutorial: HiFi-MAG-Pipeline](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-HiFi-MAG-Pipeline.md)
 - [Tutorial: Taxonomic-Functional-Profiling-Protein](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Functional-Profiling-Protein.md)
 - [Tutorial: Taxonomic-Profiling-Nucleotide](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Profiling-Nucleotide.md)
 - [Tutorial: MEGAN-RMA-Summary](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-MEGAN-RMA-summary.md)
