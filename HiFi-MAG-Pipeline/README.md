@@ -1,10 +1,10 @@
-# HiFi-MAG--Pipeline
+# HiFi-MAG-Pipeline
 
 Obtain high-quality MAGs from HiFi assemblies with a streamlined workflow. Includes steps with minimap2, MetaBAT2, CheckM, and GTDB-Tk.
 
-This directory contains all the materials needed to run the snakemake workflow for genome binning. 
+This directory contains all the materials needed to run the snakemake workflow. 
 
-[Documentation for the HiFi-MAG--Pipeline is available here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-HiFi-MAG-Pipeline.md).
+[Documentation for the HiFi-MAG-Pipeline is available here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-HiFi-MAG-Pipeline.md).
 
 
 ## DISCLAIMER
