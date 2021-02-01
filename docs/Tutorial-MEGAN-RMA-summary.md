@@ -71,19 +71,19 @@ MEGAN-RMA-summary
 │
 ├── configs/
 │   ├── Sample-Config-nucleotide.yaml
-│	└── Sample-Config-protein.yaml
+│   └── Sample-Config-protein.yaml
 │
 ├── envs/
-│	└── general.yml
+│   └── general.yml
 │
 ├── inputs/
-│	└── Sample-Read-Counts.txt
+│   └── Sample-Read-Counts.txt
 │
 ├── scripts/
 │   ├── RMA-class-join.py
 │   ├── RMA-Summarizer-nuc.py
 │   ├── RMA-Summarizer-prot.py
-│	└── RMA-taxonomy-join.py
+│   └── RMA-taxonomy-join.py
 │
 ├── Snakefile-summarizeNucleotideRMA
 ├── Snakefile-summarizeProteinRMA
@@ -323,7 +323,7 @@ Upon successful completion, the following main output files will be available in
 │   ├── SummaryPlot-Functional_Total_Reads_Assigned.prot.pdf
 │   ├── SummaryPlot-Taxonomic_Classes_Assigned.prot.pdf
 │   ├── SummaryPlot-Taxonomic_Percent_Reads_Assigned.prot.pdf
-│	└── SummaryPlot-Taxonomic_Total_Reads_Assigned.prot.pdf
+│   └── SummaryPlot-Taxonomic_Total_Reads_Assigned.prot.pdf
 └── RMA-Full-Summary.prot.txt
 ```
 
@@ -387,7 +387,7 @@ Upon successful completion, the following main output files will be available in
 ├── Plots-Summaries/
 │   ├── SummaryPlot-Taxonomic_Classes_Assigned.nuc.pdf
 │   ├── SummaryPlot-Taxonomic_Percent_Reads_Assigned.nuc.pdf
-│	└── SummaryPlot-Taxonomic_Total_Reads_Assigned.nuc.pdf
+│   └── SummaryPlot-Taxonomic_Total_Reads_Assigned.nuc.pdf
 └── RMA-Full-Summary.nuc.txt
 ```
 
