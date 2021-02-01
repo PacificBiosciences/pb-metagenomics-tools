@@ -437,6 +437,7 @@ To include the taxonomic rank of the class for NCBI as an additional column, the
 rma2info -i {input.rma} -o {output.name} -c2c Taxonomy -n -r &> {log}
 ```
 
+And finally, to switch between the full NCBI report and the bacteria-restricted NCBI report, the `--bacteriaOnly` flag should be used with the above commands. 
 
 [Back to top](#TOP)
 
