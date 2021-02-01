@@ -62,10 +62,10 @@ def main():
         df_sorted = merge_dfs(df_list)
     else:
         df = make_df(args.counts[0])
-        filter_unassigned = ((df_sorted['Class'] != "EC;Not assigned;") &
-                         (df_sorted['Class'] != "eggNOG;Not assigned;") &
-                         (df_sorted['Class'] != "InterPro2GO;Not assigned;") &
-                         (df_sorted['Class'] != "SEED;Not assigned;"))
+        filter_unassigned = ((df['Class'] != "EC;Not assigned;") &
+                         (df['Class'] != "eggNOG;Not assigned;") &
+                         (df['Class'] != "InterPro2GO;Not assigned;") &
+                         (df['Class'] != "SEED;Not assigned;"))
         df_filtered = df[filter_unassigned]
         df_sorted = df_filtered.sort_values(['Class'])
         
