@@ -2,7 +2,7 @@
 
 Summarize information contained within RMA format files intended for MEGAN6-LR. This workflow is intended to be used after running the [Taxonomic-Functional-Profiling-Protein](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Functional-Profiling-Protein) pipeline or the [Taxonomic-Profiling-Nucleotide](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Nucleotide) pipeline. 
 
-For protein RMA files, this workflow will output absolute and normalized read counts of the EC, EGGNOG, INTERPRO2GO, and SEED functional classes, along with read counts of the NCBI and GTDB taxonomy classes. A summary file and several plots will be created showing the number of reads assigned to functional and taxonomic databases, the total classes represented per database, and average annotations per read. 
+For protein RMA files, this workflow will output absolute and normalized read counts of the EC, EGGNOG, INTERPRO2GO, and SEED functional classes, along with read counts of the NCBI (full database and bacteria-only) and GTDB taxonomy classes. A summary file and several plots will be created showing the number of reads assigned to functional and taxonomic databases, the total classes represented per database, and average annotations per read. 
 
 For nucleotide RMA files, this workflow will output absolute and normalized read counts of the NCBI taxonomy classes. A summary file and plots will be created showing the number of reads assigned to the NCBI taxonomic database and the total NCBI classes represented.
 

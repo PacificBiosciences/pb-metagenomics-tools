@@ -20,7 +20,7 @@ The purpose of this snakemake workflow is to summarize the information contained
 
 This workflow is intended to be used after running the [Taxonomic-Functional-Profiling-Protein](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Functional-Profiling-Protein) pipeline or the [Taxonomic-Profiling-Nucleotide](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Nucleotide) pipeline. To work properly, these RMA files must should be created using the following settings in `sam2rma`: `-lg -alg longReads -ram readCount`. These are the default settings for both of the above pipelines. 
 
-For protein RMA files, this workflow will output absolute and normalized read counts of the EC, EGGNOG, INTERPRO2GO, and SEED functional classes across all samples, along with read counts of the NCBI and GTDB taxonomy classes across samples. A summary file and several plots will be created showing the number and percentage of reads assigned to functional and taxonomic databases, the total classes represented per database, and average annotations per read. A visual depiction of the protein-RMA workflow is shown below:
+For protein RMA files, this workflow will output absolute and normalized read counts of the EC, EGGNOG, INTERPRO2GO, and SEED functional classes across all samples, along with read counts of the NCBI (full database and bacteria-only) and GTDB taxonomy classes across samples. A summary file and several plots will be created showing the number and percentage of reads assigned to functional and taxonomic databases, the total classes represented per database, and average annotations per read. A visual depiction of the protein-RMA workflow is shown below:
 
 ![rmaprotein](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/MEGAN-RMA-summary-protein.png)
 
@@ -290,8 +290,8 @@ MEGAN-RMA-summary
 
 - `benchmarks/` contains benchmark information on memory usage and I/O for each rule executed.
 - `logs/` contains log files for each rule executed. 
-- `1-r2c/` temporarily holds the per-sample read assignment files for each database. For protein RMA, this includes EC, EGGNOG, GTDB, INTERPRO2GO, NCBI, and SEED. For nucleotide RMA, this will only include NCBI reads. These files are temporary and will be deleted before completion if no errors occur.
-- `2-c2c/` holds the per-sample class count files for each database. For protein RMA, this includes EC, EGGNOG, GTDB, INTERPRO2GO, NCBI, and SEED class counts. For nucleotide RMA, this will only include NCBI class counts.
+- `1-r2c/` holds the per-sample read assignment files for each database. For protein RMA, this includes EC, EGGNOG, GTDB, INTERPRO2GO, NCBI (full and bacteria-only), and SEED. For nucleotide RMA, this will only include NCBI reads. These files are temporary and will be deleted before completion if no errors occur.
+- `2-c2c/` holds the per-sample class count files for each database. For protein RMA, this includes EC, EGGNOG, GTDB, INTERPRO2GO, NCBI (full and bacteria-only), and SEED class counts. For nucleotide RMA, this will only include NCBI class counts.
 - `3-summaries/` contains combined counts files for each database which include all samples. These are present as absolute counts, and normalized counts (determined by the sample with the least number of HiFi reads). **These are the main files of interest.**
 
 
@@ -307,12 +307,14 @@ Upon successful completion, the following main output files will be available in
 ├── Absolute.GTDB.counts.prot.txt
 ├── Absolute.INTERPRO2GO.counts.prot.txt
 ├── Absolute.NCBI.counts.prot.txt
+├── Absolute.NCBIbac.counts.prot.txt
 ├── Absolute.SEED.counts.prot.txt
 ├── Normalized.EC.counts.prot.txt
 ├── Normalized.EGGNOG.counts.prot.txt
 ├── Normalized.GTDB.counts.prot.txt
 ├── Normalized.INTERPRO2GO.counts.prot.txt
 ├── Normalized.NCBI.counts.prot.txt
+├── Normalized.NCBIbac.counts.prot.txt
 ├── Normalized.SEED.counts.prot.txt
 ├── Plots-Samples/
 ├── Plots-Summaries/
@@ -325,7 +327,7 @@ Upon successful completion, the following main output files will be available in
 └── RMA-Full-Summary.prot.txt
 ```
 
-The absolute read counts and normalized read counts are summarized for each functional database (EC, EGGNOG, INTERPRO2GO, and SEED) and taxonomic database (GTDB, NCBI). For normalization, counts are normalized to the smallest number of reads found in the sample set. The count file for NCBI classes contains an additional column containing an abbreviation that indicates the taxonomic rank of the class (Kingdom = K, Genus = G, etc.).
+The absolute read counts and normalized read counts are summarized for each functional database (EC, EGGNOG, INTERPRO2GO, and SEED) and taxonomic database (GTDB, NCBI, NCBI bacteria only). For normalization, counts are normalized to the smallest number of reads found in the sample set. The count file for NCBI classes contains an additional column containing an abbreviation that indicates the taxonomic rank of the class (Kingdom = K, Genus = G, etc.).
 
 Within the `Plots-Samples/` folder, there are histograms showing the number of annotations per read per functional database per sample. 
 
@@ -342,6 +344,7 @@ Total reads assigned	SEED	715,636	486,654	1,030,114
 Total reads assigned	Combined_Taxonomic	1,063,364	733,291	1,590,226
 Total reads assigned	GTDB	1,048,622	723,418	1,565,263
 Total reads assigned	NCBI	1,060,129	731,385	1,576,219
+Total reads assigned	NCBIbac	1,058,176	728,429	1,564,859
 Percent reads assigned	Combined_Functional	90.5	89.2	82.9
 Percent reads assigned	EC	46.6	41.4	30.6
 Percent reads assigned	EGGNOG	65.1	63.6	53.5
@@ -350,18 +353,21 @@ Percent reads assigned	SEED	67.1	66.1	64.3
 Percent reads assigned	Combined_Taxonomic	99.8	99.7	99.3
 Percent reads assigned	GTDB	98.4	98.3	97.7
 Percent reads assigned	NCBI	99.5	99.4	98.4
+Percent reads assigned	NCBIbac	98.9	99.1	97.6
 Number of unique classes	EC	1,676	1,652	1,499
 Number of unique classes	EGGNOG	4,087	4,081	3,939
 Number of unique classes	INTERPRO2GO	13,184	12,836	12,949
 Number of unique classes	SEED	596	583	572
 Number of unique classes	GTDB	188	190	235
 Number of unique classes	NCBI	117	159	147
+Number of unique classes	NCBIbac	110	153	141
 Total assignments to classes	EC	776,380	466,575	732,219
 Total assignments to classes	EGGNOG	1,244,316	833,497	1,479,322
 Total assignments to classes	INTERPRO2GO	2,941,071	1,904,750	3,304,754
 Total assignments to classes	SEED	1,190,914	805,433	1,697,989
 Total assignments to classes	GTDB	1,048,622	723,418	1,565,263
 Total assignments to classes	NCBI	1,060,129	731,385	1,576,219
+Total assignments to classes	NCBIbac	1,058,176	728,429	1,564,859
 Average annotations per read	EC	2.1	2	1.9
 Average annotations per read	EGGNOG	3	3	2.8
 Average annotations per read	INTERPRO2GO	3.9	4	3.8

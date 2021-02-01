@@ -6,16 +6,19 @@ SAMPLES = config['samplenames']
 
 rule all:
     input:
+        expand("1-r2c/{sample}.{type}.reads.prot.txt", sample = SAMPLES, 
+                type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "NCBIbac", "GTDB"]),
+                
         expand("2-c2c/{sample}.{type}.counts.prot.txt", sample = SAMPLES, 
-                type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "GTDB"]),
+                type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "NCBIbac", "GTDB"]),
                 
         expand("3-summaries/Absolute.{type}.counts.prot.txt", 
-                type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "GTDB"]),
+                type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "NCBIbac", "GTDB"]),
                 
         "3-summaries/RMA-Full-Summary.prot.txt",
         
         expand("3-summaries/Normalized.{type}.counts.prot.txt", 
-                 type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "GTDB"]),
+                 type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "NCBIbac", "GTDB"]),
                  
         expand("3-summaries/Plots-Samples/{sample}.{type}.histo.prot.pdf", sample = SAMPLES, 
                  type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED"]),
@@ -33,7 +36,7 @@ rule RunR2CforEC:
     input:
         f"inputs/{{sample}}{config['rma']['fill']}.rma"
     output:
-        temp("1-r2c/{sample}.EC.reads.prot.txt")
+        "1-r2c/{sample}.EC.reads.prot.txt"
     conda:
         "envs/general.yml"
     threads: config['rma2info']['threads']
@@ -50,7 +53,7 @@ rule RunR2CforEGGNOG:
     input:
         f"inputs/{{sample}}{config['rma']['fill']}.rma"
     output:
-        temp("1-r2c/{sample}.EGGNOG.reads.prot.txt")
+        "1-r2c/{sample}.EGGNOG.reads.prot.txt"
     conda:
         "envs/general.yml"
     threads: config['rma2info']['threads']
@@ -67,7 +70,7 @@ rule RunR2CforINTERPRO2GO:
     input:
         f"inputs/{{sample}}{config['rma']['fill']}.rma"
     output:
-        temp("1-r2c/{sample}.INTERPRO2GO.reads.prot.txt")
+        "1-r2c/{sample}.INTERPRO2GO.reads.prot.txt"
     conda:
         "envs/general.yml"
     threads: config['rma2info']['threads']
@@ -84,7 +87,7 @@ rule RunR2CforSEED:
     input:
         f"inputs/{{sample}}{config['rma']['fill']}.rma"
     output:
-        temp("1-r2c/{sample}.SEED.reads.prot.txt")
+        "1-r2c/{sample}.SEED.reads.prot.txt"
     conda:
         "envs/general.yml"
     threads: 
@@ -102,7 +105,7 @@ rule RunR2CforNCBI:
     input:
         f"inputs/{{sample}}{config['rma']['fill']}.rma"
     output:
-        temp("1-r2c/{sample}.NCBI.reads.prot.txt")
+        "1-r2c/{sample}.NCBI.reads.prot.txt"
     conda:
         "envs/general.yml"
     threads: 
@@ -116,11 +119,29 @@ rule RunR2CforNCBI:
     shell:
         "{params.rma2info} -i {input} -o {output} -r2c Taxonomy -n &> {log}"
 
+rule RunR2CforNCBIbac:
+    input:
+        f"inputs/{{sample}}{config['rma']['fill']}.rma"
+    output:
+        "1-r2c/{sample}.NCBIbac.reads.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        "logs/{sample}.RunR2CforNCBIbac.prot.log"
+    benchmark: 
+        "benchmarks/{sample}.RunR2CforNCBIbac.prot.tsv"
+    shell:
+        "{params.rma2info} -i {input} -o {output} -r2c Taxonomy -n --bacteriaOnly &> {log}"
+
 rule RunR2CforGTDB:
     input:
         f"inputs/{{sample}}{config['rma']['fill']}.rma"
     output:
-        temp("1-r2c/{sample}.GTDB.reads.prot.txt")
+        "1-r2c/{sample}.GTDB.reads.prot.txt"
     conda:
         "envs/general.yml"
     threads: 
@@ -242,6 +263,24 @@ rule RunC2CforNCBI:
     shell:
         "{params.rma2info} -i {input} -o {output} -c2c Taxonomy -n -r &> {log}"
 
+rule RunC2CforNCBIbac:
+    input:
+        f"inputs/{{sample}}{config['rma']['fill']}.rma"
+    output:
+        "2-c2c/{sample}.NCBIbac.counts.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        "logs/{sample}.RunC2CforNCBIbac.prot.log"
+    benchmark: 
+        "benchmarks/{sample}.RunC2CforNCBIbac.prot.tsv"
+    shell:
+        "{params.rma2info} -i {input} -o {output} -c2c Taxonomy -n -r --bacteriaOnly &> {log}"
+
 rule SummarizeEC:
     input:
         expand("2-c2c/{sample}.EC.counts.prot.txt", sample = SAMPLES)
@@ -338,16 +377,32 @@ rule SummarizeNCBI:
     shell:
         "python scripts/RMA-taxonomy-join.py -c {input} -o {output}  &> {log}"
 
+rule SummarizeNCBIbac:
+    input:
+        expand("2-c2c/{sample}.NCBIbac.counts.prot.txt", sample = SAMPLES)
+    output:
+        "3-summaries/Absolute.NCBIbac.counts.prot.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        config['rma2info']['threads']
+    log: 
+        "logs/SummarizeNCBIbac.prot.log"
+    benchmark: 
+        "benchmarks/SummarizeNCBIbac.prot.tsv"
+    shell:
+        "python scripts/RMA-taxonomy-join.py -c {input} -o {output}  &> {log}"
+        
 rule SummarizeAllRMA:
     input:
         read_files = expand("1-r2c/{sample}.{type}.reads.prot.txt", sample = SAMPLES, 
-                            type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "GTDB"]),
+                            type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "NCBIbac", "GTDB"]),
         sum_files = expand("3-summaries/Absolute.{type}.counts.prot.txt", 
-                            type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "GTDB"])
+                            type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "NCBIbac", "GTDB"])
     output:
         summary = "3-summaries/RMA-Full-Summary.prot.txt",
         norm_files = expand("3-summaries/Normalized.{type}.counts.prot.txt", 
-                            type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "GTDB"]),
+                            type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED", "NCBI", "NCBIbac", "GTDB"]),
         sample_histos = expand("3-summaries/Plots-Samples/{sample}.{type}.histo.prot.pdf", 
                             sample = SAMPLES, 
                             type = ["EC", "EGGNOG", "INTERPRO2GO", "SEED"]),
