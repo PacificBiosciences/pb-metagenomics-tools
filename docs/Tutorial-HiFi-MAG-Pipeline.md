@@ -2,7 +2,7 @@
 
 ## **Table of Contents**
 
-+ [Genome-Binning-Pipeline Overview](#PO)
++ [HiFi-MAG-Pipeline Overview](#PO)
 + [Quick Start](#QS)
 + [1. Snakemake Contents](#SMC)
 + [2. Requirements for Running](#RFR)
