@@ -10,7 +10,7 @@ rule all:
         expand("5-gtdb-individual/{sample}/{dir}/", sample = SAMPLES, dir = ["align", "classify", "identify"]),
         expand("6-gtdb-combined-{label}/{dir}/", dir = ["align", "classify", "identify"], label = config['gtdbtk']['gtdb_full_label']),
         expand("7-summary/{sample}/binplots/{sample}-{filt}-compl-vs-{type}.pdf", sample = SAMPLES, filt = ["unfiltered", "filtered"], type = ["contam", "contam-contigNums", "contam-Bins"]),
-        expand("7-summary/{sample}/{sample}.genomebinning.summary.txt", sample = SAMPLES)
+        expand("7-summary/{sample}/{sample}.HiFi-MAG.summary.txt", sample = SAMPLES)
 
 rule MinimapToBam:
     input:
@@ -221,7 +221,7 @@ rule SummarizeResults:
         checkm = "4-checkm-summary/{sample}.simple.txt",
         gtdbdir = "5-gtdb-individual/{sample}/classify/"
     output:
-        outfile = "7-summary/{sample}/{sample}.genomebinning.summary.txt"
+        outfile = "7-summary/{sample}/{sample}.HiFi-MAG.summary.txt"
     conda:
         "envs/general.yml"
     params:

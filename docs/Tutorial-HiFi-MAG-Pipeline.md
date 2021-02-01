@@ -1,4 +1,4 @@
-# Tutorial for Genome-Binning-Pipeline <a name="TOP"></a>
+# Tutorial for HiFi-MAG-Pipeline <a name="TOP"></a>
 
 ## **Table of Contents**
 
@@ -14,13 +14,13 @@
 
 ---------------
 
-# **Genome-Binning-Pipeline Overview** <a name="PO"></a>
+# **HiFi-MAG-Pipeline Overview** <a name="PO"></a>
 
-The purpose of this snakemake workflow is to obtain high-quality metagenome-assembled genomes (MAGs) from previously generated assemblies. The general steps of the Genome-Binning-Pipeline are shown below:
+The purpose of this snakemake workflow is to obtain high-quality metagenome-assembled genomes (MAGs) from previously generated assemblies. The general steps of the HiFi-MAG-Pipeline are shown below:
 
 ![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Genome-Binning-Steps.png)
 
-HiFi reads are mapped to contigs using minimap2 to generate BAM files. The BAM files are used to obtain coverage estimates for the contigs. The coverages and contigs are used as inputs to MetaBAT2, which constructs the genome bins. CheckM is used to assess the quality of the resulting genome bins. It provides measures of genome completeness, contamination, and other useful metrics. A custom filtering step is used to eliminate genome bins with <70% genome completeness, >10% genome contamination, and >10 contigs per bin. These are default values, and they can be changed. The genome bins which pass the default thresholds can be considered high-quality MAGs. Finally, the Genome Taxonomy Database Toolkit (GTDB-Tk) is used to identify the closest reference match to each high-quality MAG. It will report the taxonomy of the closest reference. **This does not guarantee the identity of the MAG, but serves as a starting point for understanding which genus, species, or strain it is most closely related to.**
+HiFi reads are first mapped to contigs using minimap2 to generate BAM files. The BAM files are used to obtain coverage estimates for the contigs. The coverages and contigs are used as inputs to MetaBAT2, which constructs the genome bins. **Note that sometimes complete MAGs are recovered straight from assembly, whereas other MAGs are recovered from binning approach.** Binning with MetaBAT2 can be used to identify complete MAGs as well as fragmented MAGs. CheckM is used to assess the quality of the resulting genome bins. It provides measures of genome completeness, contamination, and other useful metrics. A custom filtering step is used to eliminate genome bins with <70% genome completeness, >10% genome contamination, and >10 contigs per bin. These are default values, and they can be changed. The genome bins which pass the default thresholds can be considered high-quality MAGs. Finally, the Genome Taxonomy Database Toolkit (GTDB-Tk) is used to identify the closest reference match to each high-quality MAG. It will report the taxonomy of the closest reference. **This does not guarantee the identity of the MAG, but serves as a starting point for understanding which genus, species, or strain it is most closely related to.**
 
 [Back to top](#TOP)
 
@@ -30,14 +30,14 @@ HiFi reads are mapped to contigs using minimap2 to generate BAM files. The BAM f
 
 This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require 45-150GB memory and >250GB temporary disk space (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps. Snakemake v5+ is required, and the workflows have been tested using v5.19.3.
 
-- Clone the Genome-Binning-Pipeline directory.
+- Clone the HiFi-MAG-Pipeline directory.
 - Download and unpack the databases for CheckM (<2GB) and GTDB (~28GB). Specify paths to each database in `config.yaml`.
 - Include all input HiFi fasta files (`SAMPLE.fasta`) and contig fasta files (`SAMPLE.contigs.fasta`) in the `inputs/` folder. These can be files or symlinks. 
 - Edit sample names in `Sample-Config.yaml` configuration file in `configs/` for your project. 
 - Check that the `tmpdir` argument is set correctly in `config.yaml`. The default is `/scratch`.
 - Execute snakemake using the general commands below: 
 ```
-snakemake --snakefile Snakefile-genomebinning --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]
+snakemake --snakefile Snakefile-hifimags --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]
 ```
 The choice of additional arguments to include depends on where and how you choose to run snakemake. Please refer to the [4. Executing Snakemake](#EXS) section for more details.
 
@@ -47,10 +47,10 @@ The choice of additional arguments to include depends on where and how you choos
 
 # **1. Snakemake Contents** <a name="SMC"></a>
 
-To run the workflow, you will need to obtain all contents within the [Genome-Binning-Pipeline folder](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Genome-Binning-Pipeline). The default contents should look like this:
+To run the workflow, you will need to obtain all contents within the [HiFi-MAG--Pipeline folder](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/HiFi-MAG-Pipeline). The default contents should look like this:
 
 ```
-Genome-Binning-Pipeline
+HiFi-MAG-Pipeline
 │
 ├── configs/
 │	└── Sample-Config.yaml
@@ -66,11 +66,11 @@ Genome-Binning-Pipeline
 │	├── genome-binning-summarizer.py
 │	└── Metabat-Plot.py
 │
-├── Snakefile-genomebinning
+├── Snakefile-hifimags
 │
 └── config.yaml
 ```
-The `Snakefile-genomebinning` file is the Snakefile for this snakemake workflow. It contains all of the rules of the workflow. 
+The `Snakefile-hifimags` file is the Snakefile for this snakemake workflow. It contains all of the rules of the workflow. 
 
 The `config.yaml` file is the main configuration file used in the snakemake workflow. It contains the main settings that will be used for various programs. 
 
@@ -90,7 +90,7 @@ Finally, the `envs/` directory contains the `general.yml` file which is needed t
 
 ## Memory and disk space requirements
 
-Running certain steps in this pipeline will require ~45GB of memory. There is a step in GTDB-Tk (pplacer) that can require large amounts memory (~150GB) and temporary disk space (~250GB). This workflow allows writing temporary files in GTDB-Tk using the `--scratch_dir /scratch` setting, which reduces the memory requirements drastically (e.g., 150GB rather than 1TB). These are known issues with pplacer. If run into memory issues with this step please see the discussion [here](https://github.com/Ecogenomics/GTDBTk/issues/124) for potential solutions.
+Running certain steps in this pipeline will potentially require ~45GB of memory. There is a step in GTDB-Tk (pplacer) that can require large amounts memory (~150GB) and temporary disk space (~250GB). This workflow allows writing temporary files in GTDB-Tk using the `--scratch_dir /scratch` setting, which reduces the memory requirements drastically (e.g., 150GB rather than 1TB). These are known issues with pplacer. If run into memory issues with this step please see the discussion [here](https://github.com/Ecogenomics/GTDBTk/issues/124) for potential solutions.
 
 ## Dependencies
 
@@ -102,15 +102,17 @@ If you intend to generate a graphic for the snakemake workflow graph, you will a
 
 ## Generate assemblies
 
-For assembly of metagenomic samples with HiFi reads, we strongly recommend using Canu v2.1 with the following settings:
+For assembly of metagenomic samples with HiFi reads, you can use [hifiasm-meta](https://github.com/xfengnefx/hifiasm-meta), [HiCanu](https://github.com/marbl/canu), or [meta-Flye](https://github.com/fenderglass/Flye). 
+
+For hifiasm-meta, the default settings work very well. The same is true for meta-Flye, but of course make sure to use the `--pacbio-hifi` and `--meta` flags! 
+
+For Canu v2.1, we strongly recommend the following settings:
 
 ```
 canu -d DIRECTORY -p OUTPUT_NAME -pacbio-hifi FQ_DATA genomeSize=100m maxInputCoverage=1000 batMemory=200
 ```
 
-The additional batOptions previously recommended for Canu 2.0 (`batOptions=-eg 0.0 -sb 0.001 -dg 0 -db 3 -dr 0 -ca 2000 -cp 200`) are apparently no longer necessary if using Canu 2.1.
-
-For a discussion on these metagenomics assembly settings, please see [here](https://github.com/marbl/canu/issues/1796).
+The additional batOptions previously recommended for metagenomics with Canu 2.0 (`batOptions=-eg 0.0 -sb 0.001 -dg 0 -db 3 -dr 0 -ca 2000 -cp 200`) are apparently no longer necessary if using Canu 2.1. For a brief discussion on these Canu metagenomics assembly settings, please see [here](https://github.com/marbl/canu/issues/1796).
 
 ## Download required databases
 
@@ -153,7 +155,7 @@ You may also wish to change the thresholds for filtering in the gtdbtk settings:
 #### Sample configuration file (`configs/Sample-Config.yaml`)
 The example sample configuration file is called `Sample-Config.yaml` and is located in the `configs/` directory. Here you should specify the sample names that you wish to include in the analysis. 
 
-For the Genome-Binning-Pipeline, all samples specified in the sample configuration file must have two corresponding files in the `inputs/` folder. These include the fasta file of HiFi reads (`SAMPLE.fasta`) and the assembled contigs (`SAMPLE.contig.fasta`). Here, the `SAMPLE` component is a name included in the sample configuration file. The pipeline can be run for any number of samples. You can also configure the file to only run for a subset of the samples present in the `inputs/` folder. Please note that if the input files do not follow these naming conventions (`SAMPLE.fasta`, `SAMPLE.contig.fasta`), they will not be recognized by the workflow. You can use the actual files or symlinks to those files, both are compatible with snakemake.
+All samples specified in the sample configuration file must have two corresponding files in the `inputs/` folder. These include the fasta file of HiFi reads (`SAMPLE.fasta`) and the assembled contigs (`SAMPLE.contig.fasta`). Here, the `SAMPLE` component is a name included in the sample configuration file. The pipeline can be run for any number of samples. You can also configure the file to only run for a subset of the samples present in the `inputs/` folder. Please note that if the input files do not follow these naming conventions (`SAMPLE.fasta`, `SAMPLE.contig.fasta`), they will not be recognized by the workflow. You can use the actual files or symlinks to those files, both are compatible with snakemake.
 
 [Back to top](#TOP)
 
@@ -176,13 +178,13 @@ The workflow must be executed from within the directory containing all the snake
 ### Test workflow
 It is a good idea to test the workflow for errors before running it. This can be done with the following command:
 ```
-snakemake -np --snakefile Snakefile-genomebinning --configfile configs/Sample-Config.yaml
+snakemake -np --snakefile Snakefile-hifimags --configfile configs/Sample-Config.yaml
 ```
 
 Let's unpack this command:
 - `snakemake` calls snakemake.
 - `-np` performs a 'dry-run' where the rule compatibilities are tested but they are not executed.
-- `--snakefile Snakefile-genomebinning` tells snakemake to run this particular snakefile.
+- `--snakefile Snakefile-hifimags` tells snakemake to run this particular snakefile.
 - `--configfile configs/Sample-Config.yaml` tells snakemake to include the samples listed in the sample configuration file.
 
 The dry run command should result in the jobs being displayed on screen. 
@@ -190,14 +192,14 @@ The dry run command should result in the jobs being displayed on screen.
 ### Create workflow figure
 If there are no errors, you may wish to generate a figure of the directed acyclic graph (the workflow steps). You can do this using the following command:
 ```
-snakemake --dag --snakefile Snakefile-genomebinning --configfile configs/Sample-Config.yaml | dot -Tsvg > genome-binning_analysis.svg
+snakemake --dag --snakefile Snakefile-hifimags --configfile configs/Sample-Config.yaml | dot -Tsvg > hifimags_analysis.svg
 ```
-Here the `--dag` flag creates an output that is piped to `dot`, and an svg file called `genome-binning_analysis.svg` is created. This will show the workflow visually.
+Here the `--dag` flag creates an output that is piped to `dot`, and an svg file called `hifimags_analysis.svg` is created. This will show the workflow visually.
 
 ### Execute workflow
 Finally, you can execute the workflow using:
 ```
-snakemake --snakefile Snakefile-genomebinning --configfile configs/Sample-Config.yaml -j 48 --use-conda
+snakemake --snakefile Snakefile-hifimags --configfile configs/Sample-Config.yaml -j 48 --use-conda
 ```
 
 There are a couple important arguments that were added here:
@@ -219,12 +221,12 @@ One easy way to run snakemake is to start an interactive session, and execute sn
 The same general commands are used as with "local" execution, but with some additional arguments to support cluster configuration. Below is an example of cluster configuration using SGE:
 
 ```
-snakemake --snakefile Snakefile-genomebinning --configfile configs/Sample-Config.yaml --use-conda --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+snakemake --snakefile Snakefile-hifimags --configfile configs/Sample-Config.yaml --use-conda --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
 ```
 
 Let's unpack this command:
 - `snakemake` calls snakemake.
-- `--snakefile Snakefile-genomebinning` tells snakemake to run this particular snakefile.
+- `--snakefile Snakefile-hifimags` tells snakemake to run this particular snakefile.
 - `--configfile configs/Sample-Config.yaml` tells snakemake to use this sample configuration file in the `configs/` directory. This file can have any name, as long as that name is provided here.
 -  `--use-conda` this allows conda to install the programs and environments required for each step. It is essential.
 - `--cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash"` are the settings for execution with SGE, where 'default' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule. Note that the entire section in quotes can be replaced with a SLURM equivalent.
@@ -248,13 +250,13 @@ For information on how to run snakemake with AWS (Amazon Web Services), Google C
 Successful runs will result in several new directories:
 
 ```
-Genome-Binning-Pipeline
+HiFi-MAG-Pipeline
 │
 ├── configs/
 ├── envs/
 ├── inputs/
 ├── scripts/
-├── Snakefile-genomebinning
+├── Snakefile-hifimags
 ├── config.yaml
 │
 ├── benchmarks/
@@ -286,7 +288,7 @@ Genome-Binning-Pipeline
 - `7-summary/` **contains the main output files of interest**.
 
 Within `7-summary/`, there will be a folder for each sample. Within a sample folder there are several items:
-+ `SAMPLE.genomebinning.summary.txt`: A main summary file that brings together information from metabat2, checkm, and gtdb-tk for all MAGs that pass the filtering step. 
++ `SAMPLE.HiFi-MAG.summary.txt`: A main summary file that brings together information from metabat2, checkm, and gtdb-tk for all MAGs that pass the filtering step. 
 + `binplots/`: A folder that contains several plots. One set of plots is for the unfiltered genome bins (e.g., all bins from metabat2), and the other is for the filtered high-quality MAGs. These plots compare % genome completeness vs. % contamination, with variations including bin name labels or the number of contigs per bin labeled.
 + `bin-ref-pairs/`: A folder which contains a subfolder for each high-quality MAG. These folders are named using the bin numbers from metabat2. Inside each folder is a fasta file of the MAG and the closest reference (as inferred by GTDK-Tk). These two files can be useful for performing whole genome alignments or further characterization of the MAG.
 
