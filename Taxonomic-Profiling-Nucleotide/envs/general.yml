@@ -5,6 +5,6 @@ channels:
 - defaults
 dependencies:
 - exonerate == 2.4.0
-- minimap2 == 2.17
+- minimap2 >= 2.17
 - numpy
 - biopython
