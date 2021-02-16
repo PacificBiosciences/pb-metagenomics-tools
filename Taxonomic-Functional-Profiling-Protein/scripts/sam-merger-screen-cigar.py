@@ -104,9 +104,13 @@ def main():
     setup_logging(args.logfile)
     logging.info("Starting SAM merge.")
     legal = ["M", "I", "D", "N", "S", "H", "P", "=", "X"]
-    g1, b1 = write_header_sam(args.infiles[0], args.outfile, legal)
-    g2, b2 = write_remainder_sams(args.infiles[1:], args.outfile, legal)
-    tally_counts(g1, g2, b1, b2)
+    if len(args.infiles) == 1:
+        g1, b1 = write_header_sam(args.infiles[0], args.outfile, legal)
+        tally_counts(g1, 1, b1, 1)
+    else:
+        g1, b1 = write_header_sam(args.infiles[0], args.outfile, legal)
+        g2, b2 = write_remainder_sams(args.infiles[1:], args.outfile, legal)
+        tally_counts(g1, g2, b1, b2)
 
 if __name__ == '__main__':
     main()
