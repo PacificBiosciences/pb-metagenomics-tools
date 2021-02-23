@@ -4,7 +4,7 @@ Welcome! Here you can find a variety of tools and pipelines tailored to using Pa
 
 ## Available tools and pipelines
 
-+ [**HiFi-MAG-Pipeline**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/HiFi-MAG-Pipeline): Identify high-quality MAGs from HiFi metagenomic assemblies. Streamlined workflow includes steps with minimap2, MetaBAT2, CheckM, and GTDB-Tk. Outputs high-quality MAG sequences and associated metadata. 
++ [**HiFi-MAG-Pipeline**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/HiFi-MAG-Pipeline): (*previously called Genome-Binning-Pipeline*) Identify high-quality MAGs from HiFi metagenomic assemblies. Streamlined workflow includes steps with minimap2, MetaBAT2, CheckM, and GTDB-Tk. Outputs high-quality MAG sequences and associated metadata. 
 
 + [**Taxonomic-Functional-Profiling-Protein**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Functional-Profiling-Protein): Align HiFi reads to a **protein** database using DIAMOND and prepare inputs for MEGAN6, for the purpose of taxonomic and functional profiling. Provides access to taxonomic analyses (NCBI and GTDB), and allows functional analyses based on annotations from several databases (EC, SEED, InterPro2GO, eggNOG). **Ideal for profiling metagenomic samples, but can also be used to identify and characterize microbial reads present in non-metagenomic datasets (such as plant/animal genome sequencing projects).**
 
