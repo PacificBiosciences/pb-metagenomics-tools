@@ -1,0 +1,8 @@
+name: samtools_env
+channels:
+- bioconda
+- conda-forge
+- defaults
+dependencies:
+- samtools == 1.10
+- minimap2 == 2.17

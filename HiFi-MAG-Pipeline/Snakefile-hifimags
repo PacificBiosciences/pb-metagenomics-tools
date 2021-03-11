@@ -19,7 +19,7 @@ rule MinimapToBam:
     output:
         "1-bam/{sample}.bam"
     conda:
-        "envs/general.yml"
+        "envs/samtools.yml"
     threads: 
         config['minimap']['threads']
     log: 
@@ -37,7 +37,7 @@ rule BamDepth:
     output:
         "1-bam/{sample}.depth.txt"
     conda:
-        "envs/general.yml"
+        "envs/metabat.yml"
     log:
         "logs/{sample}.BamDepth.log"
     benchmark: 
@@ -53,7 +53,7 @@ rule RunMetabat:
         file = "2-metabat-bins/{sample}.completed.txt",
         outdir = directory("2-metabat-bins/{sample}/")
     conda:
-        "envs/general.yml"
+        "envs/metabat.yml"
     threads: 
         config['metabat']['threads']
     params:
@@ -72,7 +72,7 @@ rule RunCheckM:
     output:
         "3-checkm/{sample}/lineage.ms"
     conda:
-        "envs/general.yml"
+        "envs/checkm.yml"
     threads: 
         config['checkm']['threads']
     params:
@@ -97,7 +97,7 @@ rule SummarizeCheckM:
     output:
         "4-checkm-summary/{sample}.qa.txt"
     conda:
-        "envs/general.yml"
+        "envs/checkm.yml"
     params:
         outdir = "3-checkm/{sample}/"
     log: 
@@ -114,6 +114,8 @@ rule PrepBatchFile:
     output:
         batch = "4-checkm-summary/{sample}.batchfile.txt",
         simple = "4-checkm-summary/{sample}.simple.txt"
+    conda:
+        "envs/python.yml"
     params:
         completeness = config['gtdbtk']['min_completeness'],
         contamination = config['gtdbtk']['max_contamination'],
@@ -133,9 +135,10 @@ rule RunGTDBTkIndividual:
     output:
         directory("5-gtdb-individual/{sample}/align/"),
         directory("5-gtdb-individual/{sample}/classify/"),
-        directory("5-gtdb-individual/{sample}/identify/")
+        directory("5-gtdb-individual/{sample}/identify/"),
+        temp(f"{config['tmpdir']}/{{sample}}.pplacer.scratch")
     conda:
-        "envs/general.yml"
+        "envs/gtdbtk.yml"
     threads: 
         config['gtdbtk']['threads']
     params:
@@ -170,9 +173,10 @@ rule RunGTDBTkFull:
     output:
         directory(f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/align/"),
         directory(f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/classify/"),
-        directory(f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/identify/")
+        directory(f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/identify/"),
+        temp(f"{config['tmpdir']}/Full.pplacer.scratch")
     conda:
-        "envs/general.yml"
+        "envs/gtdbtk.yml"
     threads: 
         config['gtdbtk']['threads']
     params:
@@ -200,7 +204,7 @@ rule PlotCheckM:
         o5 = "7-summary/{sample}/binplots/{sample}-filtered-compl-vs-contam-contigNums.pdf",
         o6 = "7-summary/{sample}/binplots/{sample}-filtered-compl-vs-contam-Bins.pdf"
     conda:
-        "envs/general.yml"
+        "envs/python.yml"
     params:
         completeness = config['gtdbtk']['min_completeness'],
         contamination = config['gtdbtk']['max_contamination'],
@@ -223,7 +227,7 @@ rule SummarizeResults:
     output:
         outfile = "7-summary/{sample}/{sample}.HiFi-MAG.summary.txt"
     conda:
-        "envs/general.yml"
+        "envs/python.yml"
     params:
         gtdbtk_data = config['gtdbtk']['gtdbtk_data'],
         outdir = "7-summary/{sample}/bin-ref-pairs/"
