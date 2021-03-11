@@ -52,7 +52,7 @@ rule RunMinimap:
     benchmark: 
         "benchmarks/{sample}.{piece}.RunMinimap.tsv"
     shell:
-        "minimap2 -a -k 19 -w 10 -I 10G -g 5000 -r 2000 -N 100 --lj-min-ratio 0.5 "
+        "minimap2 -a -k 19 -w 10 -I 10G -g 5000 -r 2000 -N 50 --lj-min-ratio 0.5 "
         "-A 2 -B 5 -O 5,56 -E 4,1 -z 400,50 --sam-hit-only -t {threads} "
         "{params.db} {input} 1> {output} 2> {log}"
         
