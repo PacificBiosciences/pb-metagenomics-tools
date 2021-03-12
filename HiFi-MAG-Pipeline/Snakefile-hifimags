@@ -136,7 +136,6 @@ rule RunGTDBTkIndividual:
         directory("5-gtdb-individual/{sample}/align/"),
         directory("5-gtdb-individual/{sample}/classify/"),
         directory("5-gtdb-individual/{sample}/identify/"),
-        temp(f"{config['tmpdir']}/{{sample}}.pplacer.scratch")
     conda:
         "envs/gtdbtk.yml"
     threads: 
@@ -174,7 +173,6 @@ rule RunGTDBTkFull:
         directory(f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/align/"),
         directory(f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/classify/"),
         directory(f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/identify/"),
-        temp(f"{config['tmpdir']}/Full.pplacer.scratch")
     conda:
         "envs/gtdbtk.yml"
     threads: 
