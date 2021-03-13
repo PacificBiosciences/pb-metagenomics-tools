@@ -9,7 +9,7 @@ rule all:
     input:
         expand("5-gtdb-individual/{sample}/{dir}/", sample = SAMPLES, dir = ["align", "classify", "identify"]),
         expand("6-gtdb-combined-{label}/{dir}/", dir = ["align", "classify", "identify"], label = config['gtdbtk']['gtdb_full_label']),
-        expand("7-summary/{sample}/binplots/{sample}-{filt}-compl-vs-{type}.pdf", sample = SAMPLES, filt = ["unfiltered", "filtered"], type = ["contam", "contam-contigNums", "contam-Bins"]),
+        expand("7-summary/{sample}/{sample}-binplots/{sample}-{filt}-compl-vs-{type}.pdf", sample = SAMPLES, filt = ["unfiltered", "filtered"], type = ["contam", "contam-contigNums", "contam-Bins"]),
         expand("7-summary/{sample}/{sample}.HiFi-MAG.summary.txt", sample = SAMPLES)
 
 rule MinimapToBam:
@@ -195,12 +195,12 @@ rule PlotCheckM:
     input:
         "4-checkm-summary/{sample}.qa.txt"
     output:
-        o1 = "7-summary/{sample}/binplots/{sample}-unfiltered-compl-vs-contam.pdf",
-        o2 = "7-summary/{sample}/binplots/{sample}-unfiltered-compl-vs-contam-contigNums.pdf",
-        o3 = "7-summary/{sample}/binplots/{sample}-unfiltered-compl-vs-contam-Bins.pdf",
-        o4 = "7-summary/{sample}/binplots/{sample}-filtered-compl-vs-contam.pdf",
-        o5 = "7-summary/{sample}/binplots/{sample}-filtered-compl-vs-contam-contigNums.pdf",
-        o6 = "7-summary/{sample}/binplots/{sample}-filtered-compl-vs-contam-Bins.pdf"
+        o1 = "7-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam.pdf",
+        o2 = "7-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam-contigNums.pdf",
+        o3 = "7-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam-Bins.pdf",
+        o4 = "7-summary/{sample}/{sample}-binplots/{sample}-filtered-compl-vs-contam.pdf",
+        o5 = "7-summary/{sample}/{sample}-binplots/{sample}-filtered-compl-vs-contam-contigNums.pdf",
+        o6 = "7-summary/{sample}/{sample}-binplots/{sample}-filtered-compl-vs-contam-Bins.pdf"
     conda:
         "envs/python.yml"
     params:
@@ -228,7 +228,7 @@ rule SummarizeResults:
         "envs/python.yml"
     params:
         gtdbtk_data = config['gtdbtk']['gtdbtk_data'],
-        outdir = "7-summary/{sample}/bin-ref-pairs/"
+        outdir = "7-summary/{sample}/{sample}-bin-ref-pairs/"
     log: 
         "logs/{sample}.SummarizeResults.log"
     benchmark: 
