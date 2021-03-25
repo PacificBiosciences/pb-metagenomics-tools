@@ -34,12 +34,13 @@ sam2rma:
   # https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html
   # please note that the name of this file will change depending on the version, 
   # and that this must be the the version for the NCBI-nr accessions.
-  db: "/home/dportik/programs/megan/db/megan-map-Jul2020-2.db"
+  db: "/home/dportik/programs/megan/db/megan-map-Jan2021.db"
   
   # Number of threads to use for sam2rma, 24 is generally sufficient
   threads: 24
   
   # Affects which type of RMA file to produce. When comparing taxa/functional counts, it
-  # is best to use the number or reads (readCount) or the total aligned bases (alignedBases). 
+  # is best to use the number or reads (readCount) or the total aligned bases (alignedBases).
+  # If you plan to use the RMA summary pipeline afterwards, make sure to use readCount.  
   readassignmentmode: "readCount"
   # possible values = readCount, readLength, alignedBases, readMagnitude

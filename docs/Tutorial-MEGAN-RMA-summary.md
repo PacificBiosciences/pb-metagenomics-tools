@@ -18,9 +18,9 @@
 
 The purpose of this snakemake workflow is to summarize the information contained in long-read RMA format files for MEGAN6. These RMA files were previously created from alignments of HiFi data to nucleotide or protein databases. 
 
-This workflow is intended to be used after running the [Taxonomic-Functional-Profiling-Protein](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Functional-Profiling-Protein) pipeline or the [Taxonomic-Profiling-Nucleotide](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Nucleotide) pipeline. To work properly, these RMA files must should be created using the following settings in `sam2rma`: `-lg -alg longReads -ram readCount`. These are the default settings for both of the above pipelines. 
+This workflow is intended to be used after running the [Taxonomic-Functional-Profiling-Protein](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Functional-Profiling-Protein) pipeline or the [Taxonomic-Profiling-Nucleotide](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Nucleotide) pipeline. To work properly, these RMA files must should be created using the following settings in `sam2rma`: `-lg -alg longReads -ram readCount`. These are the default settings for both of the above pipelines, and report read counts (rather than base pair counts) for annotations. 
 
-For protein RMA files, this workflow will output absolute and normalized read counts of the EC, EGGNOG, INTERPRO2GO, and SEED functional classes across all samples, along with read counts of the NCBI (full database and bacteria-only) and GTDB taxonomy classes across samples. A summary file and several plots will be created showing the number and percentage of reads assigned to functional and taxonomic databases, the total classes represented per database, and average annotations per read. A visual depiction of the protein-RMA workflow is shown below:
+For protein RMA files, this workflow will output absolute and normalized read counts of the EC, EGGNOG, INTERPRO2GO, and SEED functional classes across all samples, along with read counts of the NCBI (full database and bacteria-only) and GTDB taxonomy classes across samples. A summary file and several plots will be created showing the number and percentage of reads assigned to functional and taxonomic databases, the total classes represented per database, and average annotations per read. **Update (March 2021): The full NCBI taxonomic counts are now also provided in kraken report (kreport) and metaphlan (mpa) output formats.** A visual depiction of the protein-RMA workflow is shown below:
 
 ![rmaprotein](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/MEGAN-RMA-summary-protein.png)
 
@@ -285,7 +285,9 @@ MEGAN-RMA-summary
 │
 ├── 2-c2c/
 │
-└── 3-summaries/
+├── 3-summaries/
+│
+└── 4-kraken-mpa-reports/
 ```
 
 - `benchmarks/` contains benchmark information on memory usage and I/O for each rule executed.
@@ -293,7 +295,7 @@ MEGAN-RMA-summary
 - `1-r2c/` holds the per-sample read assignment files for each database. For protein RMA, this includes EC, EGGNOG, GTDB, INTERPRO2GO, NCBI (full and bacteria-only), and SEED. For nucleotide RMA, this will only include NCBI reads. These files are temporary and will be deleted before completion if no errors occur.
 - `2-c2c/` holds the per-sample class count files for each database. For protein RMA, this includes EC, EGGNOG, GTDB, INTERPRO2GO, NCBI (full and bacteria-only), and SEED class counts. For nucleotide RMA, this will only include NCBI class counts.
 - `3-summaries/` contains combined counts files for each database which include all samples. These are present as absolute counts, and normalized counts (determined by the sample with the least number of HiFi reads). **These are the main files of interest.**
-
+- `4-kraken-mpa-reports/` contains the taxonomic class counts in kraken report (kreport) and metaphlan (mpa) format. **These two taxonomic count files allow comparisons to other taxonomic profiling programs.**
 
 ### Outputs from the Protein RMA version:
 
@@ -373,6 +375,20 @@ Average annotations per read	EGGNOG	3	3	2.8
 Average annotations per read	INTERPRO2GO	3.9	4	3.8
 Average annotations per read	SEED	2.2	2.1	2.1
 ```
+
+The taxonomic reports will be available in the `4-kraken-mpa-reports/` folder:
+
+```
+4-kraken-mpa-reports/
+│
+├── NCBI-updated.txt
+├── SAMPLE.inter.taxids.txt
+├── SAMPLE.inter.taxnames.txt
+├── SAMPLE.megan-RMA-c2c.kreport.txt
+└── SAMPLE.megan-RMA-c2c.mpa.txt
+```
+
+The key files here are `SAMPLE.megan-RMA-c2c.kreport.txt` which is the kraken report output file, and `SAMPLE.megan-RMA-c2c.mpa.txt` which is the metaphlan format output file. The other files are intermediate files or checkpointing files, and can be ignored.
 
 
 ### Outputs from the Nucleotide RMA version:

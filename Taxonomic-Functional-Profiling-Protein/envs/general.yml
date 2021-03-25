@@ -4,5 +4,6 @@ channels:
 - conda-forge
 - defaults
 dependencies:
+- python == 3.7
 - exonerate == 2.4.0
 - diamond >= 2.0.6

@@ -1,4 +1,4 @@
-#localrules: 
+localrules: UpdateNCBI, MakeKeportMPA
 
 configfile: "config.yaml"
 
@@ -29,7 +29,13 @@ rule all:
         "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Percent_Reads_Assigned.prot.pdf",
         "3-summaries/Plots-Summaries/SummaryPlot-Functional_Classes_Assigned.prot.pdf",
         "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Classes_Assigned.prot.pdf",
-        "3-summaries/Plots-Summaries/SummaryPlot-Functional_Average_Annotations_Assigned.prot.pdf"
+        "3-summaries/Plots-Summaries/SummaryPlot-Functional_Average_Annotations_Assigned.prot.pdf",
+        
+        expand("4-kraken-mpa-reports/{sample}.inter.taxnames.txt", sample = SAMPLES),
+        expand("4-kraken-mpa-reports/{sample}.inter.taxids.txt", sample = SAMPLES),
+        expand("4-kraken-mpa-reports/{sample}.megan-RMA-c2c.kreport.txt", sample = SAMPLES),
+        expand("4-kraken-mpa-reports/{sample}.megan-RMA-c2c.mpa.txt", sample = SAMPLES)
+
         
 
 rule RunR2CforEC:
@@ -428,3 +434,41 @@ rule SummarizeAllRMA:
         "python scripts/RMA-Summarizer-prot.py -c {input.read_files} -s {input.sum_files} "
         "-r {params.rcfile} -o {output.summary} -p {params.outdir} &> {log}"
 
+rule UpdateNCBI:
+    input:
+        expand("2-c2c/{sample}.NCBI.counts.prot.txt", sample = SAMPLES)
+    output:
+        "4-kraken-mpa-reports/NCBI-updated.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        1
+    log: 
+        "logs/UpdateNCBI.prot.log"
+    benchmark: 
+        "benchmarks/UpdateNCBI.prot.tsv"
+    shell:
+        "python scripts/Run_ete3_NCBI_update.py -i {input} -o {output} &> {log}"
+
+rule MakeKeportMPA:
+    input:
+        c2c = "2-c2c/{sample}.NCBI.counts.prot.txt",
+        ncbiready = "4-kraken-mpa-reports/NCBI-updated.txt"
+    output:
+        inter1 = "4-kraken-mpa-reports/{sample}.inter.taxnames.txt",
+        inter2 = "4-kraken-mpa-reports/{sample}.inter.taxids.txt",
+        kreport = "4-kraken-mpa-reports/{sample}.megan-RMA-c2c.kreport.txt",
+        mpa = "4-kraken-mpa-reports/{sample}.megan-RMA-c2c.mpa.txt"
+    conda:
+        "envs/general.yml"
+    threads: 
+        1
+    params:
+        rcfile = config['readcounts']
+    log: 
+        "logs/{sample}.MakeKeportMPA.prot.log"
+    benchmark: 
+        "benchmarks/{sample}.MakeKeportMPA.prot.tsv"
+    shell:
+        "python scripts/Convert_MEGAN_RMA_NCBI_c2c-snake.py -i {input.c2c} -o1 {output.inter1} "
+        "-o2 {output.inter2} -m {output.mpa} -k {output.kreport} -r {params.rcfile} &> {log}"
