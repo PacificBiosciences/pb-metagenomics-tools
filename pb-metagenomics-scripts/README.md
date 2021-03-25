@@ -6,9 +6,9 @@ Welcome! This repository contains a variety of scripts that are useful for metag
 
 **Converting output file formats for taxonomic profilers:**
 
-+ [Convert_kreport_to_mpa.py](#ckm): Convert a kraken report (kreport) file into metaphlan (mpa) format.
-+ [Convert_MEGAN-RMA-NCBI-c2c_to_kreport-mpa.py](#mckm): Convert taxonomic counts from MEGAN6 into kraken report (kreport) file into metaphlan (mpa) formats.
-+ [Convert_metamaps-KRONA_to_kreport-mpa.py](#mkkm): Convert the output of metamaps into kraken report (kreport) file into metaphlan (mpa) formats.
++ [Convert_kreport_to_mpa.py](#ckm): Convert any kraken report (kreport) file into metaphlan (mpa) format.
++ [Convert_MEGAN-RMA-NCBI-c2c_to_kreport-mpa.py](#mckm): Convert taxonomic counts from MEGAN6 into kraken report (kreport) and metaphlan (mpa) formats.
++ [Convert_metamaps-KRONA_to_kreport-mpa.py](#mkkm): Convert the output of Metamaps into kraken report (kreport) and metaphlan (mpa) formats.
 + [Convert_metaphlan3_mpa_to_kreport](#mmkr): Convert the output of MetaPhlAn3 into kraken report (kreport) format.
 
 ---------------
@@ -21,13 +21,13 @@ This script requires `python 3.7` and the python packages `ete3` and `pandas`.
 
 Output file is written to working directory (`label.mpa.txt`).
 
-### Basic Usage:
+#### Basic Usage:
 
 ```
 python Convert_kreport_to_mpa.py -i <kreport file> -f <choice> -l <label string>
 ```
 
-### Argument Explanations:
+#### Argument Explanations:
 
 ##### `-i <path-to-file>` or `--input <path-to-file>`
 
@@ -48,7 +48,7 @@ python Convert_kreport_to_mpa.py -i <kreport file> -f <choice> -l <label string>
 > **Optional**: If this flag is provided, ete3 will update the local NCBI taxonomy database before using it to perform the format conversion.
 
 
-### Example Usage:
+#### Example Usage:
 
 ```
 python Convert_kreport_to_mpa.py -i Sample1_mmseqs2_report.txt -f mmseqs -l Sample1
@@ -72,13 +72,13 @@ This script requires `python 3.7` and the python packages `ete3` and `pandas`.
 
 Output files are written to working directory (`label.megan-c2c.mpa.txt`, `label.megan-c2c.kreport.txt`, `label.intermediate.names.txt`, and `label.intermediate.taxid.txt`).
 
-### Basic Usage:
+#### Basic Usage:
 
 ```
 python Convert_MEGAN-RMA-NCBI-c2c_to_kreport-mpa.py -i <c2c file> -c <choice> -l <label string> -r <int>
 ```
 
-### Argument Explanations:
+#### Argument Explanations:
 
 ##### `-i <path-to-file>` or `--input <path-to-file>`
 
@@ -100,7 +100,7 @@ python Convert_MEGAN-RMA-NCBI-c2c_to_kreport-mpa.py -i <c2c file> -c <choice> -l
 
 > **Optional**: If this flag is provided, ete3 will update the local NCBI taxonomy database before using it to perform the format conversion.
 
-### Example Usage:
+#### Example Usage:
 
 ```
 python Convert_MEGAN-RMA-NCBI-c2c_to_kreport-mpa.py -i Sample1.NCBI.c2c.txt -c three -l Sample1 -r 1802756
@@ -119,13 +119,13 @@ This script requires `python 3.7` and the python packages `ete3` and `pandas`.
 
 Output files are written to working directory (`label.metamaps-krona.mpa.txt`, `label.metamaps-krona.kreport.txt`, `label.intermediate.names.txt`, and `label.intermediate.taxid.txt`).
 
-### Basic Usage:
+#### Basic Usage:
 
 ```
 python Convert_metamaps-KRONA_to_kreport-mpa.py -i <krona file> -l <label string> -r <int>
 ```
 
-### Argument Explanations:
+#### Argument Explanations:
 
 ##### `-i <path-to-file>` or `--input <path-to-file>`
 
@@ -143,7 +143,7 @@ python Convert_metamaps-KRONA_to_kreport-mpa.py -i <krona file> -l <label string
 
 > **Optional**: If this flag is provided, ete3 will update the local NCBI taxonomy database before using it to perform the format conversion.
 
-### Example Usage:
+#### Example Usage:
 
 ```
 python Convert_metamaps-KRONA_to_kreport-mpa.py -i Sample1.EM.reads2Taxon.krona -l Sample1 -r 1802756
@@ -165,13 +165,13 @@ This script requires `python 3.7` and the python packages `ete3` and `pandas`.
 
 Output files are written to working directory (`label.metamaps-krona.mpa.txt`, `label.metamaps-krona.kreport.txt`, `label.intermediate.names.txt`, and `label.intermediate.taxid.txt`).
 
-### Basic Usage:
+#### Basic Usage:
 
 ```
 python Convert_metaphlan3_mpa_to_kreport.py -i <mpa file> -l <label string> -r <int> -m <int>
 ```
 
-### Argument Explanations:
+#### Argument Explanations:
 
 ##### `-i <path-to-file>` or `--input <path-to-file>`
 
@@ -193,7 +193,7 @@ python Convert_metaphlan3_mpa_to_kreport.py -i <mpa file> -l <label string> -r <
 
 > **Optional**: If this flag is provided, ete3 will update the local NCBI taxonomy database before using it to perform the format conversion.
 
-### Example Usage:
+#### Example Usage:
 
 ```
 python Convert_metaphlan3_mpa_to_kreport.py -i Sample1-profiled_metagenome.mpa.txt -l Sample1 -r 1802756 -m 1407360
@@ -204,5 +204,5 @@ python Convert_metaphlan3_mpa_to_kreport.py -i Sample1-profiled_metagenome.mpa.t
 
 ---------------
 
-## DISCLAIMER
+### DISCLAIMER
 THIS WEBSITE AND CONTENT AND ALL SITE-RELATED SERVICES, INCLUDING ANY DATA, ARE PROVIDED "AS IS," WITH ALL FAULTS, WITH NO REPRESENTATIONS OR WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, ANY WARRANTIES OF MERCHANTABILITY, SATISFACTORY QUALITY, NON-INFRINGEMENT OR FITNESS FOR A PARTICULAR PURPOSE. YOU ASSUME TOTAL RESPONSIBILITY AND RISK FOR YOUR USE OF THIS SITE, ALL SITE-RELATED SERVICES, AND ANY THIRD PARTY WEBSITES OR APPLICATIONS. NO ORAL OR WRITTEN INFORMATION OR ADVICE SHALL CREATE A WARRANTY OF ANY KIND. ANY REFERENCES TO SPECIFIC PRODUCTS OR SERVICES ON THE WEBSITES DO NOT CONSTITUTE OR IMPLY A RECOMMENDATION OR ENDORSEMENT BY PACIFIC BIOSCIENCES.
