@@ -60,7 +60,7 @@ python Convert_kreport_to_mpa.py -i Sample1_mmseqs2_report.txt -f mmseqs -l Samp
 
 ## Convert_MEGAN-RMA-NCBI-c2c_to_kreport-mpa.py <a name="mckm"></a>
 
-This script can be used to convert an NCBI class2count (c2c) file obtained through MEGAN6  into kraken report (kreport) and metaphlan (mpa) formats. To obtain this c2c file, you can run MEGAN's `ram2info` program on a MEGAN read-count RMA file:
+This script can be used to convert an NCBI class2count (c2c) file obtained through MEGAN6  into kraken report (kreport) and metaphlan (mpa) formats. To obtain this c2c file, you can run MEGAN's `rma2info` program on a MEGAN read-count RMA file:
 
 ```
 rma2info -i input.RMA -o NCBI.c2c.txt -c2c Taxonomy -n -r
