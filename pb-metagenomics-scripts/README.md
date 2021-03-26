@@ -56,7 +56,7 @@ python Convert_kreport_to_mpa.py -i Sample1_mmseqs2_report.txt -f mmseqs -l Samp
 
 #### Example Input File Contents:
 
-**kraken format ranks:**
+kraken format ranks:
 ```
 99.94	1961144	0	D	2	    Bacteria
 48.79	957327	0	D1	1783272	      Terrabacteria group
@@ -78,7 +78,7 @@ python Convert_kreport_to_mpa.py -i Sample1_mmseqs2_report.txt -f mmseqs -l Samp
 0.19	3753	3753	S	166486	                  Roseburia intestinalis
 ```
 
-**mmseqs format ranks:**
+mmseqs format ranks:
 ```
 0.0031	61	61	no rank	0	unclassified
 99.9969	1978505	251569	no rank	1	root
