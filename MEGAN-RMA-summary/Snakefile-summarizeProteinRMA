@@ -438,7 +438,8 @@ rule UpdateNCBI:
     input:
         expand("2-c2c/{sample}.NCBI.counts.prot.txt", sample = SAMPLES)
     output:
-        "4-kraken-mpa-reports/NCBI-updated.txt"
+        dummy = "4-kraken-mpa-reports/NCBI-updated.txt",
+        taxdump = temp("taxdump.tar.gz")
     conda:
         "envs/general.yml"
     threads: 
@@ -448,12 +449,13 @@ rule UpdateNCBI:
     benchmark: 
         "benchmarks/UpdateNCBI.prot.tsv"
     shell:
-        "python scripts/Run_ete3_NCBI_update.py -i {input} -o {output} &> {log}"
+        "python scripts/Run_ete3_NCBI_update.py -i {input} -o {output.dummy} &> {log}"
 
 rule MakeKeportMPA:
     input:
         c2c = "2-c2c/{sample}.NCBI.counts.prot.txt",
-        ncbiready = "4-kraken-mpa-reports/NCBI-updated.txt"
+        ncbiready = "4-kraken-mpa-reports/NCBI-updated.txt",
+        taxdump = "taxdump.tar.gz"
     output:
         inter1 = "4-kraken-mpa-reports/{sample}.inter.taxnames.txt",
         inter2 = "4-kraken-mpa-reports/{sample}.inter.taxids.txt",
