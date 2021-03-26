@@ -151,11 +151,11 @@ def write_kreport(expanded_dict, outname, reads, ncbi):
                             "G":"          ", "S":"          ",
                             "SS":"            "}
             if '|' in k:
-                rank = k.split('|')[-1].split('_')[0].upper()
-                name = k.split('|')[-1].split('_')[-1]
+                rank = k.split('|')[-1].split('__')[0].upper()
+                name = k.split('|')[-1].split('__')[-1]
             else:
-                rank = k.split('_')[0].upper()
-                name = k.split('_')[-1]
+                rank = k.split('__')[0].upper()
+                name = k.split('__')[-1]
             taxid = ncbi.get_name_translator([name])[name][0]
             name = indent_rules[rank] + name
             if rank == "SS":
