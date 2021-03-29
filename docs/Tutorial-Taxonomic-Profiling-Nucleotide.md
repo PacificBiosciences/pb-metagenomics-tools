@@ -20,7 +20,8 @@ The purpose of this snakemake workflow is to perform alignment of HiFi reads to 
 
 ![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Taxonomic-Profiling-Nucleotide-Steps.png)
 
-To make an RMA file, it is required to have the reads and alignments in the exact same order. To prevent errors, the first step is to sort the HiFi reads fasta file by read name. The sorted reads fasta file is then split into two chunks for parallel processing. This allows a speedup when jobs are run simultaneously, and also reduces the resources required to run the alignments sequentially. Minimap2 is used to align the HiFi reads files to a nucleotide database. The two resulting SAM files (per sample) are then sorted by read names, and subsequently merged. The resulting sorted SAM file is converted into long-read RMA format using the sam2rma tool distributed with MEGAN6. Each input file of HiFi reads will produce a corresponding output RMA file, ready to use with MEGAN6.  
+
+The reads fasta file is split into two chunks for parallel processing. This allows a speedup when jobs are run simultaneously, and also reduces the resources required to run the alignments sequentially. Minimap2 is used to align the HiFi reads files to a nucleotide database. The two resulting SAM files (per sample) are then sorted by read names, and subsequently merged. To make an RMA file, the reads and alignments must occur in the same order. The SAM alignment order is used to re-write the reads fasta file in the correct sorted order. The new reads fasta and the SAM file are then used to create a long-read RMA format using the sam2rma tool distributed with MEGAN6. Each input file of HiFi reads will produce a corresponding output RMA file, ready to use with MEGAN6.  
 
 **Please note that nucleotide alignments to the NCBI nt database will only provide access to NCBI taxonomy analyses in MEGAN6. Using protein alignments to the NCBI nr database will provide access to the NCBI taxonomy, functional annotations (SEED, InterPro2GO, eggNOG) and the option to use GTDB taxonomy instead. The protein version of this pipeline is described [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Functional-Profiling-Protein.md).**
 
@@ -140,7 +141,7 @@ You can always use a customized nt database, for example a subset of the NCBI nt
 To configure the analysis, the main configuration file (`config.yaml`) and sample configuration file (`configs/Sample-Config.yaml`) should be edited. 
 
 #### Main configuration file (`config.yaml`)
-The main configuration file contains several parameters, each of which is described in the configuration file. Depending on your system resources, you may choose to change the number of threads used in the minimap2 and sam2rma settings.
+The main configuration file contains several parameters, each of which is described in the configuration file. Depending on your system resources, you may choose to change the number of threads used in the minimap2 and sam2rma settings. An important parameter to consider is the number of secondary alignments to allow in minimap2 (`minimap2`:`secondary`). The default is 20. Increasing this number will likely increase the size of the resulting SAM file, and may or may not improve the LCA algorithm in MEGAN6.
 
 **You must also specify the full paths to `sam2rma`, the MEGAN mapping database file, and the indexed NCBI-nt database**. 
 
