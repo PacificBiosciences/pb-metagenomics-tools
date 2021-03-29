@@ -10,6 +10,11 @@ minimap:
   # The number of threads to use for minimap2 alignments.
   threads: 24
   
+  # The number of secondary alignments to allow; 20 is reasonable for the LCA algorithm 
+  # in MEGAN. Increasing this number will cause the SAM file to become much larger in size, 
+  # sometimes over 500 GB. 
+  secondary: 20
+  
 sam2rma:
   # The full path to the sam2rma tool.
   # This tool is distributed as part of the MEGAN download, it is a binary.
@@ -19,7 +24,7 @@ sam2rma:
   # https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html
   # please note that the name of this file will change depending on the version, 
   # and that this must be the the version for the genomic DNA accessions.
-  db: "/home/dportik/programs/megan/db/megan-nucl-map-Jul2020.db"
+  db: "/home/dportik/programs/megan/db/megan-nucl-Jan201.db"
 
   # Number of threads to use for sam2rma, 24 is generally sufficient
   threads: 24
