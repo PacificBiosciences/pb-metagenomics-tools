@@ -34,28 +34,31 @@ def add_skeleton_header(outfile):
     """
     with open(outfile, 'a') as fhout:
         fhout.write("@PG\tID:minimap2\tPN:minimap2\tVN:2.17-r941\t"
-                    "CL:minimap2 -a --eqx -k 19 -w 10 -g 5000 -r 2000 "
-                    "--lj-min-ratio 0.5 -A 2 -B 5 -O 5,56 -E 4,1 -z 400,50 -t 24 DATABASE FASTA\n")
-    logging.info("Added sham @PG header to output SAM.")
+                    "CL:minimap2 -a -k 19 -w 10 -I 10G -g 5000 -r 2000 -N 20 --lj-min-ratio 0.5 "
+                    "A 2 -B 5 -O 5,56 -E 4,1 -z 400,50 --sam-hit-only -t 24 DATABASE FASTA\n")
+    logging.info("add_skeleton_header: Added sham @PG header to output SAM.")
 
 def write_all_sams(samlist, outfile):
     """
     Writes all lines of SAM files included in list to output file,
     while excluding any lines with headers (start with @). Filters
-    out CIGAR strings with illegal characters and omits row.
+    out alignments with 'illegal' tags (de:f:-inf).
     
     :param samlist: list of SAM file names
     :param outfile: name of output SAM file to write to
-    :return alncount: count of all alignments in SAM
+    :return alncount: count of all legal alignments in SAM
     """
     alncount = int(0)
     for infile in samlist:
         with open(infile, 'r') as fhin, open(outfile, 'a') as fhout:
             for line in fhin:
                 if not line.startswith("@") and len(line.split()) > 5:
-                    fhout.write(line)
-                    alncount += 1
-        logging.info("Finished adding SAM: {}".format(infile))
+                    if 'de:f:-inf' in line:
+                        logging.info("write_all_sams: found illegal line - {}".format(line))
+                    else:
+                        fhout.write(line)
+                        alncount += 1
+        logging.info("write_all_sams: Finished adding SAM: {}".format(infile))
     return alncount
 
 def setup_logging(logfile):
