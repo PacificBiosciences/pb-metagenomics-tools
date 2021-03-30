@@ -48,7 +48,7 @@ def make_annotations_dict(counts):
     annotations_dict = {}
     samplereads_dict = {"Combined_Functional":{}, "Combined_Taxonomic":{}}
     functional_dbs = ['EC', 'EGGNOG', 'INTERPRO2GO', 'SEED']
-    taxonomic_dbs = ['GTDB', 'NCBI']
+    taxonomic_dbs = ['GTDB', 'NCBI', 'NCBIbac']
 
     for f in counts:
         database = f.split('/')[-1].split('.')[1]
@@ -108,7 +108,7 @@ def add_normalization_info(annotations_dict, samples, rcfile):
     return normalization_dict
 
 def plot_histograms(dbs, samples, annotations_dict, outdir):
-    exceptions = ["GTDB", "NCBI", "Combined_Functional", "Combined_Taxonomic"]
+    exceptions = ["GTDB", "NCBI", "NCBIbac", "Combined_Functional", "Combined_Taxonomic"]
     for db in dbs:
         if db in exceptions:
             pass
@@ -136,7 +136,7 @@ def write_main_output(samples, annotations_dict, normalization_dict, outname):
     with open(outname, 'a') as fh:
         fh.write("Category\tDatabase\t{}\n".format('\t'.join(samples)))
 
-        dbs = ['NCBI']
+        dbs = ['NCBI', 'NCBIbac']
 
         for db in dbs:
             reads_assigned = ["{:,}".format(annotations_dict[db][s]['total_unique_reads']) for s in samples]
@@ -176,7 +176,7 @@ def make_plot_dicts(samples, annotations_dict, normalization_dict, outdir):
     # sample classes database (taxonomic)
     # sample avg_annotations database (functional)
 
-    tax_dbs = ['NCBI']
+    tax_dbs = ['NCBI', 'NCBIbac']
 
 
     tax_read_dict = {'Sample':[], 'Total_Reads_Assigned':[], 'Database':[]}
