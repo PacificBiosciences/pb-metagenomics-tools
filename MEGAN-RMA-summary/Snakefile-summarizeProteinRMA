@@ -31,10 +31,10 @@ rule all:
         "3-summaries/Plots-Summaries/SummaryPlot-Taxonomic_Classes_Assigned.prot.pdf",
         "3-summaries/Plots-Summaries/SummaryPlot-Functional_Average_Annotations_Assigned.prot.pdf",
         
-        expand("4-kraken-mpa-reports/{sample}.inter.taxnames.txt", sample = SAMPLES),
-        expand("4-kraken-mpa-reports/{sample}.inter.taxids.txt", sample = SAMPLES),
-        expand("4-kraken-mpa-reports/{sample}.megan-RMA-c2c.kreport.txt", sample = SAMPLES),
-        expand("4-kraken-mpa-reports/{sample}.megan-RMA-c2c.mpa.txt", sample = SAMPLES)
+        expand("4-kraken-mpa-reports/{sample}.megan-prot-inter.taxnames.txt", sample = SAMPLES),
+        expand("4-kraken-mpa-reports/{sample}.megan-prot-inter.taxids.txt", sample = SAMPLES),
+        expand("4-kraken-mpa-reports/{sample}.megan-prot-RMA-c2c.kreport.txt", sample = SAMPLES),
+        expand("4-kraken-mpa-reports/{sample}.megan-prot-RMA-c2c.mpa.txt", sample = SAMPLES)
 
         
 
@@ -457,10 +457,10 @@ rule MakeKeportMPA:
         ncbiready = "4-kraken-mpa-reports/NCBI-updated.txt",
         taxdump = "taxdump.tar.gz"
     output:
-        inter1 = "4-kraken-mpa-reports/{sample}.inter.taxnames.txt",
-        inter2 = "4-kraken-mpa-reports/{sample}.inter.taxids.txt",
-        kreport = "4-kraken-mpa-reports/{sample}.megan-RMA-c2c.kreport.txt",
-        mpa = "4-kraken-mpa-reports/{sample}.megan-RMA-c2c.mpa.txt"
+        inter1 = "4-kraken-mpa-reports/{sample}.megan-prot-inter.taxnames.txt",
+        inter2 = "4-kraken-mpa-reports/{sample}.megan-prot-inter.taxids.txt",
+        kreport = "4-kraken-mpa-reports/{sample}.megan-prot-RMA-c2c.kreport.txt",
+        mpa = "4-kraken-mpa-reports/{sample}.megan-prot-RMA-c2c.mpa.txt"
     conda:
         "envs/general.yml"
     threads: 
