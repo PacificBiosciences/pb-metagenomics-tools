@@ -181,7 +181,7 @@ If there are no errors, you may wish to generate a figure of the directed acycli
 ```
 snakemake --dag --snakefile Snakefile-taxprot --configfile configs/Sample-Config.yaml | dot -Tsvg > taxfunc_analysis.svg
 ```
-Here the `--dag` flag creates an output that is piped to `dot`, and an svg file called `genome-binning_analysis.svg` is created. This will show the workflow visually.
+Here the `--dag` flag creates an output that is piped to `dot`, and an svg file is created. This will show the workflow visually.
 
 ### Execute workflow
 Finally, you can execute the workflow using:

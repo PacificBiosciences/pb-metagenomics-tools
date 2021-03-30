@@ -80,7 +80,7 @@ The `inputs/` directory should contain all of the required input files for each 
 
 The `scripts/` directory contains a few Python scripts required for the workflow. These are involved with formatting, filtering, plotting, and summarizing. They are called in different steps of the workflow.
 
-Finally, the `envs/` directory contains the `general.yml` file which is needed to install all dependencies through conda. This environment is activated for each step of the workflow. The dependencies are installed from bioconda and conda-forge and include: `samtools 1.10`, `minimap2 2.17`, `metabat2 2.15`, `checkm-genome 1.1.2`, `gtdbtk 1.3.0`, `numpy`, `pandas`, `seaborn`, `matplotlib`, and `biopython`.
+Finally, the `envs/` directory contains the several files which are needed to install all dependencies through conda. These environments are activated for each step of the workflow.
 
 [Back to top](#TOP)
 
@@ -173,7 +173,7 @@ There are several ways to execute the workflow. The easiest way is to run snakem
 
 Snakemake can be run "locally" (e.g., without cluster configuration). Snakemake will automatically determine how many jobs can be run simultaneously based on the resources specified. This type of snakemake analysis can be run on a local system, but ideally it should be executed using an interactive HPC session (for example, `qrsh` with SGE or the SLURM equivalent).
 
-The workflow must be executed from within the directory containing all the snakemake contents for the Genome-Binning-Pipeline. 
+The workflow must be executed from within the directory containing all the snakemake contents for the HiFi-MAG-Pipeline. 
 
 ### Test workflow
 It is a good idea to test the workflow for errors before running it. This can be done with the following command:
@@ -194,7 +194,7 @@ If there are no errors, you may wish to generate a figure of the directed acycli
 ```
 snakemake --dag --snakefile Snakefile-hifimags --configfile configs/Sample-Config.yaml | dot -Tsvg > hifimags_analysis.svg
 ```
-Here the `--dag` flag creates an output that is piped to `dot`, and an svg file called `hifimags_analysis.svg` is created. This will show the workflow visually.
+Here the `--dag` flag creates an output that is piped to `dot`, and an svg file is created. This will show the workflow visually.
 
 ### Execute workflow
 Finally, you can execute the workflow using:
@@ -299,7 +299,7 @@ Within `7-summary/`, there will be a folder for each sample. Within a sample fol
 
 ## **6. Usage Details for Main Programs** <a name="UDMP"></a>
 
-In this section, additional details are provided for the main programs used in the workflow. The commands to call these programs are provided here for quick reference. Curly braces are sections filled automatically by snakemake. For additional details on other steps, please refer to the Snakefile-genomebinning file.
+In this section, additional details are provided for the main programs used in the workflow. The commands to call these programs are provided here for quick reference. Curly braces are sections filled automatically by snakemake. For additional details on other steps, please refer to the Snakefile-hifimags file.
 
 ### Minimap2
 

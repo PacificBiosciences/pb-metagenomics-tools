@@ -198,7 +198,7 @@ Protein rma version:
 snakemake --dag --snakefile Snakefile-summarizeProteinRMA --configfile configs/Sample-Config-protein.yaml | dot -Tsvg > prot-RMA-Summary.svg
 ```
 
-Here the `--dag` flag creates an output that is piped to `dot`, and an svg file called `genome-binning_analysis.svg` is created. This will show the workflow visually.
+Here the `--dag` flag creates an output that is piped to `dot`, and an svg file is created. This will show the workflow visually.
 
 ### Execute workflow
 Finally, you can execute the workflow using the following commands.
