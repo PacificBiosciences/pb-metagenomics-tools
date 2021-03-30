@@ -25,9 +25,9 @@ For protein RMA files, this workflow will output absolute and normalized read co
 ![rmaprotein](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/MEGAN-RMA-summary-protein.png)
 
 
-For nucleotide RMA files, this workflow will output absolute and normalized read counts of the NCBI taxonomy classes across samples. A summary file and plots will be created showing the number of reads assigned to the NCBI taxonomic database and the total NCBI classes represented. A visual depiction of the nucleotide-RMA workflow is shown below:
+For nucleotide RMA files, this workflow will output absolute and normalized read counts of the NCBI taxonomy classes across samples. A summary file and plots will be created showing the number of reads assigned to the NCBI taxonomic database and the total NCBI classes represented. **Update (March 2021): The full NCBI taxonomic counts are now also provided in kraken report (kreport) and metaphlan (mpa) output formats.** A visual depiction of the nucleotide-RMA workflow is shown below:
 
-![rmanucleotide](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/MEGAN-RMA-summary-nucleotide-fix.png)
+![rmanucleotide](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/MEGAN-RMA-summary-nucleotide.png)
 
 
 [Back to top](#TOP)
@@ -382,13 +382,13 @@ The taxonomic reports will be available in the `4-kraken-mpa-reports/` folder:
 4-kraken-mpa-reports/
 │
 ├── NCBI-updated.txt
-├── SAMPLE.inter.taxids.txt
-├── SAMPLE.inter.taxnames.txt
-├── SAMPLE.megan-RMA-c2c.kreport.txt
-└── SAMPLE.megan-RMA-c2c.mpa.txt
+├── SAMPLE.megan-prot-inter.taxids.txt
+├── SAMPLE.megan-prot-inter.taxnames.txt
+├── SAMPLE.megan-prot-RMA-c2c.kreport.txt
+└── SAMPLE.megan-prot-RMA-c2c.mpa.txt
 ```
 
-The key files here are `SAMPLE.megan-RMA-c2c.kreport.txt` which is the kraken report output file, and `SAMPLE.megan-RMA-c2c.mpa.txt` which is the metaphlan format output file. The other files are intermediate files or checkpointing files, and can be ignored.
+The key files here are `SAMPLE.megan-prot-RMA-c2c.kreport.txt` which is the kraken report output file, and `SAMPLE.megan-prot-RMA-c2c.mpa.txt` which is the metaphlan format output file. The other files are intermediate files or checkpointing files, and can be ignored.
 
 
 ### Outputs from the Nucleotide RMA version:
@@ -411,13 +411,28 @@ The absolute read counts and normalized read counts are summarized for the NCBI 
 
 Within the `Plots-Summaries/` folder are figures showing the number of classes found, the percent of reads assigned, and total reads assigned to the NCBI taxonomic database.
 
-Finally, the `RMA-Full-Summary.prot.txt` contains a detailed summary of all of this information. Here is an example of the contents of this file:
+Finally, the `RMA-Full-Summary.nuc.txt` contains a detailed summary of all of this information. Here is an example of the contents of this file:
 ```
 Category	Database	FP103	HL103	TD324
 Total reads assigned	NCBI	967,057	651,956	1,331,839
 Percent reads assigned	NCBI	90.7	88.6	83.1
 Number of classes	NCBI	167	184	175
 ```
+
+The taxonomic reports will be available in the `4-kraken-mpa-reports/` folder:
+
+```
+4-kraken-mpa-reports/
+│
+├── NCBI-updated.txt
+├── SAMPLE.megan-nuc-inter.taxids.txt
+├── SAMPLE.megan-nuc-inter.taxnames.txt
+├── SAMPLE.megan-nuc-RMA-c2c.kreport.txt
+└── SAMPLE.megan-nuc-RMA-c2c.mpa.txt
+```
+
+The key files here are `SAMPLE.megan-nuc-RMA-c2c.kreport.txt` which is the kraken report output file, and `SAMPLE.megan-nuc-RMA-c2c.mpa.txt` which is the metaphlan format output file. The other files are intermediate files or checkpointing files, and can be ignored.
+
 
 [Back to top](#TOP)
 
@@ -454,6 +469,10 @@ rma2info -i {input.rma} -o {output.name} -c2c Taxonomy -n -r &> {log}
 ```
 
 And finally, to switch between the full NCBI report and the bacteria-restricted NCBI report, the `--bacteriaOnly` flag should be used with the above commands. 
+
+### MEGAN c2c format to kraken and metaphlan formats
+
+The conversion from c2c format to kreport and mpa format is done using a modified version of the `Convert_MEGAN-NCBI-c2c_to_kreport-mpa.py` script available in the [pb-metagenomics-scripts](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-metagenomics-scripts) folder. The version used here was modified to make inputs and outputs more explicit for snakemake.
 
 [Back to top](#TOP)
 
