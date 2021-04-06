@@ -282,6 +282,8 @@ Output kreport format:
 
 Metamaps is a metagenomics taxonomic profiler that was designed to be used with long reads. Currently, metamaps does not provide the option for kraken report (kreport) or metaphlan (mpa) formats. This script can be used to convert the WIMP output file from metamaps into kraken report (kreport) and metaphlan (mpa) formats. The WIMP file should have an extension that looks like `EM.WIMP`, and it is produced after running the `metamaps classify` module.
 
+Note that running this conversion will eliminate strain-level information. I had attempted to include this information by using the KRONA file as input previously (which has some NCBI-safe taxonomy assignments for strains), but the cumulative counts at species and genus level did not match what the WIMP file reported. This script uses species-level counts from the WIMP file to calculate cumulative counts, and the outputs match the numbers reported for higher ranks in the WIMP file.
+
 This script requires `python 3.7` and the python packages `ete3` and `pandas`. 
 
 Output files are written to working directory (`label.metamaps-wimp.mpa.txt`, `label.metamaps-wimp.kreport.txt`, `label.intermediate.names.txt`, and `label.intermediate.taxid.txt`).
