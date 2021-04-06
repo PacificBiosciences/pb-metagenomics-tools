@@ -8,7 +8,7 @@ Welcome! This repository contains a variety of scripts that are useful for metag
 
 + [Convert_kreport_to_mpa.py](#ckm): Convert any kraken report (kreport) file into metaphlan (mpa) format.
 + [Convert_MEGAN-RMA-NCBI-c2c_to_kreport-mpa.py](#mckm): Convert taxonomic counts from MEGAN6 into kraken report (kreport) and metaphlan (mpa) formats.
-+ [Convert_metamaps-KRONA_to_kreport-mpa.py](#mkkm): Convert the output of Metamaps into kraken report (kreport) and metaphlan (mpa) formats.
++ [Convert_metamaps-WIMP_to_kreport-mpa](#mkkm): Convert the output of Metamaps into kraken report (kreport) and metaphlan (mpa) formats.
 + [Convert_metaphlan3_mpa_to_kreport](#mmkr): Convert the output of MetaPhlAn3 into kraken report (kreport) format.
 
 ---------------
@@ -278,25 +278,25 @@ Output kreport format:
 
 ---------------
 
-## Convert_metamaps-KRONA_to_kreport-mpa.py <a name="mkkm"></a>
+## Convert_metamaps-WIMP_to_kreport-mpa.py <a name="mkkm"></a>
 
-Metamaps is a metagenomics taxonomic profiler that was designed to be used with long reads. Currently, metamaps does not provide the option for kraken report (kreport) or metaphlan (mpa) formats. This script can be used to convert the KRONA output file from metamaps into kraken report (kreport) and metaphlan (mpa) formats. The krona file should have an extension that looks like `EM.reads2Taxon.krona`, and it is produced after running the `metamaps classify` module.
+Metamaps is a metagenomics taxonomic profiler that was designed to be used with long reads. Currently, metamaps does not provide the option for kraken report (kreport) or metaphlan (mpa) formats. This script can be used to convert the WIMP output file from metamaps into kraken report (kreport) and metaphlan (mpa) formats. The WIMP file should have an extension that looks like `EM.WIMP`, and it is produced after running the `metamaps classify` module.
 
 This script requires `python 3.7` and the python packages `ete3` and `pandas`. 
 
-Output files are written to working directory (`label.metamaps-krona.mpa.txt`, `label.metamaps-krona.kreport.txt`, `label.intermediate.names.txt`, and `label.intermediate.taxid.txt`).
+Output files are written to working directory (`label.metamaps-wimp.mpa.txt`, `label.metamaps-wimp.kreport.txt`, `label.intermediate.names.txt`, and `label.intermediate.taxid.txt`).
 
 #### Basic Usage:
 
 ```
-python Convert_metamaps-KRONA_to_kreport-mpa.py -i <krona file> -l <label string> -r <int>
+python Convert_metamaps-WIMP_to_kreport-mpa.py -i <krona file> -l <label string> -r <int>
 ```
 
 #### Argument Explanations:
 
 ##### `-i <path-to-file>` or `--input <path-to-file>`
 
-> **Required**: The `EM.reads2Taxon.krona` file name or the path to a `EM.reads2Taxon.krona` file.
+> **Required**: The `EM.WIMP` file name or the path to a `EM.WIMP` file.
 
 ##### `-l <string>` or `--label <string>`
 
@@ -313,65 +313,69 @@ python Convert_metamaps-KRONA_to_kreport-mpa.py -i <krona file> -l <label string
 #### Example Usage:
 
 ```
-python Convert_metamaps-KRONA_to_kreport-mpa.py -i Sample1.EM.reads2Taxon.krona -l Sample1 -r 1802756
+python Convert_metamaps-WIMP_to_kreport-mpa.py -i Sample1.EM.WIMP -l Sample1 -r 1802756
 ```
 
 #### Example Input File Contents:
 
-Contents of the krona file (`EM.reads2Taxon.krona`), in which each read is assigned a taxon ID.
+Contents of the krona file (`EM.WIMP`), in which each read is assigned a taxon ID.
 ```
-m64015_200911_223407/89456948/ccs	479436	1
-m64015_200911_223407/96600344/ccs	76859	0.922311
-m64015_200911_223407/103549548/ccs	817	0.39539
-m64015_200911_223407/110561518/ccs	481805	1
-m64015_200911_223407/124914168/ccs	195	0.717489
-m64015_200911_223407/132253047/ccs	585394	1
-m64015_200911_223407/139724371/ccs	566546	0.393522
-m64015_200911_223407/8258180/ccs	817	0.548123
-m64015_200911_223407/147325811/ccs	817	0.278916
-m64015_200911_223407/155322615/ccs	536056	0.592172
-m64015_200911_223407/163512428/ccs	469607	1
-m64015_200911_223407/16254895/ccs	272559	0.665483
-m64015_200911_223407/31654330/ccs	585394	1
-m64015_200911_223407/39127347/ccs	817	0.559924
-m64015_200911_223407/46598682/ccs	817	0.491624
-m64015_200911_223407/61147908/ccs	349741	0.772543
+AnalysisLevel	taxonID	Name	Absolute	EMFrequency	PotFrequency
+definedGenomes	1001989	Escherichia coli PCN033	157	9.99258e-05	7.19906e-05
+definedGenomes	10255	Variola virus	1	5.6742e-07	4.08792e-07
+definedGenomes	1030843	Porphyromonas gingivalis TDC60	25	1.76549e-05	1.27193e-05
+definedGenomes	1042156	Clostridium sp. SY8519	44	2.75586e-05	1.98543e-05
+definedGenomes	1048254	Escherichia coli O104:H4 str. C227-11	0	3.6204e-06	2.60829e-06
+...
+species	936456	Desulfurispirillum indicum	1	7.01592e-07	5.05456e-07
+species	9606	Homo sapiens	1	7.0181e-07	5.05613e-07
+species	964	Herbaspirillum seropedicae	26	1.76714e-05	1.27312e-05
+species	0	Unclassified	553101	0	0.279559
+species	-3	totalReads	1978852	0	0
+species	-3	readsLongEnough	1978476	0	0
+species	-3	readsLongEnough_unmapped	553101	0	0
+superkingdom	10239	Viruses	3	2.21858e-06	1.59836e-06
+superkingdom	2	Bacteria	1415949	0.993387	0.715677
+superkingdom	2157	Archaea	1049	0.000735257	0.000529709
+superkingdom	2759	Eukaryota	8374	0.00587534	0.00423283
+superkingdom	0	Unclassified	553101	0	0.279559
+superkingdom	-3	totalReads	1978852	0	0
+superkingdom	-3	readsLongEnough	1978476	0	0
+superkingdom	-3	readsLongEnough_unmapped	553101	0	0
 ```
 
 #### Example Output File Contents:
 
 Output mpa format:
 ```
-k__Bacteria	1372876
-k__Bacteria|p__Actinobacteria	31647
-k__Bacteria|p__Actinobacteria|c__Actinomycetia	29905
-k__Bacteria|p__Actinobacteria|c__Actinomycetia|o__Bifidobacteriales	29905
-k__Bacteria|p__Actinobacteria|c__Actinomycetia|o__Bifidobacteriales|f__Bifidobacteriaceae	29715
-k__Bacteria|p__Actinobacteria|c__Actinomycetia|o__Bifidobacteriales|f__Bifidobacteriaceae|g__Bifidobacterium	28463
-k__Bacteria|p__Actinobacteria|c__Actinomycetia|o__Bifidobacteriales|f__Bifidobacteriaceae|g__Bifidobacterium|s__Bifidobacterium_adolescentis	13216
-k__Bacteria|p__Bacteroidetes	453571
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia	434294
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales	432333
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae	274659
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides	273975
-k__Bacteria|p__Bacteroidetes|c__Bacteroidia|o__Bacteroidales|f__Bacteroidaceae|g__Bacteroides|s__Bacteroides_fragilis	119761
+k__Archaea	1049
+k__Archaea|p__Euryarchaeota	1049
+k__Archaea|p__Euryarchaeota|c__Halobacteria	2
+k__Archaea|p__Euryarchaeota|c__Halobacteria|o__Haloferacales	2
+k__Archaea|p__Euryarchaeota|c__Halobacteria|o__Haloferacales|f__Halorubraceae	2
+k__Archaea|p__Euryarchaeota|c__Halobacteria|o__Haloferacales|f__Halorubraceae|g__Halolamina	2
+k__Archaea|p__Euryarchaeota|c__Halobacteria|o__Haloferacales|f__Halorubraceae|g__Halolamina|s__Halolamina_sediminis	2
+k__Archaea|p__Euryarchaeota|c__Methanobacteria	1047
+k__Archaea|p__Euryarchaeota|c__Methanobacteria|o__Methanobacteriales	1047
+k__Archaea|p__Euryarchaeota|c__Methanobacteria|o__Methanobacteriales|f__Methanobacteriaceae	1047
+k__Archaea|p__Euryarchaeota|c__Methanobacteria|o__Methanobacteriales|f__Methanobacteriaceae|g__Methanobrevibacter	1047
+k__Archaea|p__Euryarchaeota|c__Methanobacteria|o__Methanobacteriales|f__Methanobacteriaceae|g__Methanobrevibacter|s__Methanobrevibacter_smithii	1047
 ```
 
 Output kreport format:
 ```
-69.38	1372876	27968	K	2	Bacteria
-1.6	31647	1742	P	201174	  Actinobacteria
-1.51	29905	0	C	1760	    Actinomycetia
-1.51	29905	190	O	85004	      Bifidobacteriales
-1.5	29715	1252	F	31953	        Bifidobacteriaceae
-1.44	28463	15247	G	1678	          Bifidobacterium
-0.67	13216	13216	S	1680	          Bifidobacterium adolescentis
-22.92	453571	19277	P	976	  Bacteroidetes
-21.95	434294	1961	C	200643	    Bacteroidia
-21.85	432333	61390	O	171549	      Bacteroidales
-13.88	274659	684	F	815	        Bacteroidaceae
-13.85	273975	154214	G	816	          Bacteroides
-6.05	119761	119761	S	817	          Bacteroides fragilis
+0.05	1049	0	K	2157	Archaea
+0.05	1049	0	P	28890	  Euryarchaeota
+0.0	2	0	C	183963	    Halobacteria
+0.0	2	0	O	1644055	      Haloferacales
+0.0	2	0	F	1963271	        Halorubraceae
+0.0	2	0	G	1075397	          Halolamina
+0.0	2	2	S	1480675	            Halolamina sediminis
+0.05	1047	0	C	183925	    Methanobacteria
+0.05	1047	0	O	2158	      Methanobacteriales
+0.05	1047	0	F	2159	        Methanobacteriaceae
+0.05	1047	0	G	2172	          Methanobrevibacter
+0.05	1047	1047	S	2173	            Methanobrevibacter smithii
 ```
 
 [Back to top](#TOP)
