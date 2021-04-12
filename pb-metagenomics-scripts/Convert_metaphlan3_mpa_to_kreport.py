@@ -51,7 +51,10 @@ def create_df(infile, mappedreads):
     df["taxid"] = df["NCBI_tax_id_lineage"].str.split('|').str[-1]
     df["Count"] = (df["relative_abundance"] * 0.01) * mappedreads
     df = df.round({'Count': 1})
-    return df
+    # noticed that some mpa lineages are "empty" at final rank: "2|1224|28211|356|"
+    # add a fix to filter out these empty ranks
+    filt_df = df[df['taxid'] != '']
+    return filt_df
 
 def get_taxon_dict(ncbi, df):
     print("Translating taxon names...")
