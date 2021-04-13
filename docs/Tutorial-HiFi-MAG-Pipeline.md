@@ -133,7 +133,7 @@ Complete instructions for the GTDB-Tk database can be found at: https://ecogenom
 The current GTDB release can be downloaded from: 
 https://data.gtdb.ecogenomic.org/releases/release95/95.0/auxillary_files/gtdbtk_r95_data.tar.gz
 
-The link provided in the GTDB-Tk documentation no longer appears to work correctly (https://data.ace.uq.edu.au/public/gtdb/data/releases/release95/95.0/auxillary_files/gtdbtk_r95_data.tar.gz); see issue raised [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/issues/6).
+The link provided in the GTDB-Tk documentation no longer appears to work correctly for some download methods (https://data.ace.uq.edu.au/public/gtdb/data/releases/release95/95.0/auxillary_files/gtdbtk_r95_data.tar.gz); see issue raised [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/issues/6).
 
 It must also be decompressed prior to usage. The unpacked contents will be ~28GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`fastani/`, `markers/`, `masks/`, `metadata/`, `mrca_red/`, `msa/`, `pplacer/`, `radii/`, `taxonomy/`).
 
