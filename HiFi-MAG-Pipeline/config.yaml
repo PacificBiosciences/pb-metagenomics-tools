@@ -47,6 +47,9 @@ gtdbtk:
   # The path the database downloaded for gtdbtk.
   # For release 95, you can use:
   # wget https://data.ace.uq.edu.au/public/gtdb/data/releases/release95/95.0/auxillary_files/gtdbtk_r95_data.tar.gz
+  # if the above link does not work, try this instead:
+  # wget https://data.gtdb.ecogenomic.org/releases/release95/95.0/auxillary_files/gtdbtk_r95_data.tar.gz
+  
   # Once downloaded, use: tar -xvzf gtdbtk_r95_data.tar.gz
   # Please note that these data are ~27GB in size.
   # The path below must point to the directory than contains the following folders:
