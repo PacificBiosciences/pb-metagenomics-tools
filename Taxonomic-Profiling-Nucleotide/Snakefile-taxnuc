@@ -52,12 +52,14 @@ rule SortSam:
     conda:
         "envs/general.yml"
     threads: 8
+    params:
+        temp = config['minimap']['tempdir']
     log:
         "logs/{sample}.{piece}.SortSam.log"
     benchmark: 
         "benchmarks/{sample}.{piece}.SortSam.tsv"
     shell:
-        "sort -T /scratch --parallel=8 -V -k1,1 {input} 1> {output} 2> {log}"
+        "sort -T {params.temp} --parallel=8 -V -k1,1 {input} 1> {output} 2> {log}"
 
 rule MergeSam:
     input:

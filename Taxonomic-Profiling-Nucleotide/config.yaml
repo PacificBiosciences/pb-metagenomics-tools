@@ -15,6 +15,11 @@ minimap:
   # sometimes over 500 GB. 
   secondary: 20
   
+  # directory location to write large temporary files during SAM sort stage
+  # default is "/scratch", but if that is unavailable specify another directory location
+  tempdir: "/scratch"
+  
+  
 sam2rma:
   # The full path to the sam2rma tool.
   # This tool is distributed as part of the MEGAN download, it is a binary.
