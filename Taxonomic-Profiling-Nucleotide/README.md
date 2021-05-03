@@ -1,6 +1,6 @@
 # Taxonomic-Profiling-Nucleotide
 
-Align HiFi reads to a nucleotide database using minimap2 and prepare inputs for MEGAN6, for the purpose of taxonomic profiling. Only provides access to NCBI taxonomic analysis, but may give higher resolution than with protein alignments. The GTDB taxonomy and functional annotations are not accessible downstream.
+Align HiFi reads to a nucleotide database using minimap2 and prepare inputs for MEGAN-LR, for the purpose of taxonomic profiling. Only provides access to NCBI taxonomic analysis, but may give higher resolution than with protein alignments. The GTDB taxonomy and functional annotations are not accessible downstream.
 
 This directory contains all the materials needed to run this snakemake workflow.
 

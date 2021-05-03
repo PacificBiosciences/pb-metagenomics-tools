@@ -1,6 +1,6 @@
 # Taxonomic-Functional-Profiling-Protein
 
-Align HiFi reads to a protein database using DIAMOND and prepare inputs for MEGAN6, for the purpose of taxonomic and functional profiling. Provides access to NCBI and GTDB taxonomic analysis, and allows functional analyses based on annotations from several databases (SEED, InterPro2GO, eggNOG).
+Align HiFi reads to a protein database using DIAMOND and prepare inputs for MEGAN-LR, for the purpose of taxonomic and functional profiling. Provides access to NCBI and GTDB taxonomic analysis, and allows functional analyses based on annotations from several databases (SEED, InterPro2GO, eggNOG).
 
 This directory contains all the materials needed to run this snakemake workflow.
 
