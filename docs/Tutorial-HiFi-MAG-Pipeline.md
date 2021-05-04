@@ -18,7 +18,7 @@
 
 The purpose of this snakemake workflow is to obtain high-quality metagenome-assembled genomes (MAGs) from previously generated assemblies. The general steps of the HiFi-MAG-Pipeline are shown below:
 
-![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Genome-Binning-Steps.png)
+![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/HiFi-MAG-Summary.png)
 
 HiFi reads are first mapped to contigs using minimap2 to generate BAM files. The BAM files are used to obtain coverage estimates for the contigs. The coverages and contigs are used as inputs to MetaBAT2, which constructs the genome bins. **Note that sometimes complete MAGs are recovered straight from assembly, whereas other MAGs are recovered from the binning approach.** MetaBAT2 can be used to identify these already complete MAGs as well as successfully bin the fragmented MAGs. CheckM is used to assess the quality of the resulting genome bins. It provides measures of genome completeness, contamination, and other useful metrics. A custom filtering step is used to eliminate genome bins with <70% genome completeness, >10% genome contamination, and >10 contigs per bin. These are default values, and they can be changed. The genome bins which pass the default thresholds can be considered high-quality MAGs. Finally, the Genome Taxonomy Database Toolkit (GTDB-Tk) is used to identify the closest reference match to each high-quality MAG. It will report the taxonomy of the closest reference. **This does not guarantee the identity of the MAG, but serves as a starting point for understanding which genus, species, or strain it is most closely related to.**
 
@@ -56,7 +56,11 @@ HiFi-MAG-Pipeline
 │	└── Sample-Config.yaml
 │
 ├── envs/
-│	└── general.yml
+│	├── checkm.yml
+│	├── gtdbtk.yml
+│	├── metabat.yml
+│	├── python.yml
+│	└── samtools.yml
 │
 ├── inputs/
 │	└── README.md (this is just a placeholder file, and not required)
@@ -130,12 +134,17 @@ The downloaded file must be decompressed to use it. The unpacked contents will b
 
 Complete instructions for the GTDB-Tk database can be found at: https://ecogenomics.github.io/GTDBTk/installing/index.html
 
+This workflow uses GTDB-Tk v1.5.0, which requires GTDB R06-RS202 (release 202) or later. 
+
 The current GTDB release can be downloaded from: 
-https://data.gtdb.ecogenomic.org/releases/release95/95.0/auxillary_files/gtdbtk_r95_data.tar.gz
+https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_data.tar.gz
 
-The link provided in the GTDB-Tk documentation no longer appears to work correctly for some download methods (https://data.ace.uq.edu.au/public/gtdb/data/releases/release95/95.0/auxillary_files/gtdbtk_r95_data.tar.gz); see issue raised [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/issues/6).
+```
+wget https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_data.tar.gz
+tar -xvzf gtdbtk_data.tar.gz  
+```
 
-It must also be decompressed prior to usage. The unpacked contents will be ~28GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`fastani/`, `markers/`, `masks/`, `metadata/`, `mrca_red/`, `msa/`, `pplacer/`, `radii/`, `taxonomy/`).
+It must also be decompressed prior to usage. The unpacked contents (of release 202) will be ~50GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`fastani/`, `markers/`, `masks/`, `metadata/`, `mrca_red/`, `msa/`, `pplacer/`, `radii/`, `taxonomy/`).
 
 
 [Back to top](#TOP)
@@ -149,7 +158,7 @@ To configure the analysis, the main configuration file (`config.yaml`) and sampl
 #### Main configuration file (`config.yaml`)
 The main configuration file contains several parameters, each of which is described in the configuration file. Depending on your system resources, you may choose to change the number of threads used in the minimap, metabat, checkm, or gtdbtk settings. In particular, the use of `pplacer` in gtdbtk can cause very high memory/disk usage depending on the threads used (see [here](https://github.com/Ecogenomics/GTDBTk/issues/124)). You may wish to change this setting if you encounter issues.
 
-Please also check that the `tmpdir` argument is set correctly. The default is `/scratch`, which may be available to most users on HPC. This can be changed if `/scratch` is not available, or if you are running snakemake locally. Change it to a valid output directory that can be used to write many large files. This is used in conjunction with the `--tmpdir` flag in CheckM and the `--scratch_dir` flag in GTDB-Tk. If you would rather not use these flags, you can edit the `RunCheckM`, `RunGTDBTkIndividual`, and `RunGTDBTkFull` rules.
+Please also check that the `tmpdir` argument is set correctly. The default is `/scratch`, which may be available to most users on HPC. This can be changed if `/scratch` is not available, or if you are running snakemake locally. Change it to a valid output directory that can be used to write many large files. This is used in conjunction with the `--tmpdir` flag in CheckM and the `--scratch_dir` flag in GTDB-Tk. If you would rather not use these flags, you can edit the `RunCheckM` and `RunGTDBTkIndividual`rules.
 
 **You must specify the full paths to the databases that were downloaded for checkm and gtdbtk**. In the configuration file, this is the `datapath` parameter in the checkm settings, and the `gtdbtk_data` parameter in the gtdbtk settings. See above section for where to obtain these databases.
 
@@ -275,9 +284,7 @@ HiFi-MAG-Pipeline
 │
 ├── 5-gtdb-individual/
 │
-├── 6-gtdb-combined-Full/
-│
-└── 7-summary/
+└── 6-summary/
 ```
 
 - `benchmarks/` contains benchmark information on memory usage and I/O for each rule executed.
@@ -287,10 +294,9 @@ HiFi-MAG-Pipeline
 - `3-checkm/` contains outputs from checkm, per sample.
 - `4-checkm-summary/` contains intermediate files.
 - `5-gtdb-individual/` contains gtdb-tk results for each sample as run independently.
-- `6-gtdb-combined-[Full]/` contains the gtdb-tk results for the combined sample set.
-- `7-summary/` **contains the main output files of interest**.
+- `6-summary/` **contains the main output files of interest**.
 
-Within `7-summary/`, there will be a folder for each sample. Within a sample folder there are several items:
+Within `6-summary/`, there will be a folder for each sample. Within a sample folder there are several items:
 + `SAMPLE.HiFi-MAG.summary.txt`: A main summary file that brings together information from metabat2, checkm, and gtdb-tk for all MAGs that pass the filtering step. 
 + `binplots/`: A folder that contains several plots. One set of plots is for the unfiltered genome bins (e.g., all bins from metabat2), and the other is for the filtered high-quality MAGs. These plots compare % genome completeness vs. % contamination, with variations including bin name labels or the number of contigs per bin labeled.
 + `bin-ref-pairs/`: A folder which contains a subfolder for each high-quality MAG. These folders are named using the bin numbers from metabat2. Inside each folder is a fasta file of the MAG and the closest reference (as inferred by GTDK-Tk). These two files can be useful for performing whole genome alignments or further characterization of the MAG.

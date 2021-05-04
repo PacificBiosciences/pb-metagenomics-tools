@@ -45,17 +45,11 @@ gtdbtk:
   pplacer_threads: 24
   
   # The path the database downloaded for gtdbtk.
-  # For release 95, you can use:
-  # wget https://data.ace.uq.edu.au/public/gtdb/data/releases/release95/95.0/auxillary_files/gtdbtk_r95_data.tar.gz
-  # if the above link does not work, try this instead:
-  # wget https://data.gtdb.ecogenomic.org/releases/release95/95.0/auxillary_files/gtdbtk_r95_data.tar.gz
-  
-  # Once downloaded, use: tar -xvzf gtdbtk_r95_data.tar.gz
-  # Please note that these data are ~27GB in size.
+  # To download the latest release you can use:
+  # wget https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_data.tar.gz
+  # tar -xvzf gtdbtk_data.tar.gz  
+  # Please note that the data for release 202 are ~50GB in size.
   # The path below must point to the directory than contains the following folders:
   # fastani, markers, masks, metadata, mrca_red, msa, pplacer, radii, taxonomy
-  gtdbtk_data: "/dept/appslab/datasets/dp_gtdb/release95/"
+  gtdbtk_data: "/dept/appslab/datasets/dp_gtdb/release202/"
   
-  # A label for the combined analysis of the samples included in a given run;
-  # this is generally overriden by the Sample-Config.yaml.
-  gtdb_full_label: "All"

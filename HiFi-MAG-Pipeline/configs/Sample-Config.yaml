@@ -1,13 +1,12 @@
 samplenames:
   # the naming scheme for your samples must follow:
-  # SAMPLE.fasta, SAMPLE.contigs.fasta,
-  # where SAMPLE is a name provided below.
+  # SAMPLE.fasta, SAMPLE.contigs.fasta;
+  # where SAMPLE is a name provided below, 
+  # SAMPLE.fasta = the HiFi reads fasta file,
+  # and SAMPLE.contigs.fasta = a fasta file containing all contigs from the assembly.
   # For example, if "SP2" is given as a sample name, the workflow expects SP2.fasta and 
-  # SP2.contigs.fasta to both be present in the inputs/ directory.
+  # SP2.contigs.fasta to both be present in the 'inputs/' directory.
+  - "SP2"
   - "FP103"
   - "HL103"
   - "TD324"
-    
-gtdbtk:
-  # a label for the combined gtdbtk analysis of the samples included in a given run
-  gtdb_full_label: "AllSamples"

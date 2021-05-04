@@ -1,5 +1,5 @@
 
-localrules: BamDepth, SummarizeCheckM, PlotCheckM, PrepBatchFile, FullBatchFile, SummarizeResults, all
+localrules: BamDepth, SummarizeCheckM, PlotCheckM, PrepBatchFile, SummarizeResults, all
 
 configfile: "config.yaml"
 
@@ -8,9 +8,8 @@ SAMPLES = config['samplenames']
 rule all:
     input:
         expand("5-gtdb-individual/{sample}/{dir}/", sample = SAMPLES, dir = ["align", "classify", "identify"]),
-        expand("6-gtdb-combined-{label}/{dir}/", dir = ["align", "classify", "identify"], label = config['gtdbtk']['gtdb_full_label']),
-        expand("7-summary/{sample}/{sample}-binplots/{sample}-{filt}-compl-vs-{type}.pdf", sample = SAMPLES, filt = ["unfiltered", "filtered"], type = ["contam", "contam-contigNums", "contam-Bins"]),
-        expand("7-summary/{sample}/{sample}.HiFi-MAG.summary.txt", sample = SAMPLES)
+        expand("6-summary/{sample}/{sample}-binplots/{sample}-{filt}-compl-vs-{type}.pdf", sample = SAMPLES, filt = ["unfiltered", "filtered"], type = ["contam", "contam-contigNums", "contam-Bins"]),
+        expand("6-summary/{sample}/{sample}.HiFi-MAG.summary.txt", sample = SAMPLES)
 
 rule MinimapToBam:
     input:
@@ -154,53 +153,16 @@ rule RunGTDBTkIndividual:
         "--out_dir {params.outdir} -x fa --prefix {wildcards.sample} --cpus {threads} "
         "--pplacer_cpus {params.ppthreads} --scratch_dir {params.tmpdir} &> {log}"
         
-rule FullBatchFile:
-    input:
-        expand("4-checkm-summary/{sample}.batchfile.txt", sample = SAMPLES)
-    output:
-        f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/Full.batchfile.txt"
-    log: 
-        "logs/FullBatchFile.log"
-    benchmark: 
-        "benchmarks/FullBatchFile.tsv"
-    shell:
-        "cat {input} 1> {output} 2> {log}"
-
-rule RunGTDBTkFull:
-    input:
-        f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/Full.batchfile.txt"
-    output:
-        directory(f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/align/"),
-        directory(f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/classify/"),
-        directory(f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/identify/"),
-    conda:
-        "envs/gtdbtk.yml"
-    threads: 
-        config['gtdbtk']['threads']
-    params:
-        ppthreads = config['gtdbtk']['pplacer_threads'],
-        gtdbtk_data = config['gtdbtk']['gtdbtk_data'],
-        outdir = f"6-gtdb-combined-{config['gtdbtk']['gtdb_full_label']}/",
-        tmpdir = config['tmpdir']
-    log: 
-        "logs/RunGTDBTkFull.log"
-    benchmark: 
-        "benchmarks/RunGTDBTkFull.tsv"
-    shell:
-        "GTDBTK_DATA_PATH={params.gtdbtk_data:q} gtdbtk classify_wf --batchfile {input} "
-        "--out_dir {params.outdir} -x fa --prefix Full --cpus {threads} "
-        "--pplacer_cpus {params.ppthreads} --scratch_dir {params.tmpdir} &> {log}"
-
 rule PlotCheckM:
     input:
         "4-checkm-summary/{sample}.qa.txt"
     output:
-        o1 = "7-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam.pdf",
-        o2 = "7-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam-contigNums.pdf",
-        o3 = "7-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam-Bins.pdf",
-        o4 = "7-summary/{sample}/{sample}-binplots/{sample}-filtered-compl-vs-contam.pdf",
-        o5 = "7-summary/{sample}/{sample}-binplots/{sample}-filtered-compl-vs-contam-contigNums.pdf",
-        o6 = "7-summary/{sample}/{sample}-binplots/{sample}-filtered-compl-vs-contam-Bins.pdf"
+        o1 = "6-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam.pdf",
+        o2 = "6-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam-contigNums.pdf",
+        o3 = "6-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam-Bins.pdf",
+        o4 = "6-summary/{sample}/{sample}-binplots/{sample}-filtered-compl-vs-contam.pdf",
+        o5 = "6-summary/{sample}/{sample}-binplots/{sample}-filtered-compl-vs-contam-contigNums.pdf",
+        o6 = "6-summary/{sample}/{sample}-binplots/{sample}-filtered-compl-vs-contam-Bins.pdf"
     conda:
         "envs/python.yml"
     params:
@@ -223,12 +185,12 @@ rule SummarizeResults:
         checkm = "4-checkm-summary/{sample}.simple.txt",
         gtdbdir = "5-gtdb-individual/{sample}/classify/"
     output:
-        outfile = "7-summary/{sample}/{sample}.HiFi-MAG.summary.txt"
+        outfile = "6-summary/{sample}/{sample}.HiFi-MAG.summary.txt"
     conda:
         "envs/python.yml"
     params:
         gtdbtk_data = config['gtdbtk']['gtdbtk_data'],
-        outdir = "7-summary/{sample}/{sample}-bin-ref-pairs/"
+        outdir = "6-summary/{sample}/{sample}-bin-ref-pairs/"
     log: 
         "logs/{sample}.SummarizeResults.log"
     benchmark: 
