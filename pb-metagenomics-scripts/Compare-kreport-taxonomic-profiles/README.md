@@ -6,7 +6,7 @@ Contains a Jupyter notebook demonstrating how to compare kraken reports across m
 + Create and save stacked barplots showing relative or absolute abundances of taxa across samples
 + Perform analyses at different taxonomic ranks (strains, species, genera, families, etc.)
 
-To see the completed analysis, you can click and view the [Compare-kreport-taxonomic-profiles-worked.ipynb](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/pb-metagenomics-scripts/Compare-kreport-taxonomic-profiles/Compare-kreport-taxonomic-profiles-worked.ipynb) file, or download and open the `Compare-kreport-taxonomic-profiles.html` file with a web browser.
+To see the completed analysis, you can click and view the [Compare-kreport-taxonomic-profiles.html](http://htmlpreview.github.io/?https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/pb-metagenomics-scripts/Compare-kreport-taxonomic-profiles/Compare-kreport-taxonomic-profiles-worked.ipynb) file, or download and open the `Compare-kreport-taxonomic-profiles.html` file with a web browser.
 
 
 ## Contents <a name="TOP"></a>
