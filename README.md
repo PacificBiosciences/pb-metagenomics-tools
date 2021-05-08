@@ -16,7 +16,7 @@ Each of these pipelines can be found in their respective folders. They are made 
 
 ## Other tools
 
-Scripts for metagenomics tasks are available in the [**pb-metagenomics-scripts**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-metagenomics-scripts) folder. Currently, there are several scripts to convert the outputs from metagenomics taxonomic profiling programs into standard formats, including kraken report (kreport) and metaphlan report (mpa) formats.
+Scripts and tools for metagenomics tasks are available in the [**pb-metagenomics-scripts**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-metagenomics-scripts) folder. Currently, there are several scripts to convert the outputs from metagenomics taxonomic profiling programs into standard formats, including kraken report (kreport) and metaphlan report (mpa) formats. There is also a Jupyter notebook that demonstrates how to analyze and compare kraken report files for multiple samples.
 
 ## Documentation 
 
