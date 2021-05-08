@@ -16,10 +16,10 @@ Contains a Jupyter notebook demonstrating how to compare kraken reports across m
 
 Contains several scripts for converting the output file formats for taxonomic profilers to kraken and metaphlan report formats:
 
-+ [Convert_kreport_to_mpa.py](#ckm): Convert any kraken report (kreport) file into metaphlan (mpa) format.
-+ [Convert_MEGAN-RMA-NCBI-c2c_to_kreport-mpa.py](#mckm): Convert taxonomic counts from MEGAN6 into kraken report (kreport) and metaphlan (mpa) formats.
-+ [Convert_metamaps-WIMP_to_kreport-mpa](#mkkm): Convert the output of Metamaps into kraken report (kreport) and metaphlan (mpa) formats.
-+ [Convert_metaphlan3_mpa_to_kreport](#mmkr): Convert the output of MetaPhlAn3 into kraken report (kreport) format.
++ `Convert_kreport_to_mpa.py`: Convert any kraken report (kreport) file into metaphlan (mpa) format.
++ `Convert_MEGAN-RMA-NCBI-c2c_to_kreport-mpa.py`: Convert taxonomic counts from MEGAN6 into kraken report (kreport) and metaphlan (mpa) formats.
++ `Convert_metamaps-WIMP_to_kreport-mpa`: Convert the output of Metamaps into kraken report (kreport) and metaphlan (mpa) formats.
++ `Convert_metaphlan3_mpa_to_kreport`: Convert the output of MetaPhlAn3 into kraken report (kreport) format.
 
 ---------------
 
