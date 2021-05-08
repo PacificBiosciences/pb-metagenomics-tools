@@ -1,6 +1,6 @@
 # pb-metagenomics-scripts
 
-Welcome! This repository contains a variety of scripts that are useful for metagenomics work. The scripts are listed by topic, with detailed usage instructions provided below.
+Welcome! This repository contains a variety of scripts that are useful for metagenomics work. Detailed usage instructions can be found within the folders.
 
 ## Contents <a name="TOP"></a>
 
