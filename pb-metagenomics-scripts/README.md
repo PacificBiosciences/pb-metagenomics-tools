@@ -4,15 +4,15 @@ Welcome! This repository contains a variety of scripts that are useful for metag
 
 ## Contents <a name="TOP"></a>
 
-### `Compare-kreport-taxonomic-profiles/` 
+### [Compare-kreport-taxonomic-profiles](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-metagenomics-scripts/Compare-kreport-taxonomic-profiles)
 
-Contains a Jupyter notebook demonstrating how to compare kraken reports across multiple samples for specified taxonomic ranks, including how to:
+Contains a Jupyter notebook ([**Compare-kreport-taxonomic-profiles.html**](http://htmlpreview.github.io/?https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/pb-metagenomics-scripts/Compare-kreport-taxonomic-profiles/Compare-kreport-taxonomic-profiles.html)) demonstrating how to compare kraken reports across multiple samples for specified taxonomic ranks, including how to:
 
 + Generate and save a combined taxon count table for a particular taxonomic rank
 + Create and save stacked barplots showing relative or absolute abundances of taxa across samples
 + Perform analyses at different taxonomic ranks (strains, species, genera, families, etc.)
 
-### `Convert-to-kreport-mpa/` 
+### [Convert-to-kreport-mpa](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-metagenomics-scripts/Convert-to-kreport-mpa) 
 
 Contains several scripts for converting the output file formats for taxonomic profilers to kraken and metaphlan report formats:
 
