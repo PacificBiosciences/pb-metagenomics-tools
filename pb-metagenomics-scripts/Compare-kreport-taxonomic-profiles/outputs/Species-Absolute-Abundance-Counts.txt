@@ -1,0 +1,77 @@
+Taxa	CID_138274	CID_138390	CID_139369	CID_139445
+Adlercreutzia equolifaciens	1558	1201	1625	1353
+Akkermansia muciniphila	1853	2147	12138	17154
+Alistipes communis	0	0	3923	4500
+Alistipes onderdonkii	1595	1936	2258	2654
+Alistipes putredinis	1013	1466	0	1081
+Alistipes shahii	0	0	967	1369
+Anaerobutyricum hallii	1572	1602	2080	2347
+Anaerostipes hadrus	4068	4598	5623	7394
+Bacteroides caccae	0	983	0	0
+Bacteroides stercoris	1217	1436	0	1033
+Bacteroides thetaiotaomicron	0	0	0	967
+Bacteroides uniformis	6924	7492	5131	6447
+Bifidobacterium adolescentis	9303	8549	45535	37912
+Bifidobacterium animalis	1961	1870	0	0
+Bifidobacterium longum	4815	4241	0	0
+Bifidobacterium pseudocatenulatum	1298	1238	2575	2570
+Blautia faecis	930	1060	0	0
+Blautia obeum	9013	8646	11787	13169
+Blautia wexlerae	4132	4287	2843	3429
+Butyrivibrio sp. CAG:318	0	0	1739	1233
+Clostridia bacterium	930	0	3996	3280
+Clostridiales bacterium	1720	2785	7215	6122
+Clostridiales bacterium 41_12_two_minus	0	1044	1395	1379
+Clostridiales bacterium 41_21_two_genomes	0	0	3268	2582
+Clostridium sp. CAG:138	0	0	5335	3135
+Clostridium sp. CAG:343	0	0	2978	3449
+Clostridium sp. CAG:440	0	0	1068	1228
+Clostridium sp. CAG:571	1683	1802	2231	2695
+Clostridium sp. CAG:798	0	0	2073	1812
+Collinsella aerofaciens	6036	4389	4329	3537
+Coprococcus catus	975	1015	1506	1672
+Coprococcus comes	1383	1504	1008	1205
+Coprococcus eutactus	1202	1472	2279	2576
+Coriobacteriia bacterium	0	0	1091	0
+Desulfovibrio piger	0	0	1201	1036
+Dialister sp. CAG:486	0	0	1171	1401
+Dialister succinatiphilus	1396	1338	0	0
+Dorea formicigenerans	1406	1183	2150	2385
+Dorea longicatena	6593	5618	4968	5087
+Eubacterium sp. CAG:252	0	0	976	1243
+Eubacterium ventriosum	0	0	0	907
+Faecalibacterium prausnitzii	41136	47215	21247	24797
+Faecalibacterium sp. CAG:74	3719	4577	5251	6198
+Faecalibacterium sp. CAG:74_58_120	1983	2458	2951	3370
+Firmicutes bacterium CAG:103	6330	6439	8762	7792
+Firmicutes bacterium CAG:124	0	0	3018	3848
+Firmicutes bacterium CAG:341	2133	1991	5557	4664
+Firmicutes bacterium CAG:41	1151	1109	0	1011
+Firmicutes bacterium CAG:555	0	0	6272	3526
+Firmicutes bacterium CAG:83	1000	978	2756	2495
+Fusicatenibacter saccharivorans	1478	1764	1225	1520
+Gemmiger formicilis	3684	3421	5496	6156
+Holdemanella biformis	4560	3698	1166	1434
+Lachnospira eligens	1510	1495	0	0
+Methanobrevibacter smithii	0	0	4769	3876
+Parabacteroides distasonis	956	962	0	0
+Parabacteroides merdae	0	0	1271	1562
+Phascolarctobacterium faecium	1748	1673	0	0
+Phocaeicola dorei	0	906	0	0
+Phocaeicola vulgatus	8409	8608	2706	3429
+Prevotella copri	0	0	4155	5202
+Roseburia hominis	3568	3295	3196	3198
+Roseburia intestinalis	0	0	1849	2411
+Roseburia sp. 40_7	0	872	0	0
+Ruminococcus bromii	8977	7470	18138	16346
+Ruminococcus callidus	0	1076	0	0
+Ruminococcus sp. CAG:177	0	0	2506	1519
+Ruminococcus sp. CAG:254	0	2409	0	0
+Ruminococcus sp. CAG:563	0	0	1788	1406
+Ruminococcus sp. JE7A12	1296	1061	0	0
+Subdoligranulum sp. APC924/74	8629	6850	16116	14089
+[Eubacterium] rectale	13931	12605	5757	6198
+[Ruminococcus] lactaris	1305	1304	1868	1822
+[Ruminococcus] torques	1132	1155	0	0
+uncultured Clostridium sp.	1494	1975	1732	2075
+uncultured Ruminococcus sp.	0	886	0	0
