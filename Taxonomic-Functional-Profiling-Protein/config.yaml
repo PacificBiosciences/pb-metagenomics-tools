@@ -23,7 +23,7 @@ diamond:
   # I recommend -k 5 to limit hits for relatively simple metagenomics 
   # samples, and --top 5 for complex samples. Also keep in mind that more hits = larger output 
   # file size.
-  hit_limit: "--top 5"
+  hit_limit: "-k 25"
   
 sam2rma:
   # The full path to the sam2rma tool.
