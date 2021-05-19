@@ -16,14 +16,14 @@ diamond:
   
   # The method for limiting the number of hits reported. This should be either the -k option 
   # (max-target-seqs) or --top option. Either feature is used with the frameshift alignment mode. 
-  # Using this feature along with -k 25 (default), a hit will only be deleted if at least 
+  # Using this feature along with -k 25, a hit will only be deleted if at least 
   # 50% of its query range is spanned by at least 25 higher or equal scoring hits. Using 
   # this feature along with --top 10, a hit will only be deleted if its score is more than 
   # 10% lower than that of a higher scoring hit over at least 50% of its query range.
   # I recommend -k 5 to limit hits for relatively simple metagenomics 
   # samples, and --top 5 for complex samples. Also keep in mind that more hits = larger output 
   # file size.
-  hit_limit: "-k 25"
+  hit_limit: "--top 5"
   
 sam2rma:
   # The full path to the sam2rma tool.
