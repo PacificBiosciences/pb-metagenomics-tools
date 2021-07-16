@@ -1,4 +1,12 @@
 diamond:
+  # Specify the number of chunks to break each fasta file into. The default is 4, which is
+  # optimal for a fasta of 2.5 million HiFi reads. Smaller files can run faster with fewer 
+  # chunks (e.g., 2 or 1). Larger files (consisting of multiple sequencing cells) may benefit 
+  # from more chunks, but 9 is the absolute upper limit for any workflow (10 will cause errors).
+  # Using a chunk size of 1 means the entire fasta file will be used.
+  # DO NOT OVER SPLIT your fasta file, or this workflow will run substantially slower. 
+  chunks: 4
+
   # Provide the full path to the diamond-indexed database.
   # We recommend downloading the NCBI nr database from: ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz*
   # Please note the gzipped nr database as of July 2020 was 82GB in size.

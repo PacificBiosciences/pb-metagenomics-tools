@@ -135,7 +135,11 @@ You can always use a customized protein database, for example a subset of the NC
 To configure the analysis, the main configuration file (`config.yaml`) and sample configuration file (`configs/Sample-Config.yaml`) should be edited. 
 
 #### Main configuration file (`config.yaml`)
-The main configuration file contains several parameters, each of which is described in the configuration file. Depending on your system resources, you may choose to change the number of threads used in the diamond and sam2rma settings. Additionally, the `block_size` parameter of diamond will affect the speed of the analysis and memory requirements. 
+The main configuration file contains several parameters, each of which is described in the configuration file. 
+
+**NEW:** You can now change the number of fasta chunks to run with DIAMOND. Previous versions hard-coded this to 4 chunks, which is optimal for a HiFi fasta of 2.5 million reads. Smaller files will benefit from fewer chunks (such as 2 or 1). You can also increase the number of chunks for larger files, but the upper limit is 9. Increasing the number of chunks may also slow down the workflow, and the recommended value for DIAMOND is 4.
+
+Depending on your system resources, you may choose to change the number of threads used in the diamond and sam2rma settings. Additionally, the `block_size` parameter of diamond will affect the speed of the analysis and memory requirements. 
 
 Finally, the `hit_limit` argument allows you to specify the type of hit limit method and corresponding value. You can choose between the `--top` method or `-k` method, which are used with the range-culling mode (see [DIAMOND documentation](http://www.diamondsearch.org/index.php?pages/command_line_options/)). The default is `--top 5`, meaning a hit will only be deleted if its score is more than 5% lower than that of a higher scoring hit over at least 50% of its query range. Using `-k 5` instead means that a hit will only be deleted if at least 50% of its query range is spanned by at least 5 higher or equal scoring hits. In general, the `-k` method will keep far fewer hits, and specifying `-k 1` will keep a single hit per query range. This can be useful for 1) very simple metagenomic communities, or 2) reducing the output file size. If you choose to modify the `hit_limit` argument, you will want to supply the complete DIAMOND flag (e.g., `-k 3` or `--top 10`).
 

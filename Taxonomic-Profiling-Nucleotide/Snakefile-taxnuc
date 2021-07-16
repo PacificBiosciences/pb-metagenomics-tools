@@ -3,6 +3,7 @@ localrules: SplitFasta, MergeSam
 configfile: "config.yaml"
 
 SAMPLES = config['samplenames']
+CHUNKS = [str(i) for i in list(range(0,config['minimap']['chunks']))]
 
 rule all:
     input:
@@ -15,14 +16,16 @@ rule SplitFasta:
     input: 
         "inputs/{sample}.fasta"
     output: 
-        temp(expand("1-chunks/{{sample}}.fasta_chunk_000000{piece}", piece = ["0", "1"]))
+        temp(expand("1-chunks/{{sample}}.fasta_chunk_000000{piece}", piece = CHUNKS))
     conda:
         "envs/general.yml"
     threads: 1
     benchmark: 
         "benchmarks/{sample}.SplitFasta.tsv"
+    params:
+        chunks = config['minimap']['chunks']
     shell:
-        "fastasplit -c 2 -f {input} -o 1-chunks/"
+        "fastasplit -c {params.chunks} -f {input} -o 1-chunks/"
 
 rule RunMinimap:
     input:
@@ -63,7 +66,7 @@ rule SortSam:
 
 rule MergeSam:
     input:
-        expand("3-sorted/{{sample}}.{piece}.sorted.sam", piece = ["0", "1"])
+        expand("3-sorted/{{sample}}.{piece}.sorted.sam", piece = CHUNKS)
     output:
         "4-merged/{sample}.merged.sam"
     conda:

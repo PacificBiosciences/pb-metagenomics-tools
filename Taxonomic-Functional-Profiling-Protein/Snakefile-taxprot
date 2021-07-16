@@ -4,6 +4,7 @@ localrules: SplitFasta, MergeSam
 configfile: "config.yaml"
 
 SAMPLES = config['samplenames']
+CHUNKS = [str(i) for i in list(range(0,config['diamond']['chunks']))]
 
 rule all:
     input:
@@ -13,14 +14,16 @@ rule SplitFasta:
     input: 
         "inputs/{sample}.fasta"
     output: 
-        temp(expand("1-chunks/{{sample}}.fasta_chunk_000000{piece}", piece = ["0", "1", "2", "3"]))
+        temp(expand("1-chunks/{{sample}}.fasta_chunk_000000{piece}", piece = CHUNKS))
     conda:
         "envs/general.yml"
     threads: 2
     benchmark: 
         "benchmarks/{sample}.SplitFasta.tsv"
+    params:
+        chunks = config['diamond']['chunks']
     shell:
-        "fastasplit -c 4 -f {input} -o 1-chunks/"
+        "fastasplit -c {params.chunks} -f {input} -o 1-chunks/"
 
 rule RunDiamond:
     input:
@@ -44,7 +47,7 @@ rule RunDiamond:
 
 rule MergeSam:
     input:
-        expand("2-diamond/{{sample}}.{piece}.sam", piece = ["0", "1", "2", "3"])
+        expand("2-diamond/{{sample}}.{piece}.sam", piece = CHUNKS)
     output:
         "3-merged/{sample}.merged.sam"
     conda:

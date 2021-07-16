@@ -141,7 +141,11 @@ You can always use a customized nt database, for example a subset of the NCBI nt
 To configure the analysis, the main configuration file (`config.yaml`) and sample configuration file (`configs/Sample-Config.yaml`) should be edited. 
 
 #### Main configuration file (`config.yaml`)
-The main configuration file contains several parameters, each of which is described in the configuration file. Depending on your system resources, you may choose to change the number of threads used in the minimap2 and sam2rma settings. An important parameter to consider is the number of secondary alignments to allow in minimap2 (`minimap2`:`secondary`). The default is 20. Increasing this number will likely increase the size of the resulting SAM file, and may or may not improve the LCA algorithm in MEGAN6.
+The main configuration file contains several parameters, each of which is described in the configuration file. 
+
+**NEW:** You can now change the number of fasta chunks to run with minimap2. Previous versions hard-coded this to 2 chunks, which is optimal for a HiFi fasta of 2.5 million reads. Smaller files will benefit from fewer chunks (such as 1). You can also increase the number of chunks for larger files, but the upper limit is 9. Increasing the number of chunks may also slow down the workflow, and the recommended value for minimap2 is 2.
+
+Depending on your system resources, you may choose to change the number of threads used in the minimap2 and sam2rma settings. An important parameter to consider is the number of secondary alignments to allow in minimap2 (`minimap2`:`secondary`). The default is 20. Increasing this number will likely increase the size of the resulting SAM file, and may or may not improve the LCA algorithm in MEGAN6.
 
 **You must also specify the full paths to `sam2rma`, the MEGAN mapping database file, and the indexed NCBI-nt database**. 
 

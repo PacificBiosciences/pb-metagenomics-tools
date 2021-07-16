@@ -1,4 +1,12 @@
 minimap:
+  # Specify the number of chunks to break each fasta file into. Here the default is 2, which is
+  # optimal for a fasta of 2.5 million HiFi reads. Smaller files can run faster with fewer 
+  # chunks (e.g., 1). Larger files (consisting of multiple sequencing cells) may benefit 
+  # from more chunks, but 9 is the absolute upper limit for any workflow (10 will cause errors).
+  # Using a chunk size of 1 means the entire fasta file will be used.
+  # DO NOT OVER SPLIT your fasta file, or this workflow will run substantially slower. 
+  chunks: 2
+  
   # Provide the full path to the minimap2-indexed database.
   # We recommend downloading the NCBI nt database from: ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz*
   # Please note the gzipped nt database as of July 2020 was 82GB in size.
