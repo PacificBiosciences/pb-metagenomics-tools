@@ -1,6 +1,5 @@
 # Compare-kreport-taxonomic-profiles
 
-
 ![Plot_Summary](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-metagenomics-scripts/Compare-kreport-taxonomic-profiles/outputs/Summary.png)
 
 Contains a Jupyter notebook demonstrating how to compare kraken reports across multiple samples for a specified taxonomic rank. The analysis demonstrates how to:
