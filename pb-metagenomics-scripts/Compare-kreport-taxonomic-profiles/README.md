@@ -2,8 +2,9 @@
 
 Contains a Jupyter notebook demonstrating how to compare kraken reports across multiple samples for a specified taxonomic rank. The analysis demonstrates how to:
 
-+ Generate and save a combined taxon count table for a particular taxonomic rank
-+ Create and save stacked barplots showing relative or absolute abundances of taxa across samples
++ Generate and save a combined taxon count table for a particular taxonomic rank.
++ Create and save stacked barplots showing relative or absolute abundances of taxa across samples.
++ **NEW:** Create and save heatmaps showing relative abundances of taxa across samples.
 + Perform analyses at different taxonomic ranks (strains, species, genera, families, etc.)
 + **NEW:** Plot the percentage of reads assigned across taxonomic ranks.
 + **NEW:** Plot the number of unique taxa assigned across taxonomic ranks.
