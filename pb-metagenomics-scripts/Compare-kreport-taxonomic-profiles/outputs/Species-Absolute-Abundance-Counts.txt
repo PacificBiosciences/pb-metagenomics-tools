@@ -1,4 +1,4 @@
-Taxa	CID_138274	CID_138390	CID_139369	CID_139445
+Taxa	BC_138274	BC_138390	BC_139369	BC_139445
 Adlercreutzia equolifaciens	1558	1201	1625	1353
 Akkermansia muciniphila	1853	2147	12138	17154
 Alistipes communis	0	0	3923	4500

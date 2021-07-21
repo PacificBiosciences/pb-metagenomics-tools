@@ -1,5 +1,5 @@
-40.32	722569	53213	K	2	Bacteria
-4.76	85395	3648	P	201174	  Actinobacteria
+94.2	1688266	206280	K	2	Bacteria
+6.29	112737	3648	P	201174	  Actinobacteria
 2.73	48853	0	C	1760	    Actinomycetia
 2.73	48853	495	O	85004	      Bifidobacteriales
 2.7	48358	2114	F	31953	        Bifidobacteriaceae
@@ -8,10 +8,10 @@
 0.11	1961	1961	S	28025	            Bifidobacterium animalis
 0.27	4815	4815	S	216816	            Bifidobacterium longum
 0.07	1298	1298	S	28026	            Bifidobacterium pseudocatenulatum
-1.84	32894	3785	C	84998	    Coriobacteriia
-0.74	13303	1420	O	84999	      Coriobacteriales
-0.66	11883	506	F	84107	        Coriobacteriaceae
-0.63	11377	5341	G	102106	          Collinsella
+3.36	60236	3785	C	84998	    Coriobacteriia
+2.27	40645	1420	O	84999	      Coriobacteriales
+2.19	39225	506	F	84107	        Coriobacteriaceae
+2.16	38719	32683	G	102106	          Collinsella
 0.34	6036	6036	S	74426	            Collinsella aerofaciens
 0.88	15806	131	O	1643822	      Eggerthellales
 0.87	15675	5778	F	1643826	        Eggerthellaceae
@@ -19,11 +19,11 @@
 0.09	1558	1558	S	446660	            Adlercreutzia equolifaciens
 0.3	5323	5323	G	84111	          Eggerthella
 0.06	1077	1077	G	644652	          Gordonibacter
-8.77	157094	7642	P	976	  Bacteroidetes
-8.34	149452	1167	C	200643	    Bacteroidia
-8.27	148285	76439	O	171549	      Bacteroidales
-0.64	11455	1558	F	815	        Bacteroidaceae
-0.55	9897	1756	G	816	          Bacteroides
+13.98	250615	7642	P	976	  Bacteroidetes
+13.56	242973	1167	C	200643	    Bacteroidia
+13.49	241806	76439	O	171549	      Bacteroidales
+5.86	104976	1558	F	815	        Bacteroidaceae
+5.77	103418	95277	G	816	          Bacteroides
 0.07	1217	1217	S	46506	            Bacteroides stercoris
 0.39	6924	6924	S	820	            Bacteroides uniformis
 0.06	1142	1142	F	1853231	        Odoribacteraceae
@@ -39,30 +39,30 @@
 0.05	956	956	S	823	            Parabacteroides distasonis
 0.47	8409	0	G	909656	          Phocaeicola
 0.47	8409	8409	S	821	            Phocaeicola vulgatus
-23.12	414432	178607	P	1239	  Firmicutes
+61.72	1106171	178607	P	1239	  Firmicutes
 0.24	4221	464	C	91061	    Bacilli
 0.21	3757	396	O	186826	      Lactobacillales
 0.19	3361	86	F	1300	        Streptococcaceae
 0.18	3275	3275	G	1301	          Streptococcus
-11.32	202881	4	C	186801	    Clostridia
-11.27	201947	2943	O	186802	      Eubacteriales
-0.76	13542	1558	F	31979	        Clostridiaceae
-0.06	1142	1142	G	580596	          Butyricicoccus
-0.6	10842	7665	G	1485	          Clostridium
+49.92	894620	4138	C	186801	    Clostridia
+49.64	889552	458866	O	186802	      Eubacteriales
+1.6	28605	1558	F	31979	        Clostridiaceae
+0.09	1695	1695	G	580596	          Butyricicoccus
+1.41	25352	22175	G	1485	          Clostridium
 0.09	1683	1683	S	1262822	            Clostridium sp. CAG:571
 0.08	1494	1494	S	59620	            uncultured Clostridium sp.
 0.28	5067	151	F	186806	        Eubacteriaceae
 0.27	4916	4916	G	1730	          Eubacterium
-3.98	71270	394	F	186803	        Lachnospiraceae
+12.48	223636	103077	F	186803	        Lachnospiraceae
 0.11	2004	432	G	2569097	          Anaerobutyricum
 0.09	1572	1572	S	39488	            Anaerobutyricum hallii
 0.24	4331	263	G	207244	          Anaerostipes
 0.23	4068	4068	S	649756	            Anaerostipes hadrus
-1.06	18975	4900	G	572511	          Blautia
+2.69	48251	34176	G	572511	          Blautia
 0.05	930	930	S	871665	            Blautia faecis
 0.5	9013	9013	S	40520	            Blautia obeum
 0.23	4132	4132	S	418240	            Blautia wexlerae
-0.28	5047	1487	G	33042	          Coprococcus
+0.84	15073	11513	G	33042	          Coprococcus
 0.05	975	975	S	116085	            Coprococcus catus
 0.08	1383	1383	S	410072	            Coprococcus comes
 0.07	1202	1202	S	33043	            Coprococcus eutactus
@@ -77,20 +77,20 @@
 0.24	4235	1798	G	2316020	          Mediterraneibacter
 0.07	1305	1305	S	46228	            [Ruminococcus] lactaris
 0.06	1132	1132	S	33039	            [Ruminococcus] torques
-0.28	4994	1426	G	841	          Roseburia
+0.86	15375	11807	G	841	          Roseburia
 0.2	3568	3568	S	301301	            Roseburia hominis
 0.78	13931	13931	S	39491	            [Eubacterium] rectale
-5.68	101843	25164	F	216572	        Oscillospiraceae
-2.53	45348	493	G	216851	          Faecalibacterium
+9.27	166096	25562	F	216572	        Oscillospiraceae
+4.5	80585	35730	G	216851	          Faecalibacterium
 2.3	41136	41136	S	853	            Faecalibacterium prausnitzii
 0.21	3719	1736	S	1262897	            Faecalibacterium sp. CAG:74
 0.11	1983	1983	S	1897005	            Faecalibacterium sp. CAG:74_58_120
 0.05	927	927	G	946234	          Flavonifractor
-0.08	1474	1474	G	459786	          Oscillibacter
-1.09	19548	9275	G	1263	          Ruminococcus
+0.11	1896	1896	G	459786	          Oscillibacter
+2.56	45966	35693	G	1263	          Ruminococcus
 0.5	8977	8977	S	40518	            Ruminococcus bromii
 0.07	1296	1296	S	2564099	            Ruminococcus sp. JE7A12
-0.52	9382	753	G	292632	          Subdoligranulum
+0.62	11160	2531	G	292632	          Subdoligranulum
 0.48	8629	8629	S	2086273	            Subdoligranulum sp. APC924/74
 0.1	1799	794	F	186804	        Peptostreptococcaceae
 0.06	1005	1005	G	1501226	          Romboutsia
@@ -116,7 +116,7 @@
 0.12	2133	2133	S	1263019	            Firmicutes bacterium CAG:341
 0.06	1151	1151	S	1263021	            Firmicutes bacterium CAG:41
 0.06	1000	1000	S	1262992	            Firmicutes bacterium CAG:83
-0.47	8363	1535	P	1224	  Proteobacteria
+0.47	8391	1563	P	1224	  Proteobacteria
 0.12	2074	127	C	28216	    Betaproteobacteria
 0.11	1947	918	O	80840	      Burkholderiales
 0.06	1029	1029	F	995019	        Sutterellaceae
