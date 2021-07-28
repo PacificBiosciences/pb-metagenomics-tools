@@ -1,5 +1,5 @@
 
-localrules: BamDepth, SummarizeCheckM, PlotCheckM, PrepBatchFile, SummarizeResults, all
+localrules: BamDepth, SummarizeCheckM, PlotCheckM, PrepBatchFile, SummarizeResults, SummaryPlots, all
 
 configfile: "config.yaml"
 
@@ -9,7 +9,9 @@ rule all:
     input:
         expand("5-gtdb-individual/{sample}/{dir}/", sample = SAMPLES, dir = ["align", "classify", "identify"]),
         expand("6-summary/{sample}/{sample}-binplots/{sample}-{filt}-compl-vs-{type}.pdf", sample = SAMPLES, filt = ["unfiltered", "filtered"], type = ["contam", "contam-contigNums", "contam-Bins"]),
-        expand("6-summary/{sample}/{sample}.HiFi-MAG.summary.txt", sample = SAMPLES)
+        expand("6-summary/{sample}/{sample}.HiFi-MAG.summary.txt", sample = SAMPLES),
+        expand("6-summary/{sample}/{sample}.Completeness-Contamination-Contigs.pdf", sample = SAMPLES),
+        expand("6-summary/{sample}/{sample}.GenomeSizes-Depths.pdf", sample = SAMPLES)
 
 rule MinimapToBam:
     input:
@@ -94,7 +96,7 @@ rule SummarizeCheckM:
     input:
         "3-checkm/{sample}/lineage.ms"
     output:
-        "4-checkm-summary/{sample}.qa.txt"
+        "4-checkm-summary/CheckM.{sample}.qa.txt"
     conda:
         "envs/checkm.yml"
     params:
@@ -108,11 +110,11 @@ rule SummarizeCheckM:
 
 rule PrepBatchFile:
     input:
-        sumfile = "4-checkm-summary/{sample}.qa.txt",
+        sumfile = "4-checkm-summary/CheckM.{sample}.qa.txt",
         indir = "2-metabat-bins/{sample}/"
     output:
         batch = "4-checkm-summary/{sample}.batchfile.txt",
-        simple = "4-checkm-summary/{sample}.simple.txt"
+        simple = "4-checkm-summary/CheckM.{sample}.simple.txt"
     conda:
         "envs/python.yml"
     params:
@@ -155,7 +157,7 @@ rule RunGTDBTkIndividual:
         
 rule PlotCheckM:
     input:
-        "4-checkm-summary/{sample}.qa.txt"
+        "4-checkm-summary/CheckM.{sample}.qa.txt"
     output:
         o1 = "6-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam.pdf",
         o2 = "6-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam-contigNums.pdf",
@@ -182,7 +184,7 @@ rule SummarizeResults:
     input:
         depth = "1-bam/{sample}.depth.txt",
         batch = "4-checkm-summary/{sample}.batchfile.txt",
-        checkm = "4-checkm-summary/{sample}.simple.txt",
+        checkm = "4-checkm-summary/CheckM.{sample}.simple.txt",
         gtdbdir = "5-gtdb-individual/{sample}/classify/"
     output:
         outfile = "6-summary/{sample}/{sample}.HiFi-MAG.summary.txt"
@@ -199,3 +201,19 @@ rule SummarizeResults:
         "python scripts/genome-binning-summarizer.py -d {input.depth} -b {input.batch} "
         "-c {input.checkm} -g {input.gtdbdir} -j {params.gtdbtk_data} -o {output.outfile} "
         "-s {params.outdir} -l {log}"
+
+rule SummaryPlots:
+    input:
+        "6-summary/{sample}/{sample}.HiFi-MAG.summary.txt"
+    output:
+        o1 = "6-summary/{sample}/{sample}.Completeness-Contamination-Contigs.pdf",
+        o2 = "6-summary/{sample}/{sample}.GenomeSizes-Depths.pdf"
+    conda:
+        "envs/python.yml"
+    log: 
+        "logs/{sample}.SummaryPlots.log"
+    benchmark: 
+        "benchmarks/{sample}.SummaryPlots.tsv"
+    shell:
+        "python scripts/Summary-Plots.py -i {input} -l {wildcards.sample} -o1 {output.o1} "
+        "-o2 {output.o2} &> {log}"

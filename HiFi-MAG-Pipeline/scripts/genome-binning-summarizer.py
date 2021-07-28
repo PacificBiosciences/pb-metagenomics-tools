@@ -171,6 +171,7 @@ def write_summary(depth_dict, batch_dict, gtdb_dict, checkm_dict, bin_list, outf
                                                            "Content",
                                                            "ContigLengths",
                                                            "ContigDepths",
+                                                           "AverageDepth",
                                                            "BinCompleteness",
                                                            "BinContamination",
                                                            "BinStrainHeterogeneity",
@@ -186,6 +187,8 @@ def write_summary(depth_dict, batch_dict, gtdb_dict, checkm_dict, bin_list, outf
             #learned the hard way that some bins get filtered out using GTDB
             #it isn't a guarantee they will be in the gtdb_dict
             if bin in gtdb_dict:
+                depths = [int(depth_dict[contig]["totalAvgDepth"]) for contig in batch_dict[bin]]
+                avgdepth = (sum(depths) // len(depths))
                 logging.info("Writing summary of bin {} to output file.".format(bin))
                 fh.write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}\t{10}"
                          "\t{11}\t{12}\t{13}\t{14}\t{15}\n".format(bin,
@@ -193,6 +196,7 @@ def write_summary(depth_dict, batch_dict, gtdb_dict, checkm_dict, bin_list, outf
                                                                    ", ".join(batch_dict[bin]),
                                                                    ", ".join([str(depth_dict[contig]["contigLen"]) for contig in batch_dict[bin]]),
                                                                    ", ".join([str(depth_dict[contig]["totalAvgDepth"]) for contig in batch_dict[bin]]),
+                                                                   avgdepth,
                                                                    checkm_dict[bin]["Completeness"],
                                                                    checkm_dict[bin]["Contamination"],
                                                                    checkm_dict[bin]["StrainHeterogeneity"],
@@ -211,6 +215,7 @@ def write_summary(depth_dict, batch_dict, gtdb_dict, checkm_dict, bin_list, outf
                                                          ", ".join(batch_dict[bin]),
                                                          ", ".join([str(depth_dict[contig]["contigLen"]) for contig in batch_dict[bin]]),
                                                          ", ".join([str(depth_dict[contig]["totalAvgDepth"]) for contig in batch_dict[bin]]),
+                                                         avgdepth,
                                                          checkm_dict[bin]["Completeness"],
                                                          checkm_dict[bin]["Contamination"],
                                                          checkm_dict[bin]["StrainHeterogeneity"],
