@@ -107,10 +107,7 @@ def make_lineage_dict(infile):
                          "s__{}".format(parts[10]), "ss__{}".format(parts[11])]
             lineage = "|".join([l for l in relabeled if l not in badnames])
             if lineage:
-                if lineage in lineage_dict:
-                    lineage_dict[lineage]['level_count'] += int(parts[1])
-                else:
-                    lineage_dict[lineage] = {'level_count': int(parts[1]), 'cumulative_count': int(0)}
+                lineage_dict[lineage] = {'level_count': '-', 'cumulative_count': int(parts[1])}
     return lineage_dict
 
 def fill_out_lineages(lineage_dict):
