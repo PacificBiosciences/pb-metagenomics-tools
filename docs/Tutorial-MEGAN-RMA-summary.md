@@ -29,6 +29,8 @@ For nucleotide RMA files, this workflow will output absolute and normalized read
 
 ![rmanucleotide](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/MEGAN-RMA-summary-nucleotide.png)
 
+If you are using the nucleotide profiling to identify microbial contamination in a targeted sequencing dataset, the bacterial reads will be identified in the output `/1-r2c/[sample].NCBIbac.reads.nuc.txt`.
+
 
 [Back to top](#TOP)
 
