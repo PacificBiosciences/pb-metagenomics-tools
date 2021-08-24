@@ -25,6 +25,8 @@ The reads fasta file is split into two chunks for parallel processing. This allo
 
 **Please note that nucleotide alignments to the NCBI nt database will only provide access to NCBI taxonomy analyses in MEGAN6. Using protein alignments to the NCBI nr database will provide access to the NCBI taxonomy, functional annotations (SEED, InterPro2GO, eggNOG) and the option to use GTDB taxonomy instead. The protein version of this pipeline is described [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Functional-Profiling-Protein.md).**
 
+**If you are attempting to identify microbial contamination in targeted sequencing datasets, use this pipeline!** 
+
 [Back to top](#TOP)
 
 ---------------
@@ -146,6 +148,9 @@ The main configuration file contains several parameters, each of which is descri
 **NEW:** You can now change the number of fasta chunks to run with minimap2. Previous versions hard-coded this to 2 chunks, which is optimal for a HiFi fasta of 2.5 million reads. Smaller files will benefit from fewer chunks (such as 1). You can also increase the number of chunks for larger files, but the upper limit is 9. Increasing the number of chunks may also slow down the workflow, and the recommended value for minimap2 is 2.
 
 Depending on your system resources, you may choose to change the number of threads used in the minimap2 and sam2rma settings. An important parameter to consider is the number of secondary alignments to allow in minimap2 (`minimap2`:`secondary`). The default is 20. Increasing this number will likely increase the size of the resulting SAM file, and may or may not improve the LCA algorithm in MEGAN6.
+
+**If you are attempting to identify microbial contamination in targeted sequencing datasets:**
+Make sure to change the `sam2rma`:`minPercentReadCover` value to 40 or greater. This parameter controls the minimum percent of a HiFi read that must be covered by alignments to be considered. In general, small alignments (<1,000 bp) can occur with low quality bacteria sequences, and introduce false positives. By increasing the stringency requirements, these false positives can be eliminated.
 
 **You must also specify the full paths to `sam2rma`, the MEGAN mapping database file, and the indexed NCBI-nt database**. 
 

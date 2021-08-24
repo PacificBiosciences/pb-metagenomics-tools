@@ -123,12 +123,13 @@ rule MakeRMA:
     params:
         sam2rma = config['sam2rma']['path'],
         db = config['sam2rma']['db'],
-        ram = config['sam2rma']['readassignmentmode']
+        ram = config['sam2rma']['readassignmentmode'],
+        mrc = config['sam2rma']['minPercentReadCover']
     log: 
         f"logs/{{sample}}.MakeRMA.{config['sam2rma']['readassignmentmode']}.log"
     benchmark: 
         f"benchmarks/{{sample}}.MakeRMA.{config['sam2rma']['readassignmentmode']}.tsv"
     shell:
         "{params.sam2rma} -i {input.sam} -r {input.reads} -o {output} -lg -alg longReads "
-        "-t {threads} -mdb {params.db} -ram {params.ram} -v 2> {log}"
+        "-t {threads} -mdb {params.db} -ram {params.ram} -mrc {params.mrc} -v 2> {log}"
 
