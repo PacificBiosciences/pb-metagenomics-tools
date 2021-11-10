@@ -15,7 +15,7 @@ def get_args():
 
     parser.add_argument("-d", "--depth",
                         required=True,
-                        help="The depth file produced by metabat2.")
+                        help="The contig depth file produced by metabat2.")
 
     parser.add_argument("-b", "--batch",
                         required=True,
@@ -37,7 +37,11 @@ def get_args():
                         required=True,
                         help="The name of the output summary file.")
 
-    parser.add_argument("-s", "--outdir",
+    parser.add_argument("-o1", "--outdir_binref",
+                        required=True,
+                        help="The name of the output directory.")
+
+    parser.add_argument("-o2", "--outdir_bins",
                         required=True,
                         help="The name of the output directory.")
 
@@ -75,6 +79,7 @@ def depth_to_dict(depth):
                                     "totalAvgDepth": int(float(parts[2]))}
             logging.info("{} = contigLen: {}; totalAvgDepth: {}"
                          .format(parts[0], int(float(parts[1])), int(float(parts[2]))))
+
     return depth_dict
 
 def batch_to_dict(batch):
@@ -102,10 +107,10 @@ def batch_to_dict(batch):
 
 def checkmsimple_to_dict(checkm, bin_list):
     """
-    checkm simple is a tab-delimited file with 6 columns:
-    Filter	Bin	Completenes	Contamination	StrainHeterogeneity	GenomeSize	Contigs
+    checkm simple is a tab-delimited file with 7 columns:
+    Filter	Bin	Completenes	Contamination	StrainHeterogeneity	GenomeSize	Contigs GC
     Create a dictionary where [Bin] = {Completenes:val, Contamination:val,
-    StrainHeterogeneity:val, GenomeSize:val, Contigs:val}
+    StrainHeterogeneity:val, GenomeSize:val, Contigs:val, GC:val}
 
     :param checkm: full path to simplified checkm summary file
     :param bin_list: list of bin names (which passed filtering)
@@ -123,13 +128,13 @@ def checkmsimple_to_dict(checkm, bin_list):
                                          "Contamination": parts[3],
                                          "StrainHeterogeneity": parts[4],
                                          "GenomeSize": parts[5],
-                                         "Contigs": parts[6]}
+                                         "Contigs": parts[6], "GC": parts[7]}
             logging.info("{} = Completeness: {}, "
                          "Contamination: {}, "
                          "StrainHeterogeneity: {}, "
                          "GenomeSize: {}, "
-                         "Contigs: {}".format(parts[1], parts[2], parts[3],
-                                              parts[4], parts[5], parts[6]))
+                         "Contigs: {}, GC: {}".format(parts[1], parts[2], parts[3],
+                                              parts[4], parts[5], parts[6], parts[7]))
     return checkm_dict
 
 def gtdb_to_dict(gtd_dir, home):
@@ -166,7 +171,7 @@ def write_summary(depth_dict, batch_dict, gtdb_dict, checkm_dict, bin_list, outf
     logging.info("Writing summary file: {}.".format(outfile))
     with open(outfile, 'a') as fh:
         fh.write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}\t{10}"
-                 "\t{11}\t{12}\t{13}\t{14}\t{15}\n".format("BinName",
+                 "\t{11}\t{12}\t{13}\t{14}\t{15}\t{16}\t{17}\n".format("BinName",
                                                            "NumberContigs",
                                                            "Content",
                                                            "ContigLengths",
@@ -176,6 +181,7 @@ def write_summary(depth_dict, batch_dict, gtdb_dict, checkm_dict, bin_list, outf
                                                            "BinContamination",
                                                            "BinStrainHeterogeneity",
                                                            "BinGenomeSize",
+                                                           "GC",
                                                            "GTDB_Species",
                                                            "GTDB_Taxonomy",
                                                            "ReferenceGenome",
@@ -184,14 +190,14 @@ def write_summary(depth_dict, batch_dict, gtdb_dict, checkm_dict, bin_list, outf
                                                            "other_related_references(genome_id,species_name,radius,ANI,AF)",
                                                            "GTDB_warnings"))
         for bin in bin_list:
+            depths = [int(depth_dict[contig]["totalAvgDepth"]) for contig in batch_dict[bin]]
+            avgdepth = (sum(depths) // len(depths))
             #learned the hard way that some bins get filtered out using GTDB
             #it isn't a guarantee they will be in the gtdb_dict
             if bin in gtdb_dict:
-                depths = [int(depth_dict[contig]["totalAvgDepth"]) for contig in batch_dict[bin]]
-                avgdepth = (sum(depths) // len(depths))
                 logging.info("Writing summary of bin {} to output file.".format(bin))
                 fh.write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}\t{10}"
-                         "\t{11}\t{12}\t{13}\t{14}\t{15}\n".format(bin,
+                         "\t{11}\t{12}\t{13}\t{14}\t{15}\t{16}\t{17}\n".format(bin,
                                                                    checkm_dict[bin]["Contigs"],
                                                                    ", ".join(batch_dict[bin]),
                                                                    ", ".join([str(depth_dict[contig]["contigLen"]) for contig in batch_dict[bin]]),
@@ -201,6 +207,7 @@ def write_summary(depth_dict, batch_dict, gtdb_dict, checkm_dict, bin_list, outf
                                                                    checkm_dict[bin]["Contamination"],
                                                                    checkm_dict[bin]["StrainHeterogeneity"],
                                                                    checkm_dict[bin]["GenomeSize"],
+                                                                   checkm_dict[bin]["GC"],
                                                                    gtdb_dict[bin]["Species"],
                                                                    gtdb_dict[bin]["Taxonomy"],
                                                                    gtdb_dict[bin]["ReferenceGenome"],
@@ -210,7 +217,7 @@ def write_summary(depth_dict, batch_dict, gtdb_dict, checkm_dict, bin_list, outf
                                                                    gtdb_dict[bin]["GTDB_warnings"]))
             else:
                 logging.info("Bin {} appears to have been filtered out by GTDB.".format(bin))
-                fh.write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\tNA\tNA"
+                fh.write("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}\t{10}\tNA\tNA"
                          "\tNA\tNA\tNA\tNA\tNA\n".format(bin, checkm_dict[bin]["Contigs"],
                                                          ", ".join(batch_dict[bin]),
                                                          ", ".join([str(depth_dict[contig]["contigLen"]) for contig in batch_dict[bin]]),
@@ -219,25 +226,41 @@ def write_summary(depth_dict, batch_dict, gtdb_dict, checkm_dict, bin_list, outf
                                                          checkm_dict[bin]["Completeness"],
                                                          checkm_dict[bin]["Contamination"],
                                                          checkm_dict[bin]["StrainHeterogeneity"],
-                                                         checkm_dict[bin]["GenomeSize"]))
+                                                         checkm_dict[bin]["GenomeSize"],
+                                                         checkm_dict[bin]["GC"]))
 
 
-def make_target_query_pairs(bin_list, batch_paths, gtdb_dict, gtdb_db, home, outdir):
-    if not os.path.exists(outdir):
-        os.mkdir(outdir)
-    os.chdir(outdir)
+def make_target_query_pairs(bin_list, batch_paths, gtdb_dict, gtdb_db, home, outdir_binref, outdir_bins):
+    if not os.path.exists(outdir_binref):
+        os.mkdir(outdir_binref)
+    if not os.path.exists(outdir_bins):
+        os.mkdir(outdir_bins)
+
+    #os.chdir(outdir)
     for bin in bin_list:
         if bin in gtdb_dict:
-            bindir = os.path.join(os.getcwd(), bin)
-            logging.info("Writing paired files to: {}.".format(bindir))
-            if not os.path.exists(bindir):
-                os.mkdir(bindir)
-            dest1 = os.path.join(bindir, "{}.fa".format(bin))
+            binrefdir = os.path.join(os.getcwd(), outdir_binref, bin)
+            logging.info("Writing paired files to: {}.".format(binrefdir))
+            if not os.path.exists(binrefdir):
+                os.mkdir(binrefdir)
+            dest1 = os.path.join(binrefdir, "{}.fa".format(bin))
             logging.info("Copying target file: {}.".format(batch_paths[bin]))
             shutil.copyfile(batch_paths[bin], dest1)
 
-            fzip = os.path.join(gtdb_db, "fastani", "database", "{}_genomic.fna.gz".format(gtdb_dict[bin]["ReferenceGenome"]))
-            dest2 = os.path.join(bindir, "{}.fa".format(gtdb_dict[bin]["ReferenceGenome"]))
+            shutil.copyfile(batch_paths[bin], os.path.join(os.getcwd(), outdir_bins, "{}.fa".format(bin)))
+
+            logging.info("Working on: {}.".format(gtdb_dict[bin]["ReferenceGenome"]))
+            if gtdb_dict[bin]["ReferenceGenome"].startswith('GCF'):
+                number = gtdb_dict[bin]["ReferenceGenome"].split('_')[-1].split('.')[0]
+                number_path = "GCF/" + "/".join([number[i:i+3] for i in range(0, len(number), 3)])
+            elif gtdb_dict[bin]["ReferenceGenome"].startswith('GCA'):
+                number = gtdb_dict[bin]["ReferenceGenome"].split('_')[-1].split('.')[0]
+                number_path = "GCA/" + "/".join([number[i:i+3] for i in range(0, len(number), 3)])
+            else:
+                logging.info("Odd reference name: {}.".format(gtdb_dict[bin]["ReferenceGenome"]))
+                number_path = "NA"
+            fzip = os.path.join(gtdb_db, "fastani", "database", "{}".format(number_path), "{}_genomic.fna.gz".format(gtdb_dict[bin]["ReferenceGenome"]))
+            dest2 = os.path.join(binrefdir, "{}.fa".format(gtdb_dict[bin]["ReferenceGenome"]))
             if os.path.isfile(fzip):
                 with gzip.open(fzip, 'rb') as fhin:
                     with open(dest2, 'wb') as fhout:
@@ -259,7 +282,7 @@ def main():
     checkm_dict = checkmsimple_to_dict(args.checkm, bin_list)
     gtdb_dict= gtdb_to_dict(args.gtdb_dir, home)
     write_summary(depth_dict, batch_dict, gtdb_dict, checkm_dict, bin_list, args.outfile)
-    make_target_query_pairs(bin_list, batch_paths, gtdb_dict, args.gtdb_db, home, args.outdir)
+    make_target_query_pairs(bin_list, batch_paths, gtdb_dict, args.gtdb_db, home, args.outdir_binref, args.outdir_bins)
     
 if __name__ == '__main__':
     main()

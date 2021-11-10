@@ -1,5 +1,6 @@
-
-localrules: BamDepth, SummarizeCheckM, PlotCheckM, PrepBatchFile, SummarizeResults, SummaryPlots, all
+localrules: 
+    ParseContigs, BamDepth, WriteCircularBins, MakeLinCircDASinput, MakeFullDASinput,
+    SummarizeCheckM, PlotCheckM, PrepBatchFile, SummarizeResults, SummaryPlots, all
 
 configfile: "config.yaml"
 
@@ -7,18 +8,19 @@ SAMPLES = config['samplenames']
 
 rule all:
     input:
-        expand("5-gtdb-individual/{sample}/{dir}/", sample = SAMPLES, dir = ["align", "classify", "identify"]),
-        expand("6-summary/{sample}/{sample}-binplots/{sample}-{filt}-compl-vs-{type}.pdf", sample = SAMPLES, filt = ["unfiltered", "filtered"], type = ["contam", "contam-contigNums", "contam-Bins"]),
-        expand("6-summary/{sample}/{sample}.HiFi-MAG.summary.txt", sample = SAMPLES),
-        expand("6-summary/{sample}/{sample}.Completeness-Contamination-Contigs.pdf", sample = SAMPLES),
-        expand("6-summary/{sample}/{sample}.GenomeSizes-Depths.pdf", sample = SAMPLES)
+        expand("7-gtdb-individual/{sample}/{dir}/", sample = SAMPLES, dir = ["align", "classify", "identify"]),
+        expand("8-summary/{sample}/{sample}-binplots/{sample}-{filt}-compl-vs-{type}.pdf", sample = SAMPLES, filt = ["unfiltered", "filtered"], type = ["contam", "contam-contigNums", "contam-Bins"]),
+        expand("8-summary/{sample}/{sample}.HiFi-MAG.summary.txt", sample = SAMPLES),
+        expand("8-summary/{sample}/{sample}.Completeness-Contamination-Contigs.pdf", sample = SAMPLES),
+        expand("8-summary/{sample}/{sample}.GenomeSizes-Depths.pdf", sample = SAMPLES)
 
+        
 rule MinimapToBam:
     input:
         reads = "inputs/{sample}.fasta",
         contigs = "inputs/{sample}.contigs.fasta"
     output:
-        "1-bam/{sample}.bam"
+        "2-bam/{sample}.bam"
     conda:
         "envs/samtools.yml"
     threads: 
@@ -31,12 +33,33 @@ rule MinimapToBam:
         "minimap2 -a -k 19 -w 10 -I 10G -g 5000 -r 2000 --lj-min-ratio 0.5 "
         "-A 2 -B 5 -O 5,56 -E 4,1 -z 400,50 --sam-hit-only -t {threads} " 
         "{input.contigs} {input.reads} 2> {log} | samtools sort -@ {threads} -o {output}"
-        
+
+rule ParseContigs:
+    input:
+        contigs = "inputs/{sample}.contigs.fasta"
+    output:
+        fastacircular = "1-contigs/{sample}.circular.fasta",
+        fastalinear = "1-contigs/{sample}.linear.fasta",
+        logcircular = "1-contigs/{sample}.circular.txt",
+        loglinear = "1-contigs/{sample}.linear.txt"
+    conda:
+        "envs/python.yml"
+    params: 
+        assembler = config['assembler']
+    log: 
+        "logs/{sample}.ParseContigs.log"
+    benchmark: 
+        "benchmarks/{sample}.ParseContigs.tsv"
+    shell:
+        "python scripts/Filter-CircLin-Contigs.py -f {input.contigs} -a {params.assembler} "
+        "-o1 {output.fastalinear} -o2 {output.fastacircular} -o3 {output.loglinear} -o4 {output.logcircular} "
+        "--metaflye_info inputs/{wildcards.sample}-assembly_info.txt &> {log}"
+     
 rule BamDepth:
     input:
-        bam = "1-bam/{sample}.bam"
+        bam = "2-bam/{sample}.bam"
     output:
-        "1-bam/{sample}.depth.txt"
+        "2-bam/{sample}.depth.txt"
     conda:
         "envs/metabat.yml"
     log:
@@ -46,40 +69,134 @@ rule BamDepth:
     shell:
         "jgi_summarize_bam_contig_depths --outputDepth {output} {input.bam} 2> {log}"
 
-rule RunMetabat:
+rule RunMetabatLinear:
     input:
-        contigs = "inputs/{sample}.contigs.fasta",
-        depths = "1-bam/{sample}.depth.txt"
+        contigs = "1-contigs/{sample}.linear.fasta",
+        depths = "2-bam/{sample}.depth.txt"
     output:
-        file = "2-metabat-bins/{sample}.completed.txt",
-        outdir = directory("2-metabat-bins/{sample}/")
+        complete = "3-metabat-bins-linear-circ/{sample}.linear-completed.txt",
+        outdir = directory("3-metabat-bins-linear-circ/{sample}/")
     conda:
         "envs/metabat.yml"
     threads: 
         config['metabat']['threads']
     params:
-        prefix = "2-metabat-bins/{sample}/{sample}_bin"
+        prefix = "3-metabat-bins-linear-circ/{sample}/{sample}_bin.lin"
     log: 
-        "logs/{sample}.RunMetabat.log"
+        "logs/{sample}.RunMetabatLinear.log"
     benchmark: 
-        "benchmarks/{sample}.RunMetabat.tsv"
+        "benchmarks/{sample}.RunMetabatLinear.tsv"
     shell:
         "metabat2 -i {input.contigs} -a {input.depths} -o {params.prefix} -t {threads} "
-        "-v &> {log} && touch {output.file}"
-        
+        "-v &> {log} && touch {output.complete}"
+
+rule WriteCircularBins:
+    input:
+        fastacircular = "1-contigs/{sample}.circular.fasta",
+        file = "3-metabat-bins-linear-circ/{sample}.linear-completed.txt",
+        outdir = "3-metabat-bins-linear-circ/{sample}/"
+    output:
+        "3-metabat-bins-linear-circ/{sample}.circular-completed.txt"
+    conda:
+        "envs/python.yml"
+    threads: 
+        config['metabat']['threads']
+    log: 
+        "logs/{sample}.WriteCircularBins.log"
+    benchmark: 
+        "benchmarks/{sample}.WriteCircularBins.tsv"
+    shell:
+        "python scripts/Copy-Circ-Contigs.py -f {input.fastacircular} -s {wildcards.sample} "
+        "-o1 {input.outdir} -o2 {output} &> {log}"
+
+rule RunMetabatFull:
+    input:
+        contigs = "inputs/{sample}.contigs.fasta",
+        depths = "2-bam/{sample}.depth.txt"
+    output:
+        complete = "3-metabat-bins-full/{sample}.full-completed.txt",
+        outdir = directory("3-metabat-bins-full/{sample}/")
+    conda:
+        "envs/metabat.yml"
+    threads: 
+        config['metabat']['threads']
+    params:
+        prefix = "3-metabat-bins-full/{sample}/{sample}_bin.full"
+    log: 
+        "logs/{sample}.RunMetabatFull.log"
+    benchmark: 
+        "benchmarks/{sample}.RunMetabatFull.tsv"
+    shell:
+        "metabat2 -i {input.contigs} -a {input.depths} -o {params.prefix} -t {threads} "
+        "-v &> {log} && touch {output.complete}"
+
+rule MakeLinCircDASinput:
+    input:
+        complete_lin = "3-metabat-bins-linear-circ/{sample}.linear-completed.txt",
+        complete_circ = "3-metabat-bins-linear-circ/{sample}.circular-completed.txt",
+        indir = "3-metabat-bins-linear-circ/{sample}/"
+    output:
+        "4-DAStool/{sample}.linear-circ.tsv"
+    conda:
+        "envs/dastool.yml"
+    log: 
+        "logs/{sample}.MakeLinCircDASinput.log"
+    benchmark: 
+        "benchmarks/{sample}.MakeLinCircDASinput.tsv"
+    shell:
+        "Fasta_to_Scaffolds2Bin.sh -i {input.indir} -e fa 1> {output} 2> {log}"
+
+rule MakeFullDASinput:
+    input:
+        "3-metabat-bins-full/{sample}/"
+    output:
+        "4-DAStool/{sample}.full.tsv"
+    conda:
+        "envs/dastool.yml"
+    log: 
+        "logs/{sample}.MakeFullDASinput.log"
+    benchmark: 
+        "benchmarks/{sample}.MakeFullDASinput.tsv"
+    shell:
+        "Fasta_to_Scaffolds2Bin.sh -i {input} -e fa 1> {output} 2> {log}"
+
+rule RunDAStool:
+    input:
+        full = "4-DAStool/{sample}.full.tsv",
+        lincirc = "4-DAStool/{sample}.linear-circ.tsv",
+        contigs = "inputs/{sample}.contigs.fasta"
+    output:
+        binsdir = directory("4-DAStool/{sample}_DASTool_bins/"),
+        complete = "4-DAStool/{sample}.complete.txt"
+    conda:
+        "envs/dastool.yml"
+    threads: 
+        config['dastool']['threads']
+    params:
+        outlabel = "4-DAStool/{sample}",
+        search = config['dastool']['search']
+    log: 
+        "logs/{sample}.RunDAStool.log"
+    benchmark: 
+        "benchmarks/{sample}.RunDAStool.tsv"
+    shell:
+        "DAS_Tool -i {input.lincirc},{input.full} -c {input.contigs} -l lincirc,full "
+        "-o {params.outlabel} --search_engine {params.search} --write_bins 1 -t {threads} "
+        "&> {log} && touch {output.complete}"
+
 rule RunCheckM:
     input:
-        metaoutput = "2-metabat-bins/{sample}.completed.txt"
+        complete = "4-DAStool/{sample}.complete.txt",
+        indir = "4-DAStool/{sample}_DASTool_bins/"
     output:
-        "3-checkm/{sample}/lineage.ms"
+        "5-checkm/{sample}/lineage.ms"
     conda:
         "envs/checkm.yml"
     threads: 
         config['checkm']['threads']
     params:
         ppthreads = config['checkm']['pplacer_threads'],
-        indir = "2-metabat-bins/{sample}/",
-        outdir = "3-checkm/{sample}/",
+        outdir = "5-checkm/{sample}/",
         datapath = config['checkm']['datapath'],
         tmpdir = config['tmpdir']
     log: 
@@ -89,18 +206,18 @@ rule RunCheckM:
         "benchmarks/{sample}.RunCheckM.tsv"
     shell:
         "checkm data setRoot {params.datapath} &> {log.root} && checkm lineage_wf -x fa -t {threads} "
-        "--pplacer_threads {params.ppthreads} --tmpdir {params.tmpdir} {params.indir} "
+        "--pplacer_threads {params.ppthreads} --tmpdir {params.tmpdir} {input.indir} "
         "{params.outdir} &> {log.run}"
-        
+         
 rule SummarizeCheckM:
     input:
-        "3-checkm/{sample}/lineage.ms"
+        "5-checkm/{sample}/lineage.ms"
     output:
-        "4-checkm-summary/CheckM.{sample}.qa.txt"
+        "6-checkm-summary/CheckM.{sample}.qa.txt"
     conda:
         "envs/checkm.yml"
     params:
-        outdir = "3-checkm/{sample}/"
+        outdir = "5-checkm/{sample}/"
     log: 
         "logs/{sample}.SummarizeCheckM.log"
     benchmark: 
@@ -110,11 +227,11 @@ rule SummarizeCheckM:
 
 rule PrepBatchFile:
     input:
-        sumfile = "4-checkm-summary/CheckM.{sample}.qa.txt",
-        indir = "2-metabat-bins/{sample}/"
+        sumfile = "6-checkm-summary/CheckM.{sample}.qa.txt",
+        indir = "4-DAStool/{sample}_DASTool_bins/"
     output:
-        batch = "4-checkm-summary/{sample}.batchfile.txt",
-        simple = "4-checkm-summary/CheckM.{sample}.simple.txt"
+        batch = "6-checkm-summary/{sample}.batchfile.txt",
+        simple = "6-checkm-summary/CheckM.{sample}.simple.txt"
     conda:
         "envs/python.yml"
     params:
@@ -132,11 +249,11 @@ rule PrepBatchFile:
 
 rule RunGTDBTkIndividual:
     input:
-        "4-checkm-summary/{sample}.batchfile.txt"
+        "6-checkm-summary/{sample}.batchfile.txt"
     output:
-        directory("5-gtdb-individual/{sample}/align/"),
-        directory("5-gtdb-individual/{sample}/classify/"),
-        directory("5-gtdb-individual/{sample}/identify/"),
+        directory("7-gtdb-individual/{sample}/align/"),
+        directory("7-gtdb-individual/{sample}/classify/"),
+        directory("7-gtdb-individual/{sample}/identify/"),
     conda:
         "envs/gtdbtk.yml"
     threads: 
@@ -144,7 +261,7 @@ rule RunGTDBTkIndividual:
     params:
         ppthreads = config['gtdbtk']['pplacer_threads'],
         gtdbtk_data = config['gtdbtk']['gtdbtk_data'],
-        outdir = "5-gtdb-individual/{sample}/",
+        outdir = "7-gtdb-individual/{sample}/",
         tmpdir = config['tmpdir']
     log: 
         "logs/{sample}.RunGTDBTkIndividual.log"
@@ -157,14 +274,14 @@ rule RunGTDBTkIndividual:
         
 rule PlotCheckM:
     input:
-        "4-checkm-summary/CheckM.{sample}.qa.txt"
+        "6-checkm-summary/CheckM.{sample}.qa.txt"
     output:
-        o1 = "6-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam.pdf",
-        o2 = "6-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam-contigNums.pdf",
-        o3 = "6-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam-Bins.pdf",
-        o4 = "6-summary/{sample}/{sample}-binplots/{sample}-filtered-compl-vs-contam.pdf",
-        o5 = "6-summary/{sample}/{sample}-binplots/{sample}-filtered-compl-vs-contam-contigNums.pdf",
-        o6 = "6-summary/{sample}/{sample}-binplots/{sample}-filtered-compl-vs-contam-Bins.pdf"
+        o1 = "8-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam.pdf",
+        o2 = "8-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam-contigNums.pdf",
+        o3 = "8-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam-Bins.pdf",
+        o4 = "8-summary/{sample}/{sample}-binplots/{sample}-filtered-compl-vs-contam.pdf",
+        o5 = "8-summary/{sample}/{sample}-binplots/{sample}-filtered-compl-vs-contam-contigNums.pdf",
+        o6 = "8-summary/{sample}/{sample}-binplots/{sample}-filtered-compl-vs-contam-Bins.pdf"
     conda:
         "envs/python.yml"
     params:
@@ -182,32 +299,34 @@ rule PlotCheckM:
         
 rule SummarizeResults:
     input:
-        depth = "1-bam/{sample}.depth.txt",
-        batch = "4-checkm-summary/{sample}.batchfile.txt",
-        checkm = "4-checkm-summary/CheckM.{sample}.simple.txt",
-        gtdbdir = "5-gtdb-individual/{sample}/classify/"
+        depth = "2-bam/{sample}.depth.txt",
+        batch = "6-checkm-summary/{sample}.batchfile.txt",
+        checkm = "6-checkm-summary/CheckM.{sample}.simple.txt",
+        gtdbdir = "7-gtdb-individual/{sample}/classify/",
+        plot = "8-summary/{sample}/{sample}-binplots/{sample}-unfiltered-compl-vs-contam.pdf"
     output:
-        outfile = "6-summary/{sample}/{sample}.HiFi-MAG.summary.txt"
+        outfile = "8-summary/{sample}/{sample}.HiFi-MAG.summary.txt"
     conda:
         "envs/python.yml"
     params:
         gtdbtk_data = config['gtdbtk']['gtdbtk_data'],
-        outdir = "6-summary/{sample}/{sample}-bin-ref-pairs/"
+        outdir1 = "8-summary/{sample}/{sample}-bin-ref-pairs/",
+        outdir2 = "8-summary/{sample}/{sample}-bins/"
     log: 
         "logs/{sample}.SummarizeResults.log"
     benchmark: 
         "benchmarks/{sample}.SummarizeResults.tsv"
     shell:
-        "python scripts/genome-binning-summarizer.py -d {input.depth} -b {input.batch} "
-        "-c {input.checkm} -g {input.gtdbdir} -j {params.gtdbtk_data} -o {output.outfile} "
-        "-s {params.outdir} -l {log}"
+        "python scripts/genome-binning-summarizer.py -d {input.depth} "
+        "-b {input.batch} -c {input.checkm} -g {input.gtdbdir} -j {params.gtdbtk_data} "
+        "-o {output.outfile} -o1 {params.outdir1} -o2 {params.outdir2} -l {log}"
 
 rule SummaryPlots:
     input:
-        "6-summary/{sample}/{sample}.HiFi-MAG.summary.txt"
+        "8-summary/{sample}/{sample}.HiFi-MAG.summary.txt"
     output:
-        o1 = "6-summary/{sample}/{sample}.Completeness-Contamination-Contigs.pdf",
-        o2 = "6-summary/{sample}/{sample}.GenomeSizes-Depths.pdf"
+        o1 = "8-summary/{sample}/{sample}.Completeness-Contamination-Contigs.pdf",
+        o2 = "8-summary/{sample}/{sample}.GenomeSizes-Depths.pdf"
     conda:
         "envs/python.yml"
     log: 

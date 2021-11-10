@@ -9,4 +9,4 @@ dependencies:
 - pandas
 - seaborn
 - matplotlib
-- biopython
+- biopython == 1.77

@@ -1,3 +1,18 @@
+
+# Choose the assembler used to generate the contigs. Choices currently include:
+# hicanu 
+# hifiasm-meta
+# metaflye
+
+# If you select metaflye, you must also provide the SAMPLE-assembly_info.txt file
+# for each sample in the inputs/ folder. 
+
+# The choice of assembler changes how the script will look for circular contigs in the 
+# contigs fasta files. This step is important in separating the circular and linear contigs 
+# into different files, as binning is only performing for the linear contigs.
+assembler: "hifiasm-meta"
+
+
 # The path to use as the temporary directory to write large files to, which is used with the
 # --tmpdir flag in checkm, and the --scratch_dir flag in gtdb. If using HPC, use "/scratch" 
 # if you have access. If you do not have access to "/scratch" on HPC or are running 
@@ -12,9 +27,16 @@ minimap:
 metabat:
   # The number of threads to use for metabat2.
   threads: 12
+
+dastool:
+  # The number of threads to use for DAS Tool.
+  threads: 24
+  # The engine for single copy gene searching, choices include:
+  # blast, diamond, usearch.
+  search: "diamond"
   
 checkm:
-  # The number of threads to use for checkm.
+  # The number of threads to use for CheckM.
   threads: 24
   
   # The number of threads to use for pplacer when it is called within checkm.
@@ -38,7 +60,7 @@ gtdbtk:
   # The maximum number of contigs allowed in a genome bin.
   max_contigs: 10
   
-  # The number of threads to use for gtdbtk.
+  # The number of threads to use for gtdb-tk.
   threads: 32
   
   # The number of threads to use for pplacer when it is called within gtdbtk.
