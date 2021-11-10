@@ -64,16 +64,16 @@ def parse_summary(infile, completeness, contamination, contigs, binpath, outfile
                     else:
                         print("{} is valid!".format(fpath))
                     fhout.write("{0}\t{1}\n".format(fpath, cols[0]))
-                    passed.append("PASSED\t{}\t{}\t{}\t{}\t{}\t{}\n".format(cols[0], cols[5], cols[6],
-                                                                          cols[7], cols[8], cols[11]))
+                    passed.append("PASSED\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format(cols[0], cols[5], cols[6],
+                                                                          cols[7], cols[8], cols[11], cols[18]))
                 else:
-                    failed.append("FAILED\t{}\t{}\t{}\t{}\t{}\t{}\n".format(cols[0], cols[5], cols[6],
-                                                                          cols[7], cols[8], cols[11]))
+                    failed.append("FAILED\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format(cols[0], cols[5], cols[6],
+                                                                          cols[7], cols[8], cols[11], cols[18]))
     return passed, failed
 
 def write_log(logfile, passed, failed):
     with open(logfile, 'a') as fh:
-        fh.write("Filter\tBin\tCompleteness\tContamination\tStrainHeterogeneity\tGenomeSize\tContigs\n")
+        fh.write("Filter\tBin\tCompleteness\tContamination\tStrainHeterogeneity\tGenomeSize\tContigs\tGC\n")
         for p in passed:
             fh.write(p)
         for f in failed:
