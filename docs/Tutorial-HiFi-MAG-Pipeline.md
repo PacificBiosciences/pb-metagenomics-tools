@@ -20,7 +20,7 @@ The purpose of this snakemake workflow is to obtain high-quality metagenome-asse
 
 ![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/HiFi-MAG-Summary.png)
 
-HiFi reads are first mapped to contigs using minimap2 to generate BAM files. The BAM files are used to obtain coverage estimates for the contigs. The coverages and contigs are used as inputs to MetaBAT2, which constructs the genome bins. **Note that sometimes complete MAGs are recovered straight from assembly, whereas other MAGs are recovered from the binning approach.** MetaBAT2 can be used to identify these already complete MAGs as well as successfully bin the fragmented MAGs. CheckM is used to assess the quality of the resulting genome bins. It provides measures of genome completeness, contamination, and other useful metrics. A custom filtering step is used to eliminate genome bins with <70% genome completeness, >10% genome contamination, and >10 contigs per bin. These are default values, and they can be changed. The genome bins which pass the default thresholds can be considered high-quality MAGs. Finally, the Genome Taxonomy Database Toolkit (GTDB-Tk) is used to identify the closest reference match to each high-quality MAG. It will report the taxonomy of the closest reference. **This does not guarantee the identity of the MAG, but serves as a starting point for understanding which genus, species, or strain it is most closely related to.** There are also several visualizations of the CheckM bins, and final high-quality MAGs:
+HiFi reads are first mapped to contigs using minimap2 to generate BAM files. The BAM files are used to obtain coverage estimates for the contigs. The coverages and contigs are used as inputs to MetaBAT2, which constructs the genome bins. Bins are constructed in three ways: 1) using the full set of contigs for binning, 2) using only linear contigs for binning, and 3) assigning circular contigs to bins directly. These binning strategies are compared and merged using DAS_Tool. The merged bin set is then screened with CheckM to assess the quality of the resulting genome bins. It provides measures of genome completeness, contamination, and other useful metrics. A custom filtering step is used to eliminate genome bins with <70% genome completeness, >10% genome contamination, and >10 contigs per bin. These are default values, and they can be changed. The genome bins which pass the default thresholds can be considered high-quality MAGs. Finally, the Genome Taxonomy Database Toolkit (GTDB-Tk) is used to identify the closest reference match to each high-quality MAG. It will report the taxonomy of the closest reference. **This does not guarantee the identity of the MAG, but serves as a starting point for understanding which genus, species, or strain it is most closely related to.** Outputs include several visualizations of the final bin/MAG characteristics, the sequences for all bins/MAGs passing filters, and pairs of bins:reference sequences when a GTDB closest match was found.
 
 ![MAGs](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/MAG-characteristics.png)
 
@@ -34,8 +34,9 @@ This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](h
 
 - Clone the HiFi-MAG-Pipeline directory.
 - Download and unpack the databases for CheckM (<2GB) and GTDB (~28GB). Specify paths to each database in `config.yaml`.
-- Include all input HiFi fasta files (`SAMPLE.fasta`) and contig fasta files (`SAMPLE.contigs.fasta`) in the `inputs/` folder. These can be files or symlinks. 
+- Include all input HiFi fasta files (`SAMPLE.fasta`) and contig fasta files (`SAMPLE.contigs.fasta`) in the `inputs/` folder. These can be files or symlinks. If you assembled with metaFlye, you must also include the `SAMPLE-assembly_info.txt` file here.
 - Edit sample names in `Sample-Config.yaml` configuration file in `configs/` for your project. 
+- Edit the assembly method used to generate the contigs in `config.yaml`. This choice will be used to identify which contigs are circular in the assembly. Default is `hifiasm-meta`, but other supported options include `hicanu` and `metaflye`.
 - Check that the `tmpdir` argument is set correctly in `config.yaml`. The default is `/scratch`.
 - Execute snakemake using the general commands below: 
 ```
@@ -59,6 +60,7 @@ HiFi-MAG-Pipeline
 │
 ├── envs/
 │	├── checkm.yml
+│	├── dastool.yml
 │	├── gtdbtk.yml
 │	├── metabat.yml
 │	├── python.yml
@@ -69,8 +71,11 @@ HiFi-MAG-Pipeline
 │
 ├── scripts/
 │	├── CheckM-to-batch-GTDB.py
-│	├── genome-binning-summarizer.py
-│	└── Metabat-Plot.py
+│	├── Copy-Circ-Contigs.py
+│	├── Filter-CircLin-Contigs.py
+│	├── Metabat-Plot.py
+│	├── Summary-Plots.py
+│	└── genome-binning-summarizer.py
 │
 ├── Snakefile-hifimags
 │
@@ -82,7 +87,7 @@ The `config.yaml` file is the main configuration file used in the snakemake work
 
 The `configs/` directory contains an example configuration file for specifying which samples are to be run. The configuration file can be renamed. It must be specified in the command line call for snakemake for any samples to be run.
 
-The `inputs/` directory should contain all of the required input files for each sample. In this workflow there must be a `SAMPLE.fasta` file of HiFi reads and a `SAMPLE.contigs.fasta` file that contains the assembled contigs. These can be the actual files, or symbolic links to the files (for example using `ln -s source_file symbolic_name`). 
+The `inputs/` directory should contain all of the required input files for each sample. In this workflow there must be a `SAMPLE.fasta` file of HiFi reads and a `SAMPLE.contigs.fasta` file that contains the assembled contigs. These can be the actual files, or symbolic links to the files (for example using `ln -s source_file symbolic_name`). If you used metaFlye for assembly, you must also include the `SAMPLE-assembly_info.txt` file
 
 The `scripts/` directory contains a few Python scripts required for the workflow. These are involved with formatting, filtering, plotting, and summarizing. They are called in different steps of the workflow.
 
@@ -108,9 +113,9 @@ If you intend to generate a graphic for the snakemake workflow graph, you will a
 
 ## Generate assemblies
 
-For assembly of metagenomic samples with HiFi reads, you can use [hifiasm-meta](https://github.com/xfengnefx/hifiasm-meta), [HiCanu](https://github.com/marbl/canu), or [meta-Flye](https://github.com/fenderglass/Flye). 
+For assembly of metagenomic samples with HiFi reads, you can use [hifiasm-meta](https://github.com/xfengnefx/hifiasm-meta), [HiCanu](https://github.com/marbl/canu), or [metaFlye](https://github.com/fenderglass/Flye). 
 
-For hifiasm-meta, the default settings work very well. The same is true for meta-Flye, but of course make sure to use the `--pacbio-hifi` and `--meta` flags! 
+For hifiasm-meta, the default settings work very well. The same is true for metaFlye, but of course make sure to use the `--pacbio-hifi` and `--meta` flags! 
 
 For Canu v2.1, we strongly recommend the following settings:
 
@@ -166,10 +171,13 @@ Please also check that the `tmpdir` argument is set correctly. The default is `/
 
 You may also wish to change the thresholds for filtering in the gtdbtk settings: `min_completeness` (default 70), `max_contamination` (default 10), and `max_contigs` (default 10).
 
+Finally, make sure to select the appropriate `assembler` used, with supported options including: `hicanu`, `hifiasm-meta`, and `metaflye`. This option will help locate circular contigs in the assembly, and enable the three binning approaches (all contigs binned, linear contigs binned, circular contigs assigned to bins).
+
+
 #### Sample configuration file (`configs/Sample-Config.yaml`)
 The example sample configuration file is called `Sample-Config.yaml` and is located in the `configs/` directory. Here you should specify the sample names that you wish to include in the analysis. 
 
-All samples specified in the sample configuration file must have two corresponding files in the `inputs/` folder. These include the fasta file of HiFi reads (`SAMPLE.fasta`) and the assembled contigs (`SAMPLE.contig.fasta`). Here, the `SAMPLE` component is a name included in the sample configuration file. The pipeline can be run for any number of samples. You can also configure the file to only run for a subset of the samples present in the `inputs/` folder. Please note that if the input files do not follow these naming conventions (`SAMPLE.fasta`, `SAMPLE.contig.fasta`), they will not be recognized by the workflow. You can use the actual files or symlinks to those files, both are compatible with snakemake.
+All samples specified in the sample configuration file must have two corresponding files in the `inputs/` folder. These include the fasta file of HiFi reads (`SAMPLE.fasta`) and the assembled contigs (`SAMPLE.contig.fasta`). Here, the `SAMPLE` component is a name included in the sample configuration file. The pipeline can be run for any number of samples. You can also configure the file to only run for a subset of the samples present in the `inputs/` folder. Please note that if the input files do not follow these naming conventions (`SAMPLE.fasta`, `SAMPLE.contig.fasta`), they will not be recognized by the workflow. You can use the actual files or symlinks to those files, both are compatible with snakemake. If you used metaFlye for assembly, you must also include the `SAMPLE-assembly_info.txt` file here.
 
 [Back to top](#TOP)
 
@@ -276,32 +284,38 @@ HiFi-MAG-Pipeline
 ├── benchmarks/
 ├── logs/
 │
-├── 1-bam/
-│
-├── 2-metabat-bins/
-│
-├── 3-checkm/
-│
-├── 4-checkm-summary/
-│
-├── 5-gtdb-individual/
-│
-└── 6-summary/
+├── 1-contigs/
+├── 2-bam/
+├── 3-metabat-bins-full/
+├── 3-metabat-bins-linear-circ/
+├── 4-DAStool/
+├── 5-checkm/
+├── 6-checkm-summary/
+├── 7-gtdb-individual/
+└── 8-summary/
+
+
 ```
 
 - `benchmarks/` contains benchmark information on memory usage and I/O for each rule executed.
 - `logs/` contains log files for each rule executed.
-- `1-bam/` contains the sorted bam files from mapping reads to contigs using minimap2.
-- `2-metabat-bins/` contains the outputs from metabat2, per sample.
-- `3-checkm/` contains outputs from checkm, per sample.
-- `4-checkm-summary/` contains intermediate files.
-- `5-gtdb-individual/` contains gtdb-tk results for each sample as run independently.
-- `6-summary/` **contains the main output files of interest**.
+- `1-contigs/` contains separated fasta files for circular and linear contigs, with a summary file for each (containing names of contigs, lengths).
+- `2-bam/` contains the sorted bam files from mapping reads to full contig set using minimap2.
+- `3-metabat-bins-full/` contains the outputs from metabat2, per sample, using the full contig set for binning.
+- `3-metabat-bins-linear-circ/` contains the outputs from metabat2, per sample, using the linear contig set for binning. Bins are also created for each circular contig here.
+- `4-DAStool/` contains outputs from DAS_Tool for bin merging, per sample.
+- `5-checkm/` contains CheckM results for merged bins, per sample.
+- `6-checkm-summary/` contains intermediate summary files, per sample.
+- `7-gtdb-individual/` contains gtdb-tk results for the CheckM filtered bins, per sample.
+- `8-summary/` **contains the main output files of interest**.
 
-Within `6-summary/`, there will be a folder for each sample. Within a sample folder there are several items:
+Within `8-summary/`, there will be a folder for each sample. Within a sample folder there are several items:
 + `SAMPLE.HiFi-MAG.summary.txt`: A main summary file that brings together information from metabat2, checkm, and gtdb-tk for all MAGs that pass the filtering step. 
-+ `binplots/`: A folder that contains several plots. One set of plots is for the unfiltered genome bins (e.g., all bins from metabat2), and the other is for the filtered high-quality MAGs. These plots compare % genome completeness vs. % contamination, with variations including bin name labels or the number of contigs per bin labeled.
-+ `bin-ref-pairs/`: A folder which contains a subfolder for each high-quality MAG. These folders are named using the bin numbers from metabat2. Inside each folder is a fasta file of the MAG and the closest reference (as inferred by GTDK-Tk). These two files can be useful for performing whole genome alignments or further characterization of the MAG.
++ `SAMPLE.Completeness-Contamination-Contigs.pdf`: A plot showing the relationship between completeness, contamination, and number of contigs for each high-quality MAG recovered.
++ `SAMPLE.GenomeSizes-Depths.pdf`: A plot showing the relationship between genome size and depth of coverage for each high-quality MAG recovered.
++ `SAMPLE-bins/`: A folder that contains the fasta files for all high-quality MAGs/bins.
++ `SAMPLE-binplots/`: A folder that contains several plots. One set of plots is for the unfiltered genome bins (e.g., all bins from metabat2), and the other is for the filtered high-quality MAGs. These plots compare % genome completeness vs. % contamination, with variations including bin name labels or the number of contigs per bin labeled.
++ `SAMPLE-bin-ref-pairs/`: A folder which contains a subfolder for each high-quality MAG/bin. These folders are named using the bin numbers from metabat2. Inside each folder is a fasta file of the MAG and the closest reference (as inferred by GTDK-Tk). These two files can be useful for performing whole genome alignments or further characterization of the MAG.
 
 
 [Back to top](#TOP)
