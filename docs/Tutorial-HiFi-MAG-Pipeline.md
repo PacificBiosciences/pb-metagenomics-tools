@@ -20,7 +20,7 @@ The purpose of this snakemake workflow is to obtain high-quality metagenome-asse
 
 ![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/HiFi-MAG-Summary.png)
 
-HiFi reads are first mapped to contigs using minimap2 to generate BAM files. The BAM files are used to obtain coverage estimates for the contigs. The coverages and contigs are used as inputs to MetaBAT2, which constructs the genome bins. **New feature in v1.3+:** Bins are constructed in three ways: 1) using the full set of contigs for binning, 2) using only linear contigs for binning, and 3) assigning circular contigs to bins directly. These binning strategies are subsequently compared and merged using DAS_Tool. This strategy prevents the mis-binning of complete, circular contigs and improves MAG recovery by 10-30%:
+HiFi reads are first mapped to contigs using minimap2 to generate BAM files. The BAM files are used to obtain coverage estimates for the contigs. The coverages and contigs are used as inputs to MetaBAT2, which constructs the genome bins. **New feature in v1.4+:** Bins are constructed in three ways: 1) using the full set of contigs for MetaBat2 binning, 2) using only linear contigs for MetaBat2 binning, and 3) assigning circular contigs to bins directly. These binning strategies are subsequently compared and merged using DAS_Tool. This method prevents improper binning of complete, circular contigs and improves MAG recovery by 10-30%:
 
 ![Improvement](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/HiFi-MAG-Pipeline-Update.png)
 
