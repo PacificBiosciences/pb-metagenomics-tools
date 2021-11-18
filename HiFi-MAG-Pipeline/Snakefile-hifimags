@@ -182,7 +182,7 @@ rule RunDAStool:
     shell:
         "DAS_Tool -i {input.lincirc},{input.full} -c {input.contigs} -l lincirc,full "
         "-o {params.outlabel} --search_engine {params.search} --write_bins 1 -t {threads} "
-        "&> {log} && touch {output.complete}"
+        "--score_threshold 0.05 --debug &> {log} && touch {output.complete}"
 
 rule RunCheckM:
     input:
