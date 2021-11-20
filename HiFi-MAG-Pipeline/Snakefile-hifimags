@@ -160,11 +160,27 @@ rule MakeFullDASinput:
     shell:
         "Fasta_to_Scaffolds2Bin.sh -i {input} -e fa 1> {output} 2> {log}"
 
+rule CheckForBins:
+    input:
+        lincirc = "4-DAStool/{sample}.linear-circ.tsv",
+        full = "4-DAStool/{sample}.full.tsv"
+    output:
+        "4-DAStool/{sample}.bincheck.txt"
+    conda:
+        "envs/python.yml"
+    log: 
+        "logs/{sample}.CheckForBins.log"
+    benchmark: 
+        "benchmarks/{sample}.CheckForBins.tsv"
+    shell:
+        "python scripts/CheckBins.py -f {input.full} -l {input.lincirc} -o {output} &> {log}"
+
 rule RunDAStool:
     input:
         full = "4-DAStool/{sample}.full.tsv",
         lincirc = "4-DAStool/{sample}.linear-circ.tsv",
-        contigs = "inputs/{sample}.contigs.fasta"
+        contigs = "inputs/{sample}.contigs.fasta",
+        bincheck = "4-DAStool/{sample}.bincheck.txt"
     output:
         binsdir = directory("4-DAStool/{sample}_DASTool_bins/"),
         complete = "4-DAStool/{sample}.complete.txt"
@@ -174,7 +190,8 @@ rule RunDAStool:
         config['dastool']['threads']
     params:
         outlabel = "4-DAStool/{sample}",
-        search = config['dastool']['search']
+        search = config['dastool']['search'],
+        thresh = config['dastool']['score_threshold']
     log: 
         "logs/{sample}.RunDAStool.log"
     benchmark: 
@@ -182,7 +199,7 @@ rule RunDAStool:
     shell:
         "DAS_Tool -i {input.lincirc},{input.full} -c {input.contigs} -l lincirc,full "
         "-o {params.outlabel} --search_engine {params.search} --write_bins 1 -t {threads} "
-        "--score_threshold 0.05 --debug &> {log} && touch {output.complete}"
+        "--score_threshold {params.thresh} --debug &> {log} && touch {output.complete}"
 
 rule RunCheckM:
     input:

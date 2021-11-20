@@ -1,6 +1,5 @@
 import argparse
 import os
-import pandas as pd
 from Bio import SeqIO
 
 def get_args():
@@ -19,10 +18,10 @@ def get_args():
                         help="Name of sample.")
     parser.add_argument("-o1", "--outdir",
                         required=True,
-                        help="Name of output fasta file (linear).")
+                        help="Name of output directory.")
     parser.add_argument("-o2", "--outfile",
                         required=True,
-                        help="Name of output fasta file (linear).")
+                        help="Name of output completion file.")
     return parser.parse_args()
 
 def write_bins(fasta, sample, outdir):
@@ -33,14 +32,17 @@ def write_bins(fasta, sample, outdir):
     """
     bin_count = int(1)
     for rec in SeqIO.parse(fasta, "fasta"):
-        outname = os.path.join(outdir, "{}_bin.circ{}.fa".format(sample, bin_count))
+        outname = os.path.join(outdir, "{}_bin.circ.{}.fa".format(sample, bin_count))
         with open(outname, 'a') as fh:
             fh.write(rec.format("fasta"))
         bin_count += 1
 
 def main():
     args = get_args()
-    write_bins(args.fasta, args.sample, args.outdir)
+    if os.stat(args.fasta).st_size == 0:
+        pass
+    else:
+        write_bins(args.fasta, args.sample, args.outdir)
     with open(args.outfile, 'a') as fh:
         fh.write("Completed.")
 
