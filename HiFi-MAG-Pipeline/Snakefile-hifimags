@@ -182,14 +182,14 @@ rule RunDAStool:
         contigs = "inputs/{sample}.contigs.fasta",
         bincheck = "4-DAStool/{sample}.bincheck.txt"
     output:
-        binsdir = directory("4-DAStool/{sample}_DASTool_bins/"),
+        binsdir = directory("4-DAStool/{sample}/{sample}_DASTool_bins/"),
         complete = "4-DAStool/{sample}.complete.txt"
     conda:
         "envs/dastool.yml"
     threads: 
         config['dastool']['threads']
     params:
-        outlabel = "4-DAStool/{sample}",
+        outlabel = "4-DAStool/{sample}/{sample}",
         search = config['dastool']['search'],
         thresh = config['dastool']['score_threshold']
     log: 
@@ -204,7 +204,7 @@ rule RunDAStool:
 rule RunCheckM:
     input:
         complete = "4-DAStool/{sample}.complete.txt",
-        indir = "4-DAStool/{sample}_DASTool_bins/"
+        indir = "4-DAStool/{sample}/{sample}_DASTool_bins/"
     output:
         "5-checkm/{sample}/lineage.ms"
     conda:
@@ -245,7 +245,7 @@ rule SummarizeCheckM:
 rule PrepBatchFile:
     input:
         sumfile = "6-checkm-summary/CheckM.{sample}.qa.txt",
-        indir = "4-DAStool/{sample}_DASTool_bins/"
+        indir = "4-DAStool/{sample}/{sample}_DASTool_bins/"
     output:
         batch = "6-checkm-summary/{sample}.batchfile.txt",
         simple = "6-checkm-summary/CheckM.{sample}.simple.txt"
