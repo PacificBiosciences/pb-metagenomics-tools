@@ -61,8 +61,6 @@ def parse_hifiasm(fasta, fastalinear, fastacircular, loglinear, logcircular):
 
     #catch no-circulars by adding one dummy seq
     if os.stat(fastacircular).st_size == 0:
-        with open(fastacircular, 'a') as fh:
-            fh.write(">dummyseq\nATCGATCGATCGATCGATCGATCGATCGATCGATCGATCG\n")
         with open(logcircular, 'a') as fh:
             fh.write("{}\t{}\n".format("NA", "0"))
 
@@ -89,8 +87,6 @@ def parse_hicanu(fasta, fastalinear, fastacircular, loglinear, logcircular):
 
     #catch no-circulars by adding one dummy seq
     if os.stat(fastacircular).st_size == 0:
-        with open(fastacircular, 'a') as fh:
-            fh.write(">dummyseq\nATCGATCGATCGATCGATCGATCGATCGATCGATCGATCG\n")
         with open(logcircular, 'a') as fh:
             fh.write("{}\t{}\n".format("NA", "0"))
 
@@ -122,8 +118,6 @@ def parse_metaflye(fasta, metaflye_info, fastalinear, fastacircular, loglinear, 
 
     #catch no-circulars by adding one dummy seq
     if os.stat(fastacircular).st_size == 0:
-        with open(fastacircular, 'a') as fh:
-            fh.write(">dummyseq\nATCGATCGATCGATCGATCGATCGATCGATCGATCGATCG\n")
         with open(logcircular, 'a') as fh:
             fh.write("{}\t{}\n".format("NA", "0"))
             

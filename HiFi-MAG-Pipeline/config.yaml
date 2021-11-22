@@ -34,6 +34,12 @@ dastool:
   # The engine for single copy gene searching, choices include:
   # blast, diamond, usearch.
   search: "diamond"
+  # Score threshold until selection algorithm will keep selecting bins [0 to 1].
+  # This is roughly equivalent to CheckM completeness score (0.2 = 20% completeness).
+  # If the desired minimum completeness is changed in the gtdbtk section below, 
+  # ensure this value is lower or DAS_Tool will remove the bins. The default is to set 
+  # DAS_Tool score to 0.2 (20%), and later filter out all bins with <70% completeness. 
+  score_threshold: 0.2
   
 checkm:
   # The number of threads to use for CheckM.
