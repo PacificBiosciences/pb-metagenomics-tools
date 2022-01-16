@@ -9,7 +9,7 @@
 
 # The choice of assembler changes how the script will look for circular contigs in the 
 # contigs fasta files. This step is important in separating the circular and linear contigs 
-# into different files, as binning is only performing for the linear contigs.
+# into different files, as binning is performed several ways using these file sets.
 assembler: "hifiasm-meta"
 
 
