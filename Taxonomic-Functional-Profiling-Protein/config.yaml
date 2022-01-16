@@ -52,3 +52,10 @@ sam2rma:
   # If you plan to use the RMA summary pipeline afterwards, make sure to use readCount.  
   readassignmentmode: "readCount"
   # possible values = readCount, readLength, alignedBases, readMagnitude
+  
+  # Minimum support as percent of assigned reads. Default in MEGAN is 0.05, but with HiFi
+  # the best value is 0.01. This provides an optimal trade-off between precision and recall, 
+  # with near perfect detection of species down to 0.1-0.02% abundance (based on mock community)
+  # data. To recover more species at lower abundances (which may be false positives), this 
+  # can be changed to 0.001. 
+  minSupportPercent: 0.01
