@@ -20,7 +20,7 @@ The purpose of this snakemake workflow is to perform translation alignment of Hi
 
 ![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Taxonomic-Functional-Profiling-Protein-Steps.png)
 
-Translation alignments of the HiFi reads to the protein database are performed using long-read settings in DIAMOND, resulting in a protein-SAM file. The specific long-read settings involve the `--range-culling` option. DIAMOND can take a very long time to run with large files. In this pipeline, the process is parallelized by splitting each file of HiFi reads into four chunks. This allows a 4x speedup when jobs are run simultaneously, and also reduces the resources required to run the four jobs sequentially. The four protein-SAM files per sample are filtered for illegal CIGAR strings (frameshift characters) and merged into a single protein-SAM file. The resulting protein-SAM file is converted into long-read RMA format using the sam2rma tool distributed with MEGAN6. Each input file of HiFi reads will produce a corresponding output RMA file, ready to use with MEGAN6.  
+Translation alignments of the HiFi reads to the protein database are performed using long-read settings in DIAMOND, resulting in a protein-SAM file. The specific long-read settings involve the `--range-culling` option. DIAMOND can take a very long time to run with large files. In this pipeline, the process is parallelized by splitting each file of HiFi reads into *n* chunks (default = 4). This allows a speedup when jobs are run simultaneously, and also reduces the resources required to run the jobs sequentially. The chunked protein-SAM files per sample are filtered for illegal CIGAR strings (frameshift characters) and merged into a single protein-SAM file. The resulting protein-SAM file is converted into long-read RMA format using the sam2rma tool distributed with MEGAN6. The settings for the RMA file are optimized to balance precision and recall, but can be changed for different use-cases. Each input file of HiFi reads will produce a corresponding output RMA file, ready to use with MEGAN6.  
 
 
 [Back to top](#TOP)
@@ -38,7 +38,7 @@ This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](h
 - Index the NCBI-nr database with DIAMOND using `diamond makedb --in nr.gz --db diamond_nr_db --threads 24`. This will result in a `diamond_nr_db.dmnd` file that is ~150GB.
 - Include all input HiFi fasta files (`SAMPLE.fasta`) in the `inputs/` folder. These can be files or symlinks. 
 - Edit sample names in `Sample-Config.yaml` the configuration file in `configs/` for your project. 
-- Specify the full path to `sam2rma`, full path to the MEGAN database file , and full path to the indexed NCBI-nr database in `config.yaml`. Ensure the `hit_limit` argument (under `diamond`) and `readassignmentmode` (under `sam2rma`) are set correctly for your analysis.
+- Specify the full path to `sam2rma`, full path to the MEGAN database file , and full path to the indexed NCBI-nr database in `config.yaml`. Ensure the `hit_limit` argument (under `diamond`), `readassignmentmode` (under `sam2rma`), and `minSupportPercent` (under `sam2rma`) arguments are set correctly for your analysis.
 - Execute snakemake using the general commands below: 
 ```
 snakemake --snakefile Snakefile-taxprot --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]
@@ -141,7 +141,9 @@ The main configuration file contains several parameters, each of which is descri
 
 Depending on your system resources, you may choose to change the number of threads used in the diamond and sam2rma settings. Additionally, the `block_size` parameter of diamond will affect the speed of the analysis and memory requirements. 
 
-Finally, the `hit_limit` argument allows you to specify the type of hit limit method and corresponding value. You can choose between the `--top` method or `-k` method, which are used with the range-culling mode (see [DIAMOND documentation](http://www.diamondsearch.org/index.php?pages/command_line_options/)). The default is `--top 5`, meaning a hit will only be deleted if its score is more than 5% lower than that of a higher scoring hit over at least 50% of its query range. Using `-k 5` instead means that a hit will only be deleted if at least 50% of its query range is spanned by at least 5 higher or equal scoring hits. In general, the `-k` method will keep far fewer hits, and specifying `-k 1` will keep a single hit per query range. This can be useful for 1) very simple metagenomic communities, or 2) reducing the output file size. If you choose to modify the `hit_limit` argument, you will want to supply the complete DIAMOND flag (e.g., `-k 3` or `--top 10`).
+The `hit_limit` argument allows you to specify the type of hit limit method and corresponding value. You can choose between the `--top` method or `-k` method, which are used with the range-culling mode (see [DIAMOND documentation](http://www.diamondsearch.org/index.php?pages/command_line_options/)). The default is `--top 5`, meaning a hit will only be deleted if its score is more than 5% lower than that of a higher scoring hit over at least 50% of its query range. Using `-k 5` instead means that a hit will only be deleted if at least 50% of its query range is spanned by at least 5 higher or equal scoring hits. In general, the `-k` method will keep far fewer hits, and specifying `-k 1` will keep a single hit per query range. This can be useful for 1) very simple metagenomic communities, or 2) reducing the output file size. If you choose to modify the `hit_limit` argument, you will want to supply the complete DIAMOND flag (e.g., `-k 3` or `--top 10`).
+
+Finally, consider the `minSupportPercent` argument, which is the minimum support as percent of assigned reads required to report a taxon. The default in MEGAN is 0.05, but with HiFi the best value appears to be 0.01. This provides an optimal trade-off between precision and recall, with near perfect detection of species down to 0.1-0.02% abundance based on mock community datasets. To recover more species at lower abundances (which are likely to be false positives), this can be changed to 0.001, or even 0.00001. This will primarily increase the number of species found at ultra-low abundances (<0.01%), and provide results similar to short-read methods (e.g., Kraken2, Bracken, Centrifuge).
 
 **You must also specify the full paths to `sam2rma`, the MEGAN mapping database file, and the indexed NCBI-nr database (`diamond_nr_db.dmnd`)**. 
 
@@ -209,10 +211,10 @@ There are several ways to run snakemake on HPC. There are limited instructions o
 
 One easy way to run snakemake is to start an interactive session, and execute snakemake with the relevant cluster settings as described in the documentation. In this case, only a few threads are required for the interactive session, since most jobs will be run elsewhere. Snakemake will act as a job scheduler and also run local jobs from this location, until all jobs are complete. This can take a while, so it is best to use a detachable screen with the interactive session. 
 
-The same general commands are used as with "local" execution, but with some additional arguments to support cluster configuration. Below is an example of cluster configuration using SGE:
+The same general commands are used as with "local" execution, but with some additional arguments to support cluster configuration. Below is an example of cluster configuration using SLURM:
 
 ```
-snakemake --snakefile Snakefile-taxprot --configfile configs/Sample-Config.yaml --use-conda --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+snakemake --snakefile Snakefile-taxprot --configfile configs/Sample-Config.yaml --use-conda --cluster "sbatch --partition=compute --cpus-per-task={threads}" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
 ```
 
 Let's unpack this command:
@@ -220,10 +222,19 @@ Let's unpack this command:
 - `--snakefile Snakefile-taxprot` tells snakemake to run this particular snakefile.
 - `--configfile configs/Sample-Config.yaml` tells snakemake to use this sample configuration file in the `configs/` directory. This file can have any name, as long as that name is provided here.
 -  `--use-conda` this allows conda to install the programs and environments required for each step. It is essential.
-- `--cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash"` are the settings for execution with SGE, where 'default' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule. Note that the entire section in quotes can be replaced with a SLURM equivalent.
+- `--cluster "sbatch --partition=compute --cpus-per-task={threads}"` are the settings for execution with SLURM, where 'compute' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule. Note that the entire section in quotes can be replaced with an SGE equivalent (see below).
 - `-j 5` will tell snakemake to run a maximum of 5 jobs simultaneously on the cluster. You can adjust this as needed.
 - `--jobname "{rule}.{wildcards}.{jobid}"` provides convenient names for your snakemake jobs running on the cluster.
 - `--latency-wait 60` this is important to include because there may be some delay in file writing between steps, and this prevents errors if files are not immediately found.
+
+And here is an example using SGE instead:
+
+```
+snakemake --snakefile Snakefile-taxprot --configfile configs/Sample-Config.yaml --use-conda --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+```
+- `--cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash"` are the settings for execution with SGE, where 'default' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule.
+
+
 
 Upon the first execution, conda will download packages and create the correct environment. After, the jobs should begin scheduling and running. You can see the progress on screen in the interactive session, and also be able to monitor snakemake jobs running on the cluster. 
 
@@ -314,10 +325,10 @@ diamond blastx -d {params.db} -q {input} -o {output} -f 101 -F 5000 --range-cull
 
 ### sam2rma
 
-Run the sam2rma tool with long read settings (`-alg longReads`). The default readAssignmentMode (`-ram`) for long reads is `alignedBases`, and `readCount` for all else. This controls whether or not the abundance counts rely on the total number of bases, or the number of reads. I prefer the number of reads, but this option can be changed in the `config.yaml` file to use `alignedBases` instead.
+Run the sam2rma tool with long read settings (`-alg longReads`). The default readAssignmentMode (`-ram`) for long reads is `alignedBases`, and `readCount` for all else. This controls whether or not the abundance counts rely on the total number of bases, or the number of reads. I prefer the number of reads, but this option can be changed in the `config.yaml` file to use `alignedBases` instead. The `--minSupportPercent` argument controls the minimum percent of assigned reads required to report a taxon. The default for this pipeline is `0.01` (best tradeoff between precision and recall), but this can be lowered to `0.001` or `0.0001` to recover lots of species at ultra-low abundances (<0.01%). 
 
 ```
-sam2rma -i {input.sam} -r {input.reads} -o {output} -lg -alg longReads -t {threads} -mdb {params.db} -ram {params.ram} -v 2> {log}
+sam2rma -i {input.sam} -r {input.reads} -o {output} -lg -alg longReads -t {threads} -mdb {params.db} -ram {params.ram} --minSupportPercent {params.ms} -v 2> {log}
 ```
 
 In this case, we are using a MEGAN database that maps NCBI-nr accessions to taxonomic and functional classes (NCBI, GTDB, eggNOG, InterPro2GO, SEED).

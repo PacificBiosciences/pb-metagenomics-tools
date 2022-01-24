@@ -232,6 +232,47 @@ There are several ways to run snakemake on HPC. There are limited instructions o
 
 One easy way to run snakemake is to start an interactive session, and execute snakemake with the relevant cluster settings as described in the documentation. In this case, only a few threads are required for the interactive session, since most jobs will be run elsewhere. Snakemake will act as a job scheduler and also run local jobs from this location, until all jobs are complete. This can take a while, so it is best to use a detachable screen with the interactive session. 
 
+
+
+The same general commands are used as with "local" execution, but with some additional arguments to support cluster configuration. Below is an example of cluster configuration using SLURM:
+
+
+Nucleotide RMA version:
+```
+snakemake --snakefile Snakefile-summarizeNucleotideRMA --configfile configs/Sample-Config-nucleotide.yaml --use-conda --cluster "sbatch --partition=compute --cpus-per-task={threads}" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+```
+
+Protein RMA version:
+```
+snakemake --snakefile Snakefile-summarizeProteinRMA --configfile configs/Sample-Config-protein.yaml --use-conda --cluster "sbatch --partition=compute --cpus-per-task={threads}" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+```
+
+Let's unpack this command:
+- `snakemake` calls snakemake.
+- `--snakefile Snakefile-taxprot` tells snakemake to run this particular snakefile.
+- `--configfile configs/Sample-Config.yaml` tells snakemake to use this sample configuration file in the `configs/` directory. This file can have any name, as long as that name is provided here.
+-  `--use-conda` this allows conda to install the programs and environments required for each step. It is essential.
+- `--cluster "sbatch --partition=compute --cpus-per-task={threads}"` are the settings for execution with SLURM, where 'compute' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule. Note that the entire section in quotes can be replaced with an SGE equivalent (see below).
+- `-j 5` will tell snakemake to run a maximum of 5 jobs simultaneously on the cluster. You can adjust this as needed.
+- `--jobname "{rule}.{wildcards}.{jobid}"` provides convenient names for your snakemake jobs running on the cluster.
+- `--latency-wait 60` this is important to include because there may be some delay in file writing between steps, and this prevents errors if files are not immediately found.
+
+And here is an example using SGE instead:
+
+
+Nucleotide RMA version:
+```
+snakemake --snakefile Snakefile-summarizeNucleotideRMA --configfile configs/Sample-Config-nucleotide.yaml --use-conda --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+```
+
+Protein RMA version:
+```
+snakemake --snakefile Snakefile-summarizeProteinRMA --configfile configs/Sample-Config-protein.yaml --use-conda --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+```
+
+- `--cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash"` are the settings for execution with SGE, where 'default' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule.
+
+
 The same general commands are used as with "local" execution, but with some additional arguments to support cluster configuration. Below is an example of cluster configuration using SGE:
 
 
