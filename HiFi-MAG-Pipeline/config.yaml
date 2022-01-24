@@ -67,7 +67,7 @@ gtdbtk:
   max_contigs: 10
   
   # The number of threads to use for gtdb-tk.
-  threads: 32
+  threads: 48
   
   # The number of threads to use for pplacer when it is called within gtdbtk.
   pplacer_threads: 24
