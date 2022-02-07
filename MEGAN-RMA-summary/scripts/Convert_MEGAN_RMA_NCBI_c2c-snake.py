@@ -52,7 +52,9 @@ def activate_ncbi(update=False):
 
 def get_taxon_dict(ncbi, df):
     print("get_taxon_dict: Translating taxon names into numerical IDs...")
-    name2taxid = ncbi.get_name_translator(list(df['Name'].unique()))
+    # add filter to remove any taxon with "__" in name (likely to be a garbage name)
+    # which messes up the mpa -> kraken formatting
+    name2taxid = ncbi.get_name_translator(list(df[~df['Name'].str.contains('__')]['Name'].unique()))
     taxon_dict = {}
     for k, v in name2taxid.items():
         taxon_dict[k] = {'taxid': v[0]}
