@@ -54,8 +54,10 @@ sam2rma:
   # possible values = readCount, readLength, alignedBases, readMagnitude
   
   # Minimum support as percent of assigned reads. Default in MEGAN is 0.05, but with HiFi
-  # the best value is 0.01. This provides an optimal trade-off between precision and recall, 
-  # with near perfect detection of species down to 0.1-0.02% abundance (based on mock community)
-  # data. To recover more species at lower abundances (which may be false positives), this 
-  # can be changed to 0.001. 
+  # the optimized value is 0.01. This provides a balanced trade-off between precision and recall
+  # (based on mock community datasets), with near perfect detection of species down to 
+  # ~0.04% abundance. To avoid any filtering based on this threshold, use a value of 0 
+  # instead. This will report ALL assigned reads, which will include potentially thousands 
+  # of false positives at ultra-low abundances (<0.01%), similar to results from 
+  # short-read methods (e.g., Kraken2, Centrifuge, etc).
   minSupportPercent: 0.01
