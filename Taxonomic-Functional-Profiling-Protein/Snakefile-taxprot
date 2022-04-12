@@ -8,7 +8,9 @@ CHUNKS = [str(i) for i in list(range(0,config['diamond']['chunks']))]
 
 rule all:
     input:
-        expand("4-rma/{sample}.protein.{mode}.rma", sample = SAMPLES, mode = config['sam2rma']['readassignmentmode'])
+        expand("4-rma/{sample}.filtered.protein.{mode}.rma", sample = SAMPLES, mode = config['sam2rma']['readassignmentmode']),
+        expand("4-rma/{sample}.unfiltered.protein.{mode}.rma", sample = SAMPLES, mode = config['sam2rma']['readassignmentmode'])
+
 
 rule SplitFasta:
     input: 
@@ -60,12 +62,12 @@ rule MergeSam:
     shell:
         "python scripts/sam-merger-screen-cigar.py -i {input} -o {output} -l {log}"
         
-rule MakeRMA:
+rule MakeRMAfiltered:
     input:
         sam = "3-merged/{sample}.merged.sam",
         reads = "inputs/{sample}.fasta"
     output:
-        expand("4-rma/{{sample}}.protein.{mode}.rma", mode = config['sam2rma']['readassignmentmode'])
+        expand("4-rma/{{sample}}.filtered.protein.{mode}.rma", mode = config['sam2rma']['readassignmentmode'])
     conda:
         "envs/general.yml"
     threads: config['sam2rma']['threads']
@@ -75,11 +77,32 @@ rule MakeRMA:
         ram = config['sam2rma']['readassignmentmode'],
         ms = config['sam2rma']['minSupportPercent']
     log: 
-        f"logs/{{sample}}.MakeRMA.{config['sam2rma']['readassignmentmode']}.log"
+        f"logs/{{sample}}.MakeRMA.filtered.{config['sam2rma']['readassignmentmode']}.log"
     benchmark: 
-        f"benchmarks/{{sample}}.MakeRMA.{config['sam2rma']['readassignmentmode']}.tsv"
+        f"benchmarks/{{sample}}.MakeRMA.filtered.{config['sam2rma']['readassignmentmode']}.tsv"
     shell:
         "{params.sam2rma} -i {input.sam} -r {input.reads} -o {output} -lg -alg longReads "
         "-t {threads} -mdb {params.db} -ram {params.ram} --minSupportPercent {params.ms} "
         "-v 2> {log}"
 
+rule MakeRMAunfiltered:
+    input:
+        sam = "3-merged/{sample}.merged.sam",
+        reads = "inputs/{sample}.fasta"
+    output:
+        expand("4-rma/{{sample}}.unfiltered.protein.{mode}.rma", mode = config['sam2rma']['readassignmentmode'])
+    conda:
+        "envs/general.yml"
+    threads: config['sam2rma']['threads']
+    params:
+        sam2rma = config['sam2rma']['path'],
+        db = config['sam2rma']['db'],
+        ram = config['sam2rma']['readassignmentmode']
+    log: 
+        f"logs/{{sample}}.MakeRMA.unfiltered.{config['sam2rma']['readassignmentmode']}.log"
+    benchmark: 
+        f"benchmarks/{{sample}}.MakeRMA.unfiltered.{config['sam2rma']['readassignmentmode']}.tsv"
+    shell:
+        "{params.sam2rma} -i {input.sam} -r {input.reads} -o {output} -lg -alg longReads "
+        "-t {threads} -mdb {params.db} -ram {params.ram} --minSupportPercent 0 "
+        "-v 2> {log}"
