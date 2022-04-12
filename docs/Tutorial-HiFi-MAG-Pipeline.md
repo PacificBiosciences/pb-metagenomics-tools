@@ -20,7 +20,11 @@ The purpose of this snakemake workflow is to obtain high-quality metagenome-asse
 
 ![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/HiFi-MAG-Summary.png)
 
-HiFi reads are first mapped to contigs using minimap2 to generate BAM files. The BAM files are used to obtain coverage estimates for the contigs. The coverages and contigs are used as inputs to MetaBAT2, which constructs the genome bins. **New feature in v1.4+:** Bins are constructed in three ways: 1) using the full set of contigs for MetaBat2 binning, 2) using only linear contigs for MetaBat2 binning, and 3) assigning circular contigs to bins directly. These binning strategies are subsequently compared and merged using DAS_Tool. This method prevents improper binning of complete, circular contigs and improves MAG recovery by 10-30%:
+HiFi reads are first mapped to contigs using minimap2 to generate BAM files. The BAM files are used to obtain coverage estimates for the contigs. The coverages and contigs are used as inputs to MetaBAT2, which constructs the genome bins. **New feature in v1.4+:** Bins are constructed in three ways: 1) using the full set of contigs for MetaBat2 binning, 2) using only linear contigs for MetaBat2 binning, and 3) assigning circular contigs to bins directly. These binning strategies are subsequently compared and merged using DAS_Tool. 
+
+![Binning](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/HiFi-MAG-Binning.png)
+
+This improved method prevents improper binning of complete, circular contigs and provides a 8–28% increase in total MAGs and 28–73% increase in single contig MAGs.
 
 ![Improvement](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/HiFi-MAG-Pipeline-Update.png)
 
@@ -38,7 +42,7 @@ The merged bin set is then screened with CheckM to assess the quality of the res
 This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require 45-150GB memory and >250GB temporary disk space (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps. Snakemake v5+ is required, and the workflows have been tested using v5.19.3.
 
 - Clone the HiFi-MAG-Pipeline directory.
-- Download and unpack the databases for CheckM (<2GB) and GTDB (~28GB). Specify paths to each database in `config.yaml`.
+- Download and unpack the databases for CheckM (<2GB) and GTDB (~66GB). Specify paths to each database in `config.yaml`.
 - Include all input HiFi fasta files (`SAMPLE.fasta`) and contig fasta files (`SAMPLE.contigs.fasta`) in the `inputs/` folder. These can be files or symlinks. If you assembled with metaFlye, you must also include the `SAMPLE-assembly_info.txt` file here.
 - Edit sample names in `Sample-Config.yaml` configuration file in `configs/` for your project. 
 - Edit the assembly method used to generate the contigs in `config.yaml`. This choice will be used to identify which contigs are circular in the assembly. Default is `hifiasm-meta`, but other supported options include `hicanu` and `metaflye`.
@@ -146,7 +150,7 @@ The downloaded file must be decompressed to use it. The unpacked contents will b
 
 Complete instructions for the GTDB-Tk database can be found at: https://ecogenomics.github.io/GTDBTk/installing/index.html
 
-This workflow uses GTDB-Tk v1.5.0, which requires GTDB R06-RS202 (release 202) or later. 
+**As of April 2022, this workflow now uses GTDB-Tk v2.0+, which requires GTDB 07-RS207 (release 207).**
 
 The current GTDB release can be downloaded from: 
 https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_data.tar.gz
@@ -156,7 +160,7 @@ wget https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_dat
 tar -xvzf gtdbtk_data.tar.gz  
 ```
 
-It must also be decompressed prior to usage. The unpacked contents (of release 202) will be ~50GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`fastani/`, `markers/`, `masks/`, `metadata/`, `mrca_red/`, `msa/`, `pplacer/`, `radii/`, `taxonomy/`).
+It must also be decompressed prior to usage. The unpacked contents will be ~66GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`fastani/`, `markers/`, `masks/`, `metadata/`, `mrca_red/`, `msa/`, `pplacer/`, `radii/`, `taxonomy/`).
 
 
 [Back to top](#TOP)

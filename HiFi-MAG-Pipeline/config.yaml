@@ -64,7 +64,7 @@ gtdbtk:
   max_contamination: 10
   
   # The maximum number of contigs allowed in a genome bin.
-  max_contigs: 10
+  max_contigs: 20
   
   # The number of threads to use for gtdb-tk.
   threads: 48
@@ -79,5 +79,5 @@ gtdbtk:
   # Please note that the data for release 202 are ~50GB in size.
   # The path below must point to the directory than contains the following folders:
   # fastani, markers, masks, metadata, mrca_red, msa, pplacer, radii, taxonomy
-  gtdbtk_data: "/dept/appslab/datasets/dp_gtdb/release202/"
+  gtdbtk_data: "/dept/appslab/datasets/dp_gtdb/release207"
   
