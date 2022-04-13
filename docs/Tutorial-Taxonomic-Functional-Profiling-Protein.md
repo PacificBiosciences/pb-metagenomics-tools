@@ -278,7 +278,7 @@ Taxonomic-Functional-Profiling-Protein
 - `1-chunks/` temporarily holds the four chunks of an input reads file. Will be empty if no errors occur.
 - `2-diamond/` temporarily holds the four protein-SAM files generated per sample. Will be empty if no errors occur.
 - `3-merged/` contains the filtered and merged protein-SAM files for each sample. *These can be deleted if no other RMA files will be created.*
-- `4-rma/` contains final RMA files for MEGAN. **These are the main files of interest.** This includes `{sample}.filtered.protein.{mode}.rma` and `{sample}.unfiltered.protein.{mode}.rma`, which are the optimal filtered and unfiltered RMA files, respectively.
+- `4-rma/` contains final RMA files for MEGAN. **These are the main files of interest.** This includes `{sample}_filtered.protein.{mode}.rma` and `{sample}_unfiltered.protein.{mode}.rma`, which are the optimal filtered and unfiltered RMA files, respectively.
 
 If no additional RMA files are to be generated, you should remove all the large protein-SAM files from the `3-merged/` folder. 
 
