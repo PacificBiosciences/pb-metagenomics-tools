@@ -16,11 +16,11 @@
 
 # **Taxonomic-Functional-Profiling-Protein Overview** <a name="PO"></a>
 
-The purpose of this snakemake workflow is to perform translation alignment of HiFi reads to a protein database, and convert the resulting alignments to RMA input files for MEGAN6. This allows interactive taxonomic and functional analyses to be performed across samples. The general steps of the Taxonomic-Functional-Profiling-Protein pipeline are shown below:
+The purpose of this snakemake workflow is to perform translation alignment of HiFi reads to a protein database, and convert the resulting alignments to RMA input files for MEGAN-LR. This allows interactive taxonomic and functional analyses to be performed across samples. The general steps of the Taxonomic-Functional-Profiling-Protein pipeline are shown below:
 
 ![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Taxonomic-Functional-Profiling-Protein-Steps.png)
 
-Translation alignments of the HiFi reads to the protein database are performed using long-read settings in DIAMOND, resulting in a protein-SAM file. The specific long-read settings involve the `--range-culling` option. DIAMOND can take a very long time to run with large files. In this pipeline, the process is parallelized by splitting each file of HiFi reads into *n* chunks (default = 4). This allows a speedup when jobs are run simultaneously, and also reduces the resources required to run the jobs sequentially. The chunked protein-SAM files per sample are filtered for illegal CIGAR strings (frameshift characters) and merged into a single protein-SAM file. The resulting protein-SAM file is converted into long-read RMA format using the sam2rma tool distributed with MEGAN6. The settings for the RMA file are optimized to balance precision and recall, but can be changed for different use-cases. Each input file of HiFi reads will produce a corresponding output RMA file, ready to use with MEGAN6.  
+Translation alignments of the HiFi reads to the protein database are performed using long-read settings in DIAMOND, resulting in a protein-SAM file. The specific long-read settings involve the `--range-culling` option. DIAMOND can take a very long time to run with large files. In this pipeline, the process is parallelized by splitting each file of HiFi reads into *n* chunks (default = 4). This allows a speedup when jobs are run simultaneously, and also reduces the resources required to run the jobs sequentially. The chunked protein-SAM files per sample are filtered for illegal CIGAR strings (frameshift characters) and merged into a single protein-SAM file. The resulting protein-SAM file is converted into long-read RMA format using the sam2rma tool distributed with MEGAN-LR. The settings for the RMA file are optimized to balance precision and recall, but can be changed for different use-cases. Each input file of HiFi reads will produce two corresponding output RMA files (one filtered, one unfiltered), ready to use with MEGAN-LR.  
 
 
 [Back to top](#TOP)
@@ -32,7 +32,7 @@ Translation alignments of the HiFi reads to the protein database are performed u
 This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require ~60GB memory and 40-200GB disk space per sample (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps. Snakemake v5+ is required, and the workflows have been tested using v5.19.3.
 
 - Clone the Taxonomic-Functional-Profiling-Protein directory.
-- Download MEGAN6 community edition from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html) to obtain `sam2rma`. **Ensure you have at least version 6.19.+**
+- Download MEGAN6/MEGAN-LR community edition from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html) to obtain `sam2rma`. **Ensure you have at least version 6.19.+**
 - Download and unpack the newest MEGAN mapping file for NCBI-nr accessions from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html).
 - Download the NCBI-nr database from: ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz*
 - Index the NCBI-nr database with DIAMOND using `diamond makedb --in nr.gz --db diamond_nr_db --threads 24`. This will result in a `diamond_nr_db.dmnd` file that is ~150GB.
@@ -143,7 +143,7 @@ Depending on your system resources, you may choose to change the number of threa
 
 The `hit_limit` argument allows you to specify the type of hit limit method and corresponding value. You can choose between the `--top` method or `-k` method, which are used with the range-culling mode (see [DIAMOND documentation](http://www.diamondsearch.org/index.php?pages/command_line_options/)). The default is `--top 5`, meaning a hit will only be deleted if its score is more than 5% lower than that of a higher scoring hit over at least 50% of its query range. Using `-k 5` instead means that a hit will only be deleted if at least 50% of its query range is spanned by at least 5 higher or equal scoring hits. In general, the `-k` method will keep far fewer hits, and specifying `-k 1` will keep a single hit per query range. This can be useful for 1) very simple metagenomic communities, or 2) reducing the output file size. If you choose to modify the `hit_limit` argument, you will want to supply the complete DIAMOND flag (e.g., `-k 3` or `--top 10`).
 
-Finally, consider the `minSupportPercent` argument, which is the minimum support as percent of assigned reads required to report a taxon. The default in MEGAN is 0.05, but with HiFi the best value appears to be 0.01. This provides an optimal trade-off between precision and recall, with near perfect detection of species down to ~0.04% abundance. To avoid any filtering based on this threshold, use a value of 0 instead. This will report ALL assigned reads, which will potentially include thousands of false positives at ultra-low abundances (<0.01%), similar to results from short-read methods (e.g., Kraken2, Centrifuge, etc). Make sure you filter such files after the analysis to reduce false positives!
+Finally, consider the `minSupportPercent` argument, which is the minimum support as percent of assigned reads required to report a taxon. The default in MEGAN is 0.05, but with HiFi the best value appears to be 0.01. This provides an optimal trade-off between precision and recall, with near perfect detection of species down to ~0.04% abundance. To avoid any filtering based on this threshold, use a value of 0 instead. This will report ALL assigned reads, which will potentially include thousands of false positives at ultra-low abundances (<0.01%), similar to results from short-read methods (e.g., Kraken2, Centrifuge, etc). Make sure you filter such files after the analysis to reduce false positives! **Note:** This parameter will only affect the filtered RMA file; a second unfiltered RMA file is also produced by default.
 
 **You must also specify the full paths to `sam2rma`, the MEGAN mapping database file, and the indexed NCBI-nr database (`diamond_nr_db.dmnd`)**. 
 
@@ -278,7 +278,7 @@ Taxonomic-Functional-Profiling-Protein
 - `1-chunks/` temporarily holds the four chunks of an input reads file. Will be empty if no errors occur.
 - `2-diamond/` temporarily holds the four protein-SAM files generated per sample. Will be empty if no errors occur.
 - `3-merged/` contains the filtered and merged protein-SAM files for each sample. *These can be deleted if no other RMA files will be created.*
-- `4-rma/` contains final RMA files for MEGAN. **These are the main files of interest.**
+- `4-rma/` contains final RMA files for MEGAN. **These are the main files of interest.** This includes `{sample}_filtered.protein.{mode}.rma` and `{sample}_unfiltered.protein.{mode}.rma`, which are the optimal filtered and unfiltered RMA files, respectively.
 
 If no additional RMA files are to be generated, you should remove all the large protein-SAM files from the `3-merged/` folder. 
 
@@ -325,7 +325,7 @@ diamond blastx -d {params.db} -q {input} -o {output} -f 101 -F 5000 --range-cull
 
 ### sam2rma
 
-Run the sam2rma tool with long read settings (`-alg longReads`). The default readAssignmentMode (`-ram`) for long reads is `alignedBases`, and `readCount` for all else. This controls whether or not the abundance counts rely on the total number of bases, or the number of reads. I prefer the number of reads, but this option can be changed in the `config.yaml` file to use `alignedBases` instead. The `--minSupportPercent` argument controls the minimum percent of assigned reads required to report a taxon. The default for this pipeline is `0.01` (best tradeoff between precision and recall), but this can be lowered to `0.001` or `0.0001` to recover lots of species at ultra-low abundances (<0.01%). 
+Run the sam2rma tool with long read settings (`-alg longReads`). The default readAssignmentMode (`-ram`) for long reads is `alignedBases`, and `readCount` for all else. This controls whether or not the abundance counts rely on the total number of bases, or the number of reads. I prefer the number of reads, but this option can be changed in the `config.yaml` file to use `alignedBases` instead. The `--minSupportPercent` argument controls the minimum percent of assigned reads required to report a taxon. The default for this pipeline is `0.01` (best tradeoff between precision and recall). Note that a second unfiltered RMA file is produced using a value of `0` (enabling all read-hits to be reported).
 
 ```
 sam2rma -i {input.sam} -r {input.reads} -o {output} -lg -alg longReads -t {threads} -mdb {params.db} -ram {params.ram} --minSupportPercent {params.ms} -v 2> {log}
