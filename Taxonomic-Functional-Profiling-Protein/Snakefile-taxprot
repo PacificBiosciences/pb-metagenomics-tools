@@ -8,8 +8,8 @@ CHUNKS = [str(i) for i in list(range(0,config['diamond']['chunks']))]
 
 rule all:
     input:
-        expand("4-rma/{sample}.filtered.protein.{mode}.rma", sample = SAMPLES, mode = config['sam2rma']['readassignmentmode']),
-        expand("4-rma/{sample}.unfiltered.protein.{mode}.rma", sample = SAMPLES, mode = config['sam2rma']['readassignmentmode'])
+        expand("4-rma/{sample}_filtered.protein.{mode}.rma", sample = SAMPLES, mode = config['sam2rma']['readassignmentmode']),
+        expand("4-rma/{sample}_unfiltered.protein.{mode}.rma", sample = SAMPLES, mode = config['sam2rma']['readassignmentmode'])
 
 
 rule SplitFasta:
@@ -67,7 +67,7 @@ rule MakeRMAfiltered:
         sam = "3-merged/{sample}.merged.sam",
         reads = "inputs/{sample}.fasta"
     output:
-        expand("4-rma/{{sample}}.filtered.protein.{mode}.rma", mode = config['sam2rma']['readassignmentmode'])
+        expand("4-rma/{{sample}}_filtered.protein.{mode}.rma", mode = config['sam2rma']['readassignmentmode'])
     conda:
         "envs/general.yml"
     threads: config['sam2rma']['threads']
@@ -90,7 +90,7 @@ rule MakeRMAunfiltered:
         sam = "3-merged/{sample}.merged.sam",
         reads = "inputs/{sample}.fasta"
     output:
-        expand("4-rma/{{sample}}.unfiltered.protein.{mode}.rma", mode = config['sam2rma']['readassignmentmode'])
+        expand("4-rma/{{sample}}_unfiltered.protein.{mode}.rma", mode = config['sam2rma']['readassignmentmode'])
     conda:
         "envs/general.yml"
     threads: config['sam2rma']['threads']
