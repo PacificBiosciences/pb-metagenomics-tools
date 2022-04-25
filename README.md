@@ -2,6 +2,10 @@
 
 Welcome! Here you can find a variety of tools and pipelines tailored to using PacBio HiFi Reads for metagenomics. In addition to the resources currently available, we will continue to add new tools as they are developed.
 
+## Example HiFi Datasets
+
+Several publicly available HiFi shotgun metagenomics datasets are listed on the   [**PacBio-Data**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/PacBio-Data.md) page. These include multiple mock communities, reference standards, and empirical samples (human, chicken, and sheep gut microbiome).
+
 ## Available pipelines
 
 + [**HiFi-MAG-Pipeline**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/HiFi-MAG-Pipeline): (*previously called Genome-Binning-Pipeline*) Identify high-quality MAGs from HiFi metagenomic assemblies. Streamlined workflow includes steps with minimap2, MetaBAT2, CheckM, and GTDB-Tk. Outputs high-quality MAG sequences and associated metadata. 
