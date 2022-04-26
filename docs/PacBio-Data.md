@@ -1,6 +1,6 @@
 # PacBio HiFi Shotgun Metagenomics Datasets
 
-Below is a list of publicly available shotgun metagenomics datasets generated with PacBio HiFi sequencing. 
+Below is a list of publicly available shotgun metagenomics datasets generated with PacBio HiFi sequencing. This table can be downloaded in tab-delimited format from [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/PacBio-Data.md).
 
 |  Sample Type|  Details|  Platform|  Sequencing|  Total Reads|  Mean Read Length|  Total Data|  Median Quality|  NCBI Project|  NCBI Experiment|  SRA Accession|  Study|  Year|  
 |  ----|  ----|  ----|  ----|  ----:|  ----:|  ----:|  ----:|  ----|  ----|  ----|  ----|  ----|  
