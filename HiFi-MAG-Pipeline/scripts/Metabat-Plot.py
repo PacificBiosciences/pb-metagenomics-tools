@@ -53,7 +53,7 @@ def get_args():
 
 
 def create_unfiltered_joint_scatter(df, output):
-    sns.jointplot(df['Completeness'], df['Contamination'], s=50, alpha=0.7, xlim=(68,102), ylim=(-0.5,10.5))
+    sns.jointplot(data=df, x='Completeness', y='Contamination', s=50, alpha=0.7, xlim=(68,102), ylim=(-0.5,10.5))
     plt.savefig("{}".format(output))
     plt.close()
 
