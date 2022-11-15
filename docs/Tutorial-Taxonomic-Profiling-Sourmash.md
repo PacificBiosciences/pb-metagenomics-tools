@@ -102,18 +102,6 @@ Download prepared databases from: [https://sourmash.readthedocs.io/en/latest/dat
 ---------------
 
 
-
-
-
-
-
-
-
-
-
-
-#### text from Nucleotide profiling workflow ####
-
 # **3. Configuring the Analysis** <a name="CTA"></a>
 
 To configure the analysis, the main configuration file (`config.yaml`) and sample configuration file (`configs/Sample-Config.yaml`) should be edited. 
@@ -121,19 +109,12 @@ To configure the analysis, the main configuration file (`config.yaml`) and sampl
 #### Main configuration file (`config.yaml`)
 The main configuration file contains several parameters, each of which is described in the configuration file. 
 
-**NEW:** You can now change the number of fasta chunks to run with minimap2. Previous versions hard-coded this to 2 chunks, which is optimal for a HiFi fasta of 2.5 million reads. Smaller files will benefit from fewer chunks (such as 1). You can also increase the number of chunks for larger files, but the upper limit is 9. Increasing the number of chunks may also slow down the workflow, and the recommended value for minimap2 is 2.
-
-Depending on your system resources, you may choose to change the number of threads used in the minimap2 and sam2rma settings. An important parameter to consider is the number of secondary alignments to allow in minimap2 (`minimap2`:`secondary`). The default is 20. Increasing this number will likely increase the size of the resulting SAM file, and may or may not improve the LCA algorithm in MEGAN6.
-
-**If you are attempting to identify microbial contamination in targeted sequencing datasets:**
-Make sure to change the `sam2rma`:`minPercentReadCover` value to 40 or greater. This parameter controls the minimum percent of a HiFi read that must be covered by alignments to be considered. In general, small alignments (<1,000 bp) can occur with low quality bacteria sequences, and introduce false positives. By increasing the stringency requirements, these false positives can be eliminated.
-
-**You must also specify the full paths to `sam2rma`, the MEGAN mapping database file, and the indexed NCBI-nt database**. 
+By default, this workflow runs profiling with k-mer lengths of 31 and 51, but you can modify to choose one or both.
 
 #### Sample configuration file (`configs/Sample-Config.yaml`)
 The example sample configuration file is called `Sample-Config.yaml` and is located in the `configs/` directory. Here you should specify the sample names that you wish to include in the analysis. 
 
-For the Taxonomic-Profiling-Nucleotide pipeline, all samples specified in the sample configuration file must have a fasta file of HiFi reads (`SAMPLE.fasta`) in the `inputs/` folder. The pipeline can be run for any number of samples (though be aware of disk space requirements). You can also configure the file to only run for a subset of the samples present in the `inputs/` folder. Please note that if the input files do not follow the naming convention (`SAMPLE.fasta`), they will not be recognized by the workflow. You can use the actual files or symlinks to those files, both are compatible with snakemake.
+For the Taxonomic-Profiling-Sourmash pipeline, all samples specified in the sample configuration file must have a fasta file of HiFi reads (`SAMPLE.fasta`) in the `inputs/` folder. The pipeline can be run for any number of samples. You can also configure the file to only run for a subset of the samples present in the `inputs/` folder. Please note that if the input files do not follow the naming convention (`SAMPLE.fasta`), they will not be recognized by the workflow. You can use the actual files or symlinks to those files, both are compatible with snakemake.
 
 [Back to top](#TOP)
 
@@ -149,18 +130,18 @@ There are several ways to execute the workflow. The easiest way is to run snakem
 
 Snakemake can be run "locally" (e.g., without cluster configuration). Snakemake will automatically determine how many jobs can be run simultaneously based on the resources specified. This type of snakemake analysis can be run on a local system, but ideally it should be executed using an interactive HPC session (for example, `qrsh` with SGE or the SLURM equivalent).
 
-The workflow must be executed from within the directory containing all the snakemake contents for the Taxonomic-Profiling-Nucleotide pipeline. 
+The workflow must be executed from within the directory containing all the snakemake contents for the Taxonomic-Profiling-Sourmash pipeline. 
 
 ### Test workflow
 It is a good idea to test the workflow for errors before running it. This can be done with the following command:
 ```
-snakemake -np --snakefile Snakefile-taxnuc --configfile configs/Sample-Config.yaml
+snakemake -np --snakefile Snakefile-sourmash --configfile configs/Sample-Config.yaml
 ```
 
 Let's unpack this command:
 - `snakemake` calls snakemake.
 - `-np` performs a 'dry-run' where the rule compatibilities are tested but they are not executed.
-- `--snakefile Snakefile-taxnuc` tells snakemake to run this particular snakefile.
+- `--snakefile Snakefile-sourmash` tells snakemake to run this particular snakefile.
 - `--configfile configs/Sample-Config.yaml` tells snakemake to include the samples listed in the sample configuration file.
 
 The dry run command should result in a sequence of jobs being displayed on screen. 
@@ -168,19 +149,19 @@ The dry run command should result in a sequence of jobs being displayed on scree
 ### Create workflow figure
 If there are no errors, you may wish to generate a figure of the directed acyclic graph (the workflow steps). You can do this using the following command:
 ```
-snakemake --dag --snakefile Snakefile-taxnuc --configfile configs/Sample-Config.yaml | dot -Tsvg > taxfunc_analysis.svg
+snakemake --dag --snakefile Snakefile-sourmash --configfile configs/Sample-Config.yaml | dot -Tsvg > taxfunc_analysis.svg
 ```
 Here the `--dag` flag creates an output that is piped to `dot`, and an svg file is created. This will show the workflow visually.
 
 ### Execute workflow
 Finally, you can execute the workflow using:
 ```
-snakemake --snakefile Snakefile-taxnuc --configfile configs/Sample-Config.yaml -j 48 --use-conda
+snakemake --snakefile Snakefile-sourmash --configfile configs/Sample-Config.yaml -j 48 --use-conda
 ```
 
 There are a couple important arguments that were added here:
 
-- `-j 48` specifies that there are 48 threads available to use. You should change this to match the resources available. If more threads are specified in the configuration file than are available here, snakemake automatically scales them down to this number.
+- `-j 48` specifies that there are 48 threads available to use. You should change this to match the resources available. If more threads are specified in the configuration file than are available here, snakemake automatically scales them down to this number. Note that since sourmash is single-theaded, this will simply change the number of individual jobs that can be run at a single time. Do be aware of memory requirements (~40-100G for `sourmash gather` step when searching GenBank database).
 -  `--use-conda` allows conda to install the programs and environments required for each step. This is essential.
 
 Upon execution, the first step will be conda downloading packages and creating the correct environment. After, the jobs should begin running. You will see the progress on screen.
@@ -188,7 +169,7 @@ Upon execution, the first step will be conda downloading packages and creating t
 
 ## Cluster Configuration
 
-Executing snakemake on HPC with cluster configuration allows it schedule jobs and run  steps in parallel. This is the most efficient way to run snakemake.
+Executing snakemake on HPC with cluster configuration allows it schedule jobs and run steps in parallel. This is the most efficient way to run snakemake.
 
 There are several ways to run snakemake on HPC. There are limited instructions on cluster execution in the snakemake documentation [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html).
 
@@ -197,7 +178,7 @@ One easy way to run snakemake is to start an interactive session, and execute sn
 The same general commands are used as with "local" execution, but with some additional arguments to support cluster configuration. Below is an example of cluster configuration using SLURM:
 
 ```
-snakemake --snakefile Snakefile-taxnuc --configfile configs/Sample-Config.yaml --use-conda --cluster "sbatch --partition=compute --cpus-per-task={threads}" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+snakemake --snakefile Snakefile-sourmash --configfile configs/Sample-Config.yaml --use-conda --cluster "sbatch --partition=compute --cpus-per-task={threads}" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
 ```
 
 Let's unpack this command:
@@ -205,7 +186,7 @@ Let's unpack this command:
 - `--snakefile Snakefile-taxprot` tells snakemake to run this particular snakefile.
 - `--configfile configs/Sample-Config.yaml` tells snakemake to use this sample configuration file in the `configs/` directory. This file can have any name, as long as that name is provided here.
 -  `--use-conda` this allows conda to install the programs and environments required for each step. It is essential.
-- `--cluster "sbatch --partition=compute --cpus-per-task={threads}"` are the settings for execution with SLURM, where 'compute' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule. Note that the entire section in quotes can be replaced with an SGE equivalent (see below).
+- `--cluster "sbatch --partition=compute --cpus-per-task={threads}"` are the settings for execution with SLURM, where 'compute' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule (currently 1, since sourmash is single-threaded). Note that the entire section in quotes can be replaced with an SGE equivalent (see below).
 - `-j 5` will tell snakemake to run a maximum of 5 jobs simultaneously on the cluster. You can adjust this as needed.
 - `--jobname "{rule}.{wildcards}.{jobid}"` provides convenient names for your snakemake jobs running on the cluster.
 - `--latency-wait 60` this is important to include because there may be some delay in file writing between steps, and this prevents errors if files are not immediately found.
@@ -213,7 +194,7 @@ Let's unpack this command:
 And here is an example using SGE instead:
 
 ```
-snakemake --snakefile Snakefile-taxnuc --configfile configs/Sample-Config.yaml --use-conda --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+snakemake --snakefile Snakefile-sourmash --configfile configs/Sample-Config.yaml --use-conda --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
 ```
 - `--cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash"` are the settings for execution with SGE, where 'default' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule.
 
@@ -234,82 +215,28 @@ For information on how to run snakemake with AWS (Amazon Web Services), Google C
 Successful runs will result in several new directories:
 
 ```
-Taxonomic-Profiling-Nucleotide
+Taxonomic-Profiling-sourmash
 │
 ├── configs/
 ├── envs/
 ├── inputs/
 ├── scripts/
-├── Snakefile-genomebinning
+├── Snakefile-sourmash
 ├── config.yaml
 │
 ├── benchmarks/
 ├── logs/
 │
-├── 1-fasta-sort/
-│
-├── 2-chunks/
-│
-├── 3-minimap/
-│
-├── 4-sorted/
-│
-├── 5-merged/
-│
-└── 6-rma/
+├── output.sourmash-profiling/
+│   └── 1-sketch
+│   └── 2-gather
+│   └── 3-taxprofile
 ```
 
 - `benchmarks/` contains benchmark information on memory usage and I/O for each rule executed.
 - `logs/` contains log files for each rule executed. 
-- `1-fasta-sort/` contains the sorted HiFi reads fasta files. *These can be deleted if no other RMA files will be created.*
-- `2-chunks/` temporarily holds the two chunks for each sorted input reads file. Will be empty if no errors occur.
-- `3-minimap/` temporarily holds the two unsorted SAM files generated per sample (e.g., the direct outputs from minimap2). Will be empty if no errors occur.
-- `4-sorted/` temporarily holds the two sorted SAM files generated per sample. Will be empty if no errors occur.
-- `5-merged/` contains the sorted and merged SAM files for each sample. *These can be deleted if no other RMA files will be created.*
-- `6-rma/` contains final RMA files for MEGAN. **These are the main files of interest.**
-
-If no additional RMA files are to be generated, you should remove all the sorted fasta files in `1-fasta-sort/` and the large SAM files from the `5-merged/` folder. 
+- `1-sketch/` contains the k-mer sketches for each sample. 
+- `2-gather/` contains the genome-resolved taxonomic matches 
+- `3-taxprofile/` contains the LCA taxonomic profiles built from the genome match information
 
 [Back to top](#TOP)
-
----------------
-
-## **6. Usage Details for Main Programs** <a name="UDMP"></a>
-
-In this section, additional details are provided for the main programs used in the workflow. The commands to call these programs are provided here for quick reference. Curly braces are sections filled automatically by snakemake. For additional details on other steps, please refer to the Snakefile-taxnuc file.
-
-
-### exonerate
-
-Exonerate is used to split the fasta file into chunks, specifically using the `fastasplit` module:
-
-```
-fastasplit -c 2 -f {input} -o 2-chunks/
-```
-
-Chunks are named as `SAMPLE.fasta_chunk_0000000` and `SAMPLE.fasta_chunk_0000001`.   
-
-### Minimap2
-
-Minimap2 is used to align the HiFi reads to the nucleotide database. Here we are using settings appropriate for HiFi data:
-```
-minimap2 -a -k 19 -w 10 -I 10G -g 5000 -r 2000 -N 100 --lj-min-ratio 0.5 -A 2 -B 5 -O 5,56 -E 4,1 -z 400,50 --sam-hit-only -t {threads} {params.db} {input} 1> {output} 2> {log}
-```
-
-Note that the `-k 19` and `-w 10` are actually implemented when the database is indexed, which is why it is important to use `minimap2 -k 19 -w 10 -d mm2_nt_db.mmi nt.gz` for this purpose. If any other values are used during the indexing step, they will be automatically used here too (e.g., overriding `-k 19 -w 10`).
-
-**The most important flag for metagenomics is `-N 100`, which allows up to 100 secondary alignments in addition to the primary alignment.** This is critical for obtaining relevant hits that are used downstream in MEGAN.
-
-### sam2rma
-
-Run the sam2rma tool with long read settings (`-alg longReads`). The default readAssignmentMode (`-ram`) for long reads is `alignedBases`, and `readCount` for all else. This controls whether or not the abundance counts rely on the total number of bases, or the number of reads. I prefer the number of reads, but this option can be changed in the `config.yaml` file to use `alignedBases` instead.
-
-```
-sam2rma -i {input.sam} -r {input.reads} -o {output} -lg -alg longReads -t {threads} -mdb {params.db} -ram {params.ram} -v 2> {log}
-```
-
-In this case, we are using a MEGAN database that maps genomic DNA accessions to taxonomic classes.
-
-[Back to top](#TOP)
-
----------------
