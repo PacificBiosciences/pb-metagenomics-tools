@@ -6,6 +6,12 @@ sourmash:
   # k-mer size you want to run. These can be downloaded from:
   # https://sourmash.readthedocs.io/en/latest/databases.html 
   search_databases:
+
+    # estimatednumber of base pairs required for a database match.
+    # note that this affects runtime and memory. We recommend running
+    # with default threshold (50kb) first and then modifying if necessary.
+    threshold_bp: 50000
+
     k31:
       - databases/genbank-2022.03-archaea-k31.zip
       - databases/genbank-2022.03-bacteria-k31.zip
