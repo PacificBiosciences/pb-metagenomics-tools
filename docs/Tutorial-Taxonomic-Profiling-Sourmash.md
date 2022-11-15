@@ -183,7 +183,7 @@ snakemake --snakefile Snakefile-sourmash --configfile configs/Sample-Config.yaml
 
 Let's unpack this command:
 - `snakemake` calls snakemake.
-- `--snakefile Snakefile-taxprot` tells snakemake to run this particular snakefile.
+- `--snakefile Snakefile-sourmash` tells snakemake to run this particular snakefile.
 - `--configfile configs/Sample-Config.yaml` tells snakemake to use this sample configuration file in the `configs/` directory. This file can have any name, as long as that name is provided here.
 -  `--use-conda` this allows conda to install the programs and environments required for each step. It is essential.
 - `--cluster "sbatch --partition=compute --cpus-per-task={threads}"` are the settings for execution with SLURM, where 'compute' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule (currently 1, since sourmash is single-threaded). Note that the entire section in quotes can be replaced with an SGE equivalent (see below).
