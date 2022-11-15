@@ -1,0 +1,136 @@
+import os, sys
+import pandas as pd
+import glob
+
+configfile: "config.yaml"
+SAMPLES = config['samplenames']
+
+out_dir = 'output.sourmash-profiling'
+logs_dir = os.path.join(out_dir, "logs")
+benchmarks_dir = os.path.join(out_dir, "benchmarks")
+
+sourmash_params = config['sourmash']
+search_databases = sourmash_params['search_databases'] # must be dictionary
+ksize = sourmash_params.get("ksize", [31])
+if not isinstance(ksize, list):
+    ksize=[ksize]
+for k in ksize:
+    k_str = f"k{k}"
+    if k_str not in search_databases.keys():
+        raise ValueError(f"Database not specified for search ksize {k_str}. Please specify databases in `config.yaml` file.")
+        sys.exit(-1)
+
+
+onstart:
+    print("------------------------------")
+    print("sourmash taxonomic profiling workflow")
+    print("------------------------------")
+
+
+onsuccess:
+    print("\n--- Workflow executed successfully! ---\n")
+
+onerror:
+    print("Alas!\n")
+
+
+rule all:
+    input:
+        expand(os.path.join(out_dir, 'gather', '{sample}.k{ks}.gather.kreport.txt'), sample=SAMPLES, ks=ksize),
+        expand(os.path.join(out_dir, 'gather', '{sample}.k{ks}.gather.with-lineages.csv'),sample=SAMPLES, ks=ksize),
+
+
+rule sourmash_sketch_dna:
+    input: "inputs/{sample}.fasta"
+    output:
+        os.path.join(out_dir, "sketch", "{sample}.dna.sig.zip")
+    threads: 1
+    resources:
+        mem_mb=lambda wildcards, attempt: attempt *3000,
+        time=240,
+    log: os.path.join(logs_dir, "sketch", "{sample}.sketch_dna.log")
+    benchmark: os.path.join(benchmarks_dir, "sketch", "{sample}.sketch_dna.benchmark")
+    conda: "conf/env/sourmash.yml"
+    shell:
+        """
+        sourmash sketch dna {input} -p k=21,k=31,k=51,dna,scaled=1000,abund \
+                                    --name {wildcards.sample} -o {output} 2> {log}
+        """
+
+rule sourmash_gather:
+    input:
+        query=os.path.join(out_dir, "sketch", "{sample}.dna.sig.zip"),
+        databases = lambda w: search_databases[f"k{w.ksize}"],
+    output:
+        gather_csv=os.path.join(out_dir, 'gather', '{sample}.k{ksize}.gather.csv'),
+        gather_txt=os.path.join(out_dir, 'gather', '{sample}.k{ksize}.gather.txt'),
+    params:
+        threshold_bp = config.get('sourmash_database_threshold_bp', '50000'),
+    threads: 1
+    resources:
+        mem_mb=lambda wildcards, attempt: attempt *100000,
+        time=10000,
+    log: os.path.join(logs_dir, "gather", "{sample}.k{ksize}.gather.log")
+    benchmark: os.path.join(benchmarks_dir, "gather", "{sample}.k{ksize}.gather.benchmark")
+    conda: "conf/env/sourmash.yml"
+    shell:
+        # touch output to let workflow continue in cases where 0 results are found
+        """
+        echo "DB(s): {input.databases}"
+        echo "DB(s): {input.databases}" > {log}
+
+        sourmash gather {input.query} {input.databases} --dna --ksize {wildcards.ksize} \
+                 --threshold-bp {params.threshold_bp} \
+                 -o {output.gather_csv} > {output.gather_txt} 2>> {log}
+        
+        touch {output.gather_txt}
+        touch {output.gather_csv}
+        """
+
+rule tax_metagenome:
+    input:
+        gather = os.path.join(out_dir, 'gather', '{sample}.k{ksize}.gather.csv'),
+        lineages = sourmash_params['database_lineage_files'],
+    output:
+        os.path.join(out_dir, 'gather', '{sample}.k{ksize}.gather.krona.tsv'),
+        os.path.join(out_dir, 'gather', '{sample}.k{ksize}.gather.summarized.csv'),
+        os.path.join(out_dir, 'gather', '{sample}.k{ksize}.gather.kreport.txt'),
+    threads: 1
+    resources:
+        mem_mb=lambda wildcards, attempt: attempt *3000,
+        time=240,
+    params:
+        outd= lambda w: os.path.join(out_dir, f'gather'),
+        out_base= lambda w: f'{w.sample}.k{w.ksize}.gather.genbank',
+    conda: "conf/env/sourmash.yml"
+    log: os.path.join(logs_dir, "tax_metagenome", "{sample}.k{ksize}.tax_metagenome.log")
+    benchmark: os.path.join(benchmarks_dir, "tax_metagenome", "{sample}.k{ksize}.tax_metagenome.benchmark")
+    shell:
+        """
+        mkdir -p {params.outd}
+        sourmash tax metagenome -g {input.gather} -t {input.lineages} -o {params.out_base} \
+                                --output-dir {params.outd} --output-format krona csv_summary kreport \
+                                --rank species 2> {log}
+        """
+
+rule tax_annotate:
+    input:
+        gather = os.path.join(out_dir, 'gather', '{sample}.k{ksize}.gather.csv'),
+        lineages = sourmash_params['database_lineage_files'],
+    output:
+        os.path.join(out_dir, 'gather', '{sample}.k{ksize}.gather.with-lineages.csv'),
+    threads: 1
+    resources:
+        mem_mb=lambda wildcards, attempt: attempt *3000,
+        time=240,
+    params:
+        outd= lambda w: os.path.join(out_dir, f'gather'),
+    conda: "conf/env/sourmash.yml"
+    log: os.path.join(logs_dir, "tax_annotate", "{sample}.k{ksize}.tax_annotate.log")
+    benchmark: os.path.join(benchmarks_dir, "tax_annotate", "{sample}.k{ksize}.tax_annotate.benchmark")
+    shell:
+        """
+        mkdir -p {params.outd}
+        sourmash tax annotate -g {input.gather} -t {input.lineages} -o {params.outd} 2> {log}
+        """
+
