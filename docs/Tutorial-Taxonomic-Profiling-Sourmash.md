@@ -82,8 +82,7 @@ Finally, the `envs/` directory contains the `sourmash.yml` file which is needed 
 
 ## Memory and disk space requirements
 
-Running this pipeline using the default settings should require 10-100GB of memory, depending on your reads file size and chosen database. GenBank databases take approximately 40G of disk space and require 40G of memory and minimum.
-Minimal additional space is used by intermediate or output files.
+Running this pipeline using the default settings should require 10-100GB of memory, depending on your reads file size and chosen database. GenBank databases take approximately 40G of disk space and require 40G of memory and minimal additional space is used by intermediate or output files.
 
 ## Dependencies
 
