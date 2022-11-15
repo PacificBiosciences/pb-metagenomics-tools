@@ -1,6 +1,6 @@
-# Taxonomic-Profiling-Nucleotide
+# Taxonomic-Profiling-Sourmash
 
-Use sourmash to decompose reads into k-mers (`sketch`), find the smallest set of reference genome matches (`gather`), and build a taxonomic profile via Lowest Common Ancestor (LCA) summarization. Sourmash provides GTDB and NCBI databases, which can be downloaded from ["Prepared Databases"](https://sourmash.readthedocs.io/en/latest/databases.html) section of the documentation. At least one database is required for this workflow.
+Use `sourmash` to decompose reads into k-mers (`sketch`), find the smallest set of reference genome matches (`gather`), and build a taxonomic profile via Lowest Common Ancestor (LCA) summarization. Sourmash provides GTDB and NCBI databases, which can be downloaded from ["Prepared Databases"](https://sourmash.readthedocs.io/en/latest/databases.html) section of the documentation. At least one database is required for this workflow.
 
 This directory contains all the materials needed to run this snakemake workflow, except for databases and their corresponding taxonomic lineage files.
 
