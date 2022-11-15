@@ -1,0 +1,8 @@
+name: sourmash-env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.10
+  - sourmash>=4.5

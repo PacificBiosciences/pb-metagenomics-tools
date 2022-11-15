@@ -1,0 +1,8 @@
+name: pb-metagenomic-tools
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.10
+  - snakemake=7.18.2
