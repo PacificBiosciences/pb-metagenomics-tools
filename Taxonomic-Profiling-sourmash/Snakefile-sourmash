@@ -1,5 +1,4 @@
 import os, sys
-import pandas as pd
 import glob
 
 configfile: "config.yaml"

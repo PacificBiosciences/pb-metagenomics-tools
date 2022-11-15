@@ -6,4 +6,3 @@ channels:
 dependencies:
   - python=3.10
   - snakemake=7.18.2
-  - pandas>=1.5.1
