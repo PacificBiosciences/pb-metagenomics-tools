@@ -1,4 +1,4 @@
-# Tutorial for Taxonomic-Profiling-Nucleotide <a name="TOP"></a>
+# Tutorial for Taxonomic-Profiling-Sourmash <a name="TOP"></a>
 
 ## **Table of Contents**
 
