@@ -346,10 +346,15 @@ rule SummaryPlots:
         o2 = "8-summary/{sample}/{sample}.GenomeSizes-Depths.pdf"
     conda:
         "envs/python.yml"
+    params:
+        completeness = config['gtdbtk']['min_completeness'],
+        contamination = config['gtdbtk']['max_contamination'],
+        contigs = config['gtdbtk']['max_contigs']
     log: 
         "logs/{sample}.SummaryPlots.log"
     benchmark: 
         "benchmarks/{sample}.SummaryPlots.tsv"
     shell:
-        "python scripts/Summary-Plots.py -i {input} -l {wildcards.sample} -o1 {output.o1} "
-        "-o2 {output.o2} &> {log}"
+        "python scripts/Summary-Plots.py -i {input} -l {wildcards.sample} "
+        "-c1 {params.completeness} -c2 {params.contamination} "
+        "-o1 {output.o1} -o2 {output.o2} &> {log}"
