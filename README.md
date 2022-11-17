@@ -33,6 +33,7 @@ Available pipeline documentation:
 - [**Tutorial: Taxonomic-Functional-Profiling-Protein**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Functional-Profiling-Protein.md)
 - [**Tutorial: Taxonomic-Profiling-Nucleotide**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Profiling-Nucleotide.md)
 - [**Tutorial: MEGAN-RMA-Summary**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-MEGAN-RMA-summary.md)
+- [**Tutorial: Taxonomic-Profiling-Sourmash**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Profiling-Sourmash.md)
 
 The documentation for [pb-metagenomics-scripts](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-metagenomics-scripts) is provided in the folder.
 
