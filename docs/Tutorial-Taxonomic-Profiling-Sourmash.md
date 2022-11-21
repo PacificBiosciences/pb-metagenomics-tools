@@ -9,8 +9,6 @@
 + [3. Configuring the Analysis](#CTA)
 + [4. Executing Snakemake](#EXS)
 + [5. Outputs](#OTPS)
-+ [6. Usage Details for Main Programs](#UDMP)
-
 
 ---------------
 
@@ -19,6 +17,11 @@
 The purpose of this snakemake workflow is to generate a taxonomic profile for metagenome reads.
 
 Each fasta file is decomposed into k-mers and then searched against the provided database(s). Sourmash will find the minimum set of reference genomes that cover the information in the reads, and then use the lineage information from those genomes to build a taxonomic profile.
+
+For HiFi datasets, sourmash outperformed other available long-read classifiers. In mock communities, it detected species down to 0.001% relative abundance, displayed the best recall, and had high precision:
+
+![sourslam](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/FigureS2-Species-Precision-Recall-F1-HiFi.png)
+
 
 [Back to top](#TOP)
 
@@ -94,7 +97,7 @@ If you intend to generate a graphic for the snakemake workflow graph, you will a
 
 ## Download sourmash database file(s)
 
-Download prepared databases from: [https://sourmash.readthedocs.io/en/latest/databases.html](https://sourmash.readthedocs.io/en/latest/databases.html]). These databases range from 2G (GTDB representative genomes) to 40G (genbank genomes as of March 2022). Make sure to download the corresponding lineages file (`*csv.gz`) for each database you download.  **The path to these files must be specified in `config.yaml`.** You can alternatively build your own database of sourmash signatures for each.
+Download prepared databases from [here](https://sourmash.readthedocs.io/en/latest/databases.html]). These databases range from 2G (GTDB representative genomes) to 40G (genbank genomes as of March 2022). Make sure to download the corresponding lineages file (`*csv.gz`) for each database you download.  **The path to these files must be specified in `config.yaml`.** You can alternatively build your own database of sourmash signatures for each.
 
 [Back to top](#TOP)
 
