@@ -14,7 +14,7 @@ def get_args():
 
     parser.add_argument("-i", "--input",
                         required=True,
-                        help="The o2 format summary file from CheckM.")
+                        help="The o2 format summary file from CheckM (e.g. SAMPLE.qa.txt)")
     parser.add_argument("-l", "--label",
                         required=True,
                         help="A label for the plot.")
