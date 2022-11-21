@@ -14,7 +14,7 @@ def get_args():
 
     parser.add_argument("-i", "--input",
                         required=True,
-                        help="The o2 format summary file from CheckM.")
+                        help="The o2 format summary file from CheckM (e.g. SAMPLE.qa.txt)")
     parser.add_argument("-l", "--label",
                         required=True,
                         help="A label for the plot.")
@@ -52,13 +52,13 @@ def get_args():
     return parser.parse_args()
 
 
-def create_unfiltered_joint_scatter(df, output):
-    sns.jointplot(data=df, x='Completeness', y='Contamination', s=50, alpha=0.7, xlim=(68,102), ylim=(-0.5,10.5))
+def create_unfiltered_joint_scatter(df, output, completeness, contamination):
+    sns.jointplot(data=df, x='Completeness', y='Contamination', s=50, alpha=0.7, xlim=((completeness-2),102), ylim=(-0.5,(contamination+0.5)))
     plt.savefig("{}".format(output))
     plt.close()
 
-def create_unfiltered_scatter_bins(df, label, output):
-    ax = df.plot.scatter(x='Completeness', y='Contamination', s=40, alpha=0.9, xlim=(68,102), ylim=(-0.5,10.5))
+def create_unfiltered_scatter_bins(df, label, output, completeness, contamination):
+    ax = df.plot.scatter(x='Completeness', y='Contamination', s=40, alpha=0.9, xlim=((completeness-2),102), ylim=(-0.5,(contamination+0.5)))
     for i, txt in enumerate(df['Bin Id']):
         ax.annotate("{}".format(txt.replace(label+"_", "")), (df['Completeness'].iat[i], df['Contamination'].iat[i]),
                     xytext=(df['Completeness'].iat[i] + 0.15, df['Contamination'].iat[i] + 0.15),
@@ -69,8 +69,8 @@ def create_unfiltered_scatter_bins(df, label, output):
     plt.savefig("{}".format(output))
     plt.close()
     
-def create_unfiltered_scatter_contigs(df, label, output):
-    ax = df.plot.scatter(x='Completeness', y='Contamination', s=40, alpha=0.9, xlim=(68,102), ylim=(-0.5,10.5))
+def create_unfiltered_scatter_contigs(df, label, output, completeness, contamination):
+    ax = df.plot.scatter(x='Completeness', y='Contamination', s=40, alpha=0.9, xlim=((completeness-2),102), ylim=(-0.5,(contamination+0.5)))
     for i, txt in enumerate(df['# contigs']):
         ax.annotate(txt, (df['Completeness'].iat[i], df['Contamination'].iat[i]),
                     xytext=(df['Completeness'].iat[i] + 0.15, df['Contamination'].iat[i] + 0.15),
@@ -81,16 +81,16 @@ def create_unfiltered_scatter_contigs(df, label, output):
     plt.savefig("{}".format(output))
     plt.close()
 
-def create_filtered_scatter(df, label, output):
-    ax = df.plot.scatter(x='Completeness', y='Contamination', s=40, alpha=0.9, xlim=(68,102), ylim=(-0.5,10.5))
+def create_filtered_scatter(df, label, output, completeness, contamination):
+    ax = df.plot.scatter(x='Completeness', y='Contamination', s=40, alpha=0.9, xlim=((completeness-2),102), ylim=(-0.5,(contamination+0.5)))
     plt.xlabel('Genome Completeness')
     plt.ylabel('Genome Contamination')
     plt.title("Filtered Genome Bins: {}".format(label))
     plt.savefig("{}".format(output))
     plt.close()
 
-def create_filtered_scatter_contigs(df, label, output):
-    ax = df.plot.scatter(x='Completeness', y='Contamination', s=40, alpha=0.9, xlim=(68,102), ylim=(-0.5,10.5))
+def create_filtered_scatter_contigs(df, label, output, completeness, contamination):
+    ax = df.plot.scatter(x='Completeness', y='Contamination', s=40, alpha=0.9, xlim=((completeness-2),102), ylim=(-0.5,(contamination+0.5)))
     for i, txt in enumerate(df['# contigs']):
         ax.annotate(txt, (df['Completeness'].iat[i], df['Contamination'].iat[i]),
                     xytext=(df['Completeness'].iat[i] + 0.1, df['Contamination'].iat[i] + 0.15),
@@ -101,8 +101,8 @@ def create_filtered_scatter_contigs(df, label, output):
     plt.savefig("{}".format(output))
     plt.close()
 
-def create_filtered_scatter_bins(df, label, output):
-    ax = df.plot.scatter(x='Completeness', y='Contamination', s=40, alpha=0.9, xlim=(68,102), ylim=(-0.5,10.5))
+def create_filtered_scatter_bins(df, label, output, completeness, contamination):
+    ax = df.plot.scatter(x='Completeness', y='Contamination', s=40, alpha=0.9, xlim=((completeness-2),102), ylim=(-0.5,(contamination+0.5)))
     for i, txt in enumerate(df['Bin Id']):
         ax.annotate("{}".format(txt.replace(label+"_", "")), (df['Completeness'].iat[i], df['Contamination'].iat[i]),
                     xytext=(df['Completeness'].iat[i] + 0.1, df['Contamination'].iat[i] + 0.12),
@@ -119,12 +119,12 @@ def main():
     df = pd.read_csv(args.input, sep='\t')
     scatfilt = (df['Completeness'] >= args.completeness) & (df['Contamination'] <= args.contamination) & (df['# contigs'] < args.contigs)
     filt = df[scatfilt]
-    create_unfiltered_joint_scatter(df, args.output1)
-    create_unfiltered_scatter_contigs(df, args.label, args.output2)
-    create_unfiltered_scatter_bins(df, args.label, args.output3)
-    create_filtered_scatter(filt, args.label, args.output4)
-    create_filtered_scatter_contigs(filt, args.label, args.output5)
-    create_filtered_scatter_bins(filt, args.label, args.output6)
+    create_unfiltered_joint_scatter(df, args.output1, args.completeness, args.contamination)
+    create_unfiltered_scatter_contigs(df, args.label, args.output2, args.completeness, args.contamination)
+    create_unfiltered_scatter_bins(df, args.label, args.output3, args.completeness, args.contamination)
+    create_filtered_scatter(filt, args.label, args.output4, args.completeness, args.contamination)
+    create_filtered_scatter_contigs(filt, args.label, args.output5, args.completeness, args.contamination)
+    create_filtered_scatter_bins(filt, args.label, args.output6, args.completeness, args.contamination)
 
 if __name__ == '__main__':
     main()
