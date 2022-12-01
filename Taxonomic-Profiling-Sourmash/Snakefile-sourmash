@@ -36,7 +36,7 @@ onerror:
 rule all:
     input:
         expand(os.path.join(out_dir, '2-gather', '{sample}.k{ks}.gather.with-lineages.csv'),sample=SAMPLES, ks=ksize),
-        expand(os.path.join(out_dir, '3-taxprofile', '{sample}.k{ks}.gather.kreport.txt'), sample=SAMPLES, ks=ksize),
+        expand(os.path.join(out_dir, '3-taxprofile', '{sample}.k{ks}.gather.genbank.kreport.txt'), sample=SAMPLES, ks=ksize),
 
 
 rule sourmash_sketch_dna:
@@ -91,9 +91,9 @@ rule tax_metagenome:
         gather = os.path.join(out_dir, '2-gather', '{sample}.k{ksize}.gather.csv'),
         lineages = sourmash_params['database_lineage_files'],
     output:
-        os.path.join(out_dir, '3-taxprofile', '{sample}.k{ksize}.gather.krona.tsv'),
-        os.path.join(out_dir, '2-taxprofile', '{sample}.k{ksize}.gather.summarized.csv'),
-        os.path.join(out_dir, '3-taxprofile', '{sample}.k{ksize}.gather.kreport.txt'),
+        os.path.join(out_dir, '3-taxprofile', '{sample}.k{ksize}.gather.genbank.krona.tsv'),
+        os.path.join(out_dir, '3-taxprofile', '{sample}.k{ksize}.gather.genbank.summarized.csv'),
+        os.path.join(out_dir, '3-taxprofile', '{sample}.k{ksize}.gather.genbank.kreport.txt'),
     threads: 1
     resources:
         mem_mb=lambda wildcards, attempt: attempt *3000,
