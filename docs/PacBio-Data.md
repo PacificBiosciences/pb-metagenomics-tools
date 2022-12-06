@@ -2,7 +2,7 @@
 
 + *Last updated: December 2022*
 
-Below is a list of publicly available shotgun metagenomics datasets generated with PacBio HiFi sequencing. This table is available in tab-delimited format [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/PacBio-Data.txt).
+Below is a list of publicly available shotgun metagenomics datasets generated with PacBio HiFi sequencing. This table is available in tab-delimited format [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/PacBio-Data.txt), and in excel format [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/PacBio-Data.xlsx).
 
 |  Sample Type|  Details|  Platform|  Sequencing|  Total Reads|  Mean Read Length (kb)|  Total Data (Gb)|  Median Quality|  Project|  Experiment|  SRA Accession|  Study|  Year|  
 |  ----|  ----|  ----|  ----|  ----:|  ----:|  ----:|  ----:|  ----|  ----|  ----|  ----|  ----|  
