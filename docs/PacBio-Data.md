@@ -66,6 +66,7 @@ A visual summary of the datasets is shown below:
 |  Empirical|  Cheese rind microbiome (We-3-6-CheeseC)|  Sequel II System|  2plex on 1 SMRT Cell 8M|  613,716|  13.4 kb|  8.3 Gb|  Q31|  [PRJNA778418](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA778418)|  [SRX14626933](https://www.ncbi.nlm.nih.gov/sra/SRX14626933)|  [SRR18495445](https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR18495445)|  [Saak et al. 2022](https://www.biorxiv.org/content/10.1101/2022.07.01.497845v1)|  2022|  
 |  Empirical|  Cheese rind microbiome (We-3-5-CheeseC)|  Sequel II System|  2plex on 1 SMRT Cell 8M|  516,974|  12.1 kb|  6.3 Gb|  Q32|  [PRJNA778418](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA778418)|  [SRX14626932](https://www.ncbi.nlm.nih.gov/sra/SRX14626932)|  [SRR18495446](https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR18495446)|  [Saak et al. 2022](https://www.biorxiv.org/content/10.1101/2022.07.01.497845v1)|  2022|  
 |  Empirical|  Cheese rind microbiome (We-3-2-CheeseC)|  Sequel II System|  2plex on 1 SMRT Cell 8M|  521,875|  12.9 kb|  6.8 Gb|  Q34|  [PRJNA778418](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA778418)|  [SRX14626929](https://www.ncbi.nlm.nih.gov/sra/SRX14626929)|  [SRR18495449](https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR18495449)|  [Saak et al. 2022](https://www.biorxiv.org/content/10.1101/2022.07.01.497845v1)|  2022|  
+|  Empirical|  Saline lake sediment microbiome|  Sequel II System|  1 SMRT Cell 8M| 2,033,496|  4.5 kb|  9.1 Gb|  Q45|  [CNP0003352](https://db.cngb.org/search/project/CNP0003352/)|  [CNX0487864](https://db.cngb.org/search/experiment/CNX0487864/)|  [CNR0579765](https://db.cngb.org/search/run/CNR0579765/)|  [Tao et al. 2022](https://doi.org/10.1128/spectrum.03328-22)|  2022|  
 
 
 ## References
@@ -84,15 +85,17 @@ A visual summary of the datasets is shown below:
 
 + Noonan, A.J.C, Qiu, Y., Kieft, B., Formby, S., Liu, T., Dofher, K., Koch, M., and S.J. Hallam. 2022. Metagenome-assembled genomes for “Candidatus Phormidium sp. Strain AB48” and co-occurring microorganisms from an industrial photobioreactor environment. *Microbiology Resource Announcements*, e0044722. https://doi.org/10.1128/mra.00447-22
 
-+ Plaza Onate, F., Roume, H., and M. Almeida. 2022. Recovery of metagenome-assembled genomes from a human fecal sample with Pacific Biosciences high-fidelity sequencing. *Microbiology Resource Announcements*, 11: e0025022. https://doi.org/10.1128/mra.00250-22
-
 + Patin, N.V., and K.D. Goodwin. 2022. Long-read sequencing improves recovery of picoeukaryotic genomes and zooplankton marker genes from marine metagenomes. *mSystems*, online early. https://doi.org/10.1128/msystems.00595-22
+
++ Plaza Onate, F., Roume, H., and M. Almeida. 2022. Recovery of metagenome-assembled genomes from a human fecal sample with Pacific Biosciences high-fidelity sequencing. *Microbiology Resource Announcements*, 11: e0025022. https://doi.org/10.1128/mra.00250-22
 
 + Priest, T., Orellana, L.H., Huettel, B., Fuchs, B.M., and R. Amann. 2021. Microbial metagenome-assembled genomes of the Fram Strait from short and long read sequencing platforms. *PeerJ*, 9: e11721. https://doi.org/10.7717/peerj.11721
 
 + Saak, C.C., Pierce, E.C., Dinh, C.B., Portik, D., Hall, R., Ashby, M., and R.J. Dutton. 2022. Longitudinal, multi-platform metagenomics yields a high-quality genomic catalog and guides an in vitro model for cheese communities. *mSystems*, Accepted. https://www.biorxiv.org/content/10.1101/2022.07.01.497845v1
 
 + Sereika, M., Kirkegaard, R.H., Karst, S.M., Michaelsen, T.Y., Sorensen, E.A., Wollenberg, R.D., and M. Albertsen. 2022. Oxford Nanopore R10.4 long-read sequencing enables the generation of near-finished bacterial genomes from pure cultures and metagenomes without short-read or reference polishing. *Nature Methods*, 19: 823-826. https://doi.org/10.1038/s41592-022-01539-7
+
++ Tao, Y., Xun, F., Zhao, C., Mao, Z., Li, B.,  Xing, P., and Q.L. Wu. 2022. Improved assembly of metagenome-assembled genomes and viruses in Tibetan saline lake sediment by HiFi metagenomic sequencing. *Microbiology Spectrum*, Online Early. https://doi.org/10.1128/spectrum.03328-22 
 
 + Zhang, Y., Jiang, F., Yang, B., Wang, S., Wang, H., Wang, A., Xu, D., and W. Fan. 2022. Improved microbial genomes and gene catalog of the chicken gut from metagenomic sequencing of high-fidelity long reads. *GigaScience*, 11: 1-12. https://doi.org/10.1093/gigascience/giac116
 
