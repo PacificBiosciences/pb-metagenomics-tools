@@ -1,0 +1,15 @@
+name: maxbin_env
+channels:
+- bioconda
+- conda-forge
+dependencies:
+- maxbin2 == 2.2.7
+- fraggenescan >= 1.30
+- bowtie2
+- hmmer
+- idba
+- perl >= 5.22
+- perl-lwp-simple
+- r-base
+- r-gplots
+- tar

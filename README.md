@@ -8,7 +8,7 @@ Several publicly available HiFi shotgun metagenomics datasets are listed on the 
 
 ## Available pipelines
 
-+ [**HiFi-MAG-Pipeline**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/HiFi-MAG-Pipeline): (*previously called Genome-Binning-Pipeline*) Identify high-quality MAGs from HiFi metagenomic assemblies. Streamlined workflow includes steps with minimap2, MetaBAT2, CheckM, and GTDB-Tk. Outputs high-quality MAG sequences and associated metadata. 
++ [**HiFi-MAG-Pipeline**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/HiFi-MAG-Pipeline): Identify high-quality MAGs from HiFi metagenomic assemblies. Streamlined workflow includes a customized binning strategy (MetaBAT2, MaxBin2, CONCOCT, & circular-aware binning), bin merging with DAS_Tool, QC with CheckM, and taxonomy with GTDB-Tk. Outputs high-quality MAG sequences and associated metadata. 
 
 + [**Taxonomic-Functional-Profiling-Protein**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Functional-Profiling-Protein): Align HiFi reads to a **protein** database using DIAMOND and prepare inputs for MEGAN-LR, for the purpose of taxonomic and functional profiling. Provides access to taxonomic annotations (NCBI and GTDB), and allows functional annotations based on several databases (EC, SEED, InterPro2GO, eggNOG). Easily summarize taxonomic and functional results using [MEGAN-RMA-Summary](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/MEGAN-RMA-summary).
 
@@ -22,7 +22,11 @@ Each of these pipelines can be found in their respective folders. They are made 
 
 ## Other tools
 
-Scripts and tools for metagenomics tasks are available in the [**pb-metagenomics-scripts**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-metagenomics-scripts) folder. Currently, there are several scripts to convert the outputs from metagenomics taxonomic profiling programs into standard formats, including kraken report (kreport) and metaphlan report (mpa) formats. There is also a Jupyter notebook that demonstrates how to analyze and compare kraken report files for multiple samples.
+Scripts and tools for metagenomics tasks are available in the [**pb-metagenomics-scripts**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-metagenomics-scripts) folder. Currently, there are scripts or notebooks to perform the following tasks: 
+
++ Convert outputs from common metagenomics profiling/classification programs into standard formats, including kraken report (kreport) and metaphlan report (mpa) formats. 
+
++ Compare kraken report files across multiple samples, with several visualization options.
 
 ## Documentation 
 

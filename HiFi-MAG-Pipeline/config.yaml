@@ -12,13 +12,11 @@
 # into different files, as binning is performed several ways using these file sets.
 assembler: "hifiasm-meta"
 
-
 # The path to use as the temporary directory to write large files to, which is used with the
 # --tmpdir flag in checkm, and the --scratch_dir flag in gtdb. If using HPC, use "/scratch" 
 # if you have access. If you do not have access to "/scratch" on HPC or are running 
 # snakemake locally, change to a valid directory.
 tmpdir: "/scratch"
-
 
 minimap:
   # The number of threads to use for minimap2.
@@ -27,7 +25,23 @@ minimap:
 metabat:
   # The number of threads to use for metabat2.
   threads: 12
+  # minimum size of contig to be included in binning
+  min_contig_size: 50000
 
+concoct:
+  # The number of threads to use for concoct.
+  threads: 24
+  # size of chunks to cut contigs into (required)
+  cut_size: 100000
+  # minimum size of contig to be included in binning
+  min_contig_size: 50000
+
+maxbin:
+  # The number of threads to use for maxbin.
+  threads: 24
+  # minimum size of contig to be included in binning
+  min_contig_size: 50000
+  
 dastool:
   # The number of threads to use for DAS Tool.
   threads: 24
@@ -55,7 +69,6 @@ checkm:
   # distributions, genome_tree, hmms, hmms_ssu, img, pfam, test_data, and the two tsv files.
   datapath: "/dept/appslab/datasets/dp_checkm/"
   
-  
 gtdbtk:
   # The minimum percent completeness for a genome bin.
   min_completeness: 70
@@ -76,8 +89,8 @@ gtdbtk:
   # To download the latest release you can use:
   # wget https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_data.tar.gz
   # tar -xvzf gtdbtk_data.tar.gz  
-  # Please note that the data for release 202 are ~50GB in size.
+  # Please note that the data for release 207 are >68GB in size.
   # The path below must point to the directory than contains the following folders:
-  # fastani, markers, masks, metadata, mrca_red, msa, pplacer, radii, taxonomy
+  # fastani, markers, masks, metadata, mrca_red, msa, pplacer, radii, split, taxonomy
   gtdbtk_data: "/dept/appslab/datasets/dp_gtdb/release207"
   
