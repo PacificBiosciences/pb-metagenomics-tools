@@ -18,20 +18,20 @@
 
 The purpose of this snakemake workflow is to obtain high-quality metagenome-assembled genomes (MAGs) from previously generated assemblies. The general steps of the HiFi-MAG-Pipeline are shown below:
 
-![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/HiFi-MAG-Summary.png)
+![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-HiFi-MAG-Summary.png)
 
-HiFi reads are first mapped to contigs using minimap2 to generate BAM files. The BAM files are used to obtain coverage estimates for the contigs. The coverages and contigs are used as inputs to MetaBAT2, which constructs the genome bins. **New feature in v1.4+:** Bins are constructed in three ways: 1) using the full set of contigs for MetaBat2 binning, 2) using only linear contigs for MetaBat2 binning, and 3) assigning circular contigs to bins directly. These binning strategies are subsequently compared and merged using DAS_Tool. 
+HiFi reads are first mapped to contigs using minimap2 to generate BAM files. The BAM files are used to obtain coverage estimates for the contigs. The coverages and contigs are used as inputs to MetaBAT2, CONCOCT, and MaxBin2 which construct the genome bins. Circular-aware binning is also employed in an attempt to identify complete, circular contigs alongside the binning. All bins are subsequently compared and merged using DAS_Tool. 
 
-![Binning](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/HiFi-MAG-Binning.png)
+![Binning](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-HiFi-MAG-Binning.png)
 
-This improved method prevents improper binning of complete, circular contigs and provides a 8–28% increase in total MAGs and 28–73% increase in single contig MAGs.
+The multiple binning algorithms and circular-aware strategy tend to prevent improper binning of complete, circular contigs. It provides a 15–64% increase in total MAGs and an 8–100% increase in single contig MAGs (relative to using MetaBat2 only). The figure below shows side-by-side comparisons for several publicly available datasets (listed [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/PacBio-Data.md); **std** = binning with MetaBat2 only, **HiFi** = HiFi-MAG-Pipeline). 
 
-![Improvement](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/HiFi-MAG-Pipeline-Update.png)
+![Improvement](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-HiFi-MAG-Pipeline-Update.png)
 
 
 The merged bin set is then screened with CheckM to assess the quality of the resulting genome bins. It provides measures of genome completeness, contamination, and other useful metrics. A custom filtering step is used to eliminate genome bins with <70% genome completeness, >10% genome contamination, and >10 contigs per bin. These are default values, and they can be changed. The genome bins which pass the default thresholds can be considered high-quality MAGs. Finally, the Genome Taxonomy Database Toolkit (GTDB-Tk) is used to identify the closest reference match to each high-quality MAG. It will report the taxonomy of the closest reference. **This does not guarantee the identity of the MAG, but serves as a starting point for understanding which genus, species, or strain it is most closely related to.** Outputs include several visualizations of the final bin/MAG characteristics, the sequences for all bins/MAGs passing filters, and pairs of bins:reference sequences when a GTDB closest match was found.
 
-![MAGs](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/MAG-characteristics.png)
+![MAGs](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-MAG-characteristics.png)
 
 [Back to top](#TOP)
 
@@ -69,8 +69,10 @@ HiFi-MAG-Pipeline
 │
 ├── envs/
 │	├── checkm.yml
+│	├── concoct.yml
 │	├── dastool.yml
 │	├── gtdbtk.yml
+│	├── maxbin.yml
 │	├── metabat.yml
 │	├── python.yml
 │	└── samtools.yml
@@ -79,6 +81,7 @@ HiFi-MAG-Pipeline
 │	└── README.md (this is just a placeholder file, and not required)
 │
 ├── scripts/
+│	├── CheckBins.py
 │	├── CheckM-to-batch-GTDB.py
 │	├── Copy-Circ-Contigs.py
 │	├── Filter-CircLin-Contigs.py
@@ -150,7 +153,7 @@ The downloaded file must be decompressed to use it. The unpacked contents will b
 
 Complete instructions for the GTDB-Tk database can be found at: https://ecogenomics.github.io/GTDBTk/installing/index.html
 
-**As of April 2022, this workflow now uses GTDB-Tk v2.0+, which requires GTDB 07-RS207 (release 207).**
+**This workflow currently uses GTDB-Tk v2.1+, which requires GTDB 07-RS207 (release 207).**
 
 The current GTDB release can be downloaded from: 
 https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_data.tar.gz
@@ -302,12 +305,14 @@ HiFi-MAG-Pipeline
 │
 ├── 1-contigs/
 ├── 2-bam/
+├── 3-concoct/
+├── 3-maxbin/
 ├── 3-metabat-bins-full/
 ├── 3-metabat-bins-linear-circ/
 ├── 4-DAStool/
 ├── 5-checkm/
 ├── 6-checkm-summary/
-├── 7-gtdb-individual/
+├── 7-gtdbtk/
 └── 8-summary/
 
 
@@ -317,12 +322,14 @@ HiFi-MAG-Pipeline
 - `logs/` contains log files for each rule executed.
 - `1-contigs/` contains separated fasta files for circular and linear contigs, with a summary file for each (containing names of contigs, lengths).
 - `2-bam/` contains the sorted bam files from mapping reads to full contig set using minimap2.
+- `3-concoct/` contains the outputs from concoct, per sample, using the full contig set for binning.
+- `3-maxbin/` contains the outputs from maxbin2, per sample, using the full contig set for binning.
 - `3-metabat-bins-full/` contains the outputs from metabat2, per sample, using the full contig set for binning.
 - `3-metabat-bins-linear-circ/` contains the outputs from metabat2, per sample, using the linear contig set for binning. Bins are also created for each circular contig here.
 - `4-DAStool/` contains outputs from DAS_Tool for bin merging, per sample.
 - `5-checkm/` contains CheckM results for merged bins, per sample.
 - `6-checkm-summary/` contains intermediate summary files, per sample.
-- `7-gtdb-individual/` contains gtdb-tk results for the CheckM filtered bins, per sample.
+- `7-gtdb/` contains gtdb-tk results for the CheckM filtered bins, per sample.
 - `8-summary/` **contains the main output files of interest**.
 
 Within `8-summary/`, there will be a folder for each sample. Within a sample folder there are several items:
@@ -349,32 +356,79 @@ Map HiFi reads to contigs using minimap2 metagenomic HiFi settings, pipe output 
 minimap2 -a -k 19 -w 10 -I 10G -g 5000 -r 2000 --lj-min-ratio 0.5 -A 2 -B 5 -O 5,56 -E 4,1 -z 400,50 --sam-hit-only -t {threads} {input.contigs} {input.reads} 2> {log} | samtools sort -@ {threads} -o {output}"
 ```
 
+### CONCOCT
+
+Usage follows general procedure but default contig cut size is increased to 100,000 bases and minimum contig size for clustering is set to 50000 (accessible in the config file). 
+
+Cut contigs.
+```
+cut_up_fasta.py {input.contigs} -c {params.cut_size} -o 0 --merge_last -b {output.bed} 1> {output.cut} 2> {log} 
+```
+
+Get coverages.
+```
+concoct_coverage_table.py {input.bed} {input.bam} 1> {output} 2> {log} 
+```
+
+Run concoct. The `params.min_contig_size` param is set to 50000 in the config file.
+```
+concoct --composition_file {input.cut} --coverage_file {input.cov} -l {params.min_contig_size} -b {output.outdir} -t {threads} 2> {log}
+```
+
+Merge contigs.
+```
+merge_cutup_clustering.py {input} 1> {output} 2> {log}
+```
+
+Write bins.
+```
+extract_fasta_bins.py {input.contigs} {input.merge} --output_path {input.outdir} 2> {log} && touch {output.complete} 
+```
+
+### MaxBin2
+
+Run maxbin2, default minimum contig size is set to 50000 (accessible in config file).
+```
+run_MaxBin.pl -contig {input.contigs} -out {wildcards.sample}  -abund {input.maxbindepths} -min_contig_length {params.min_contig_size} -thread  {threads} &> {log} && touch {output.complete}
+```
+
+
 ### MetaBAT2
 
-Convert bam file to depth file for metabat2 using metabat2 helper tool:
+Convert bam file to depth file for metabat2 using metabat2 helper tool.
 ```
 jgi_summarize_bam_contig_depths --outputDepth {output} {input.bam} 2> {log}
 ```
 
-Running metabat2:
+Run metabat2.
 ```
-metabat2 -i {input.contigs} -a {input.depths} -o {params.prefix} -t {threads} -v &> {log}
+metabat2 -i {input.contigs} -a {input.depths} -o {params.prefix} -t {threads} -m {params.min_contig_size} -v &> {log} && touch {output.complete}
 ```
+
+
+### DAS_Tool
+
+Inputs for DAS_Tool are made along the way for other binning methods. This assumes multiple strategies are being used.
+```
+DAS_Tool -i {input.lincirc},{input.full},{input.maxbin},{input.concoct} -c {input.contigs} -l lincirc,metabat2,maxbin2,concoct -o {params.outlabel} --search_engine {params.search}  --write_bins 1 -t {threads} --score_threshold {params.thresh} --debug &> {log} && touch {output.complete}
+```
+
 
 ### CheckM
 
-Set the datapath for checkm database and then run checkm:
+Set the datapath for checkm database and then run checkm.
 ```
 checkm data setRoot {params.datapath} &> {log.root} && checkm lineage_wf -x fa -t {threads} --pplacer_threads {params.ppthreads} --tmpdir /scratch {params.indir} {params.outdir} &> {log.run}
 ```
 
-Summarize results in tabular format:
+Summarize results in tabular format.
 ```
 checkm qa -o2 {input} {params.outdir} -f {output} --tab_table &> {log}
 ```
 
 ### GTDB-Tk
-Set datapath and run gtdbtk:
+
+Set datapath and run gtdbtk.
 ```
 GTDBTK_DATA_PATH={params.gtdbtk_data:q} gtdbtk classify_wf --batchfile {input} --out_dir {params.outdir} -x fa --prefix {wildcards.sample} --cpus {threads} --pplacer_cpus {params.ppthreads} --scratch_dir /scratch &> {log}
 ```

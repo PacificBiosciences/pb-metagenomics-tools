@@ -1,6 +1,6 @@
 # HiFi-MAG-Pipeline
 
-Obtain high-quality MAGs from HiFi assemblies with a streamlined workflow. Includes steps with minimap2, MetaBAT2, CheckM, and GTDB-Tk.
+Obtain high-quality MAGs from HiFi assemblies with a streamlined workflow. Includes a customized binning strategy (MetaBAT2, MaxBin2, CONCOCT, & circular-aware binning), bin merging with DAS_Tool, QC with CheckM, and taxonomy with GTDB-Tk.
 
 This directory contains all the materials needed to run the snakemake workflow. 
 
