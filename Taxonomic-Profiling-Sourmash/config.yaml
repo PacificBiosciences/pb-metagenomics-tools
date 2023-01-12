@@ -35,3 +35,10 @@ sourmash:
     - databases/genbank-2022.03-fungi.lineages.csv.gz
     - databases/genbank-2022.03-protozoa.lineages.csv.gz
     - databases/genbank-2022.03-viral.lineages.csv.gz
+
+  # sourmash is not multi-threaded so this is default set to 1.
+  # There may be cases where changing thread number helps with
+  # HPC resource allocation. The sourmash_gather step in particular
+  # can require substantial memory, and this thread number will only 
+  # be applied to that rule.
+  threads: 1

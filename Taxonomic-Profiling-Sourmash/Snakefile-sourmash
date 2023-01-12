@@ -65,7 +65,7 @@ rule sourmash_gather:
         gather_txt=os.path.join(out_dir, '2-gather', '{sample}.k{ksize}.gather.txt'),
     params:
         threshold_bp = sourmash_params.get('threshold_bp', '50000'),
-    threads: 1
+    threads: sourmash_params['threads']
     resources:
         mem_mb=lambda wildcards, attempt: attempt *100000,
         time=10000,
