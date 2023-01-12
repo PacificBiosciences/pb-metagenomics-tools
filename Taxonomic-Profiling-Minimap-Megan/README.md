@@ -1,10 +1,10 @@
-# Taxonomic-Profiling-Nucleotide
+# Taxonomic-Profiling-Minimap-Megan
 
-Align HiFi reads to a nucleotide database using minimap2 and prepare inputs for MEGAN-LR, for the purpose of taxonomic profiling. Only provides access to NCBI taxonomic analysis, but may give higher resolution than with protein alignments. The GTDB taxonomy and functional annotations are not accessible downstream.
+Align HiFi reads to a nucleotide database using minimap2 and prepare inputs for MEGAN-LR, for the purpose of taxonomic profiling. Provides access to NCBI and GTDB taxonomic analysis, with final outputs of kraken and metaphlan style taxonomic reports. 
 
 This directory contains all the materials needed to run this snakemake workflow.
 
-[Documentation for the Taxonomic-Profiling-Nucleotide pipeline is available here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Profiling-Nucleotide.md).
+[Documentation for the Taxonomic-Profiling-Minimap-Megan pipeline is available here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Profiling-Minimap-Megan.md).
 
 
 ## DISCLAIMER

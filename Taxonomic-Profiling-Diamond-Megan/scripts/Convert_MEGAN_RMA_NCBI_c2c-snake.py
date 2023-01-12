@@ -133,17 +133,10 @@ def write_mpa(expanded_dict, outname):
         for k, v in sorted(expanded_dict.items()):
             fh.write("{}\t{}\n".format(k.replace(" ","_"), v['cumulative_count']))
 
-def get_readcount(c2c, rcfile):
-    # c2c is labeled as: 2-c2c/{sample}.NCBI.counts.prot.txt
-    sample = c2c.split('/')[-1].split('.')[0]
-    print("get_readcount: Identified sample {}".format(sample))
-    rc_dict = {}
+def get_readcount(rcfile):
     with open(rcfile, 'r') as fh:
-        for line in fh:
-            rc_dict[line.strip().split()[0]] = int(line.strip().split()[1])
-            print("get_readcount: parsed line - {}, {}".format(line.strip().split()[0], line.strip().split()[1]))
-    return rc_dict[sample]
-
+        contents = fh.readlines()
+    return int(contents[0].strip())
 
 def write_kreport(expanded_dict, outname, reads, ncbi):
     print("write_kreport: Writing kreport output file...")
@@ -186,7 +179,7 @@ def main():
     lineage_dict = make_lineage_dict(args.outname1)
     expanded_dict = fill_out_lineages(lineage_dict)
     write_mpa(expanded_dict, args.mpa)
-    readcount = get_readcount(args.input, args.readsfile)
+    readcount = get_readcount(args.readsfile)
     write_kreport(expanded_dict, args.kreport, readcount, ncbi)
     print("\nDone!\n")
 

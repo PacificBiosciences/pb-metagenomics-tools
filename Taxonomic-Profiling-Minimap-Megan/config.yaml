@@ -37,7 +37,7 @@ sam2rma:
   # https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html
   # please note that the name of this file will change depending on the version, 
   # and that this must be the the version for the genomic DNA accessions.
-  db: "/home/dportik/programs/megan/db/megan-nucl-Jan201.db"
+  db: "/home/dportik/programs/megan/db/megan-nucl-Feb2022.db"
 
   # Number of threads to use for sam2rma, 24 is generally sufficient
   threads: 24
@@ -47,6 +47,15 @@ sam2rma:
   readassignmentmode: "readCount"
   # possible values = readCount, readLength, alignedBases, readMagnitude
 
+  # Minimum support as percent of assigned reads. Default in MEGAN is 0.05, but with HiFi
+  # the optimized value is 0.01. This provides a balanced trade-off between precision and recall
+  # (based on mock community datasets), with near perfect detection of species down to 
+  # ~0.04% abundance. To avoid any filtering based on this threshold, use a value of 0 
+  # instead. This will report ALL assigned reads, which will include potentially thousands 
+  # of false positives at ultra-low abundances (<0.01%), similar to results from 
+  # short-read methods (e.g., Kraken2, Centrifuge, etc).
+  minSupportPercent: 0.01
+
   # This parameter indicates what minimum percent of a HiFi read should be covered 
   # by alignments (to be considered). The default is set to 10, which should work well 
   # for microbial profiling.
@@ -54,3 +63,11 @@ sam2rma:
   # may want to set this higher in order to reduce false positives, with a value of >40-50. There 
   # are often small matches to poor quality bacterial references, and this would eliminate those.
   minPercentReadCover: 10
+
+rma2info:
+  # The full path to the rma2info tool.
+  # This tool is distributed as part of the MEGAN download, it is a binary.
+  path: "/home/dportik/programs/megan/tools/rma2info"
+    
+  # Number of threads to use for rma2info. Set for memory usage of up to 5GB.
+  threads: 12
