@@ -58,7 +58,7 @@ The choice of additional arguments to include depends on where and how you choos
 
 # **1. Snakemake Contents** <a name="SMC"></a>
 
-To run the workflow, you will need to obtain all contents within the [Taxonomic-Profiling-Diamond-Megan folder](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Functional-Profiling-Protein). The default contents should look like this:
+To run the workflow, you will need to obtain all contents within the [Taxonomic-Profiling-Diamond-Megan folder](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Diamond-Megan). The default contents should look like this:
 
 ```
 Taxonomic-Profiling-Diamond-Megan
