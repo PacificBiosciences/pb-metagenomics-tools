@@ -1,10 +1,10 @@
-# Taxonomic-Functional-Profiling-Protein
+# Taxonomic-Profiling-Diamond-Megan
 
-Align HiFi reads to a protein database using DIAMOND and prepare inputs for MEGAN-LR, for the purpose of taxonomic and functional profiling. Provides access to NCBI and GTDB taxonomic analysis, and allows functional analyses based on annotations from several databases (SEED, InterPro2GO, eggNOG).
+Perform translation alignment of HiFi reads to a protein database using DIAMOND and summarize with MEGAN-LR, for the purpose of taxonomic and functional profiling. Provides access to NCBI and GTDB taxonomic analysis, with final outputs of kraken and metaphlan style taxonomic reports. Also allows functional analyses based on annotations from several databases (SEED, InterPro2GO, eggNOG, EC).
 
 This directory contains all the materials needed to run this snakemake workflow.
 
-[Documentation for the Taxonomic-Functional-Profiling-Protein pipeline is available here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Functional-Profiling-Protein.md).
+[Documentation for the Taxonomic-Profiling-Diamond-Megan pipeline is available here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Profiling-Diamond-Megan.md).
 
 
 ## DISCLAIMER

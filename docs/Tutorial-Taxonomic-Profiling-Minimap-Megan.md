@@ -1,8 +1,8 @@
-# Tutorial for Taxonomic-Profiling-Nucleotide <a name="TOP"></a>
+# Tutorial for Taxonomic-Profiling-Minimap-Megan <a name="TOP"></a>
 
 ## **Table of Contents**
 
-+ [Taxonomic-Profiling-Nucleotide Overview](#PO)
++ [Taxonomic-Profiling-Minimap-Megan Overview](#PO)
 + [Quick Start](#QS)
 + [1. Snakemake Contents](#SMC)
 + [2. Requirements for Running](#RFR)
@@ -14,18 +14,20 @@
 
 ---------------
 
-# **Taxonomic-Profiling-Nucleotide Overview** <a name="PO"></a>
+# **Taxonomic-Profiling-Minimap-Megan Overview** <a name="PO"></a>
 
-The purpose of this snakemake workflow is to perform alignment of HiFi reads to a nucleotide database, and convert the resulting alignments to RMA input files for MEGAN6. This allows interactive taxonomic analyses to be performed across samples. The general steps of the Taxonomic-Profiling-Nucleotide pipeline are shown below:
+The purpose of this snakemake workflow is to perform alignment of HiFi reads to a nucleotide database, and convert the resulting alignments to RMA input files for MEGAN6. This allows interactive taxonomic analyses to be performed across samples. 
 
-![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Taxonomic-Profiling-Nucleotide-Steps.png)
+This workflow will output absolute read counts and read-based classifications of the NCBI and GTDB taxonomy classes. The NCBI taxonomic counts are now also provided in kraken report (kreport) and metaphlan (mpa) output formats. 
 
+The general steps of the Taxonomic-Profiling-Nucleotide pipeline are shown below:
 
-The reads fasta file is split into two chunks for parallel processing. This allows a speedup when jobs are run simultaneously, and also reduces the resources required to run the alignments sequentially. Minimap2 is used to align the HiFi reads files to a nucleotide database. The two resulting SAM files (per sample) are then sorted by read names, and subsequently merged. To make an RMA file, the reads and alignments must occur in the same order. The SAM alignment order is used to re-write the reads fasta file in the correct sorted order. The new reads fasta and the SAM file are then used to create a long-read RMA format using the sam2rma tool distributed with MEGAN6. Each input file of HiFi reads will produce a corresponding output RMA file, ready to use with MEGAN6.  
+![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-Taxonomic-Profiling-Minimap-Megan.png)
 
-**Please note that nucleotide alignments to the NCBI nt database will only provide access to NCBI taxonomy analyses in MEGAN6. Using protein alignments to the NCBI nr database will provide access to the NCBI taxonomy, functional annotations (SEED, InterPro2GO, eggNOG) and the option to use GTDB taxonomy instead. The protein version of this pipeline is described [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Functional-Profiling-Protein.md).**
+This pipeline performed favorably in a recent benchmarking study evaluating several methods for taxonomic classification with long reads ([Portik et al. 2022](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-022-05103-0)), which used mock communities as the ground truth. A summary figure of performance is shown below, with Taxonomic-Profiling-Minimap-Megan labeled below as MEGAN-LR-Nuc-HiFi:
 
-**If you are attempting to identify microbial contamination in targeted sequencing datasets, use this pipeline!** 
+![benchy](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-Profiling-Benchmarks-HiFi.png)
+
 
 [Back to top](#TOP)
 
@@ -35,17 +37,17 @@ The reads fasta file is split into two chunks for parallel processing. This allo
 
 This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require ~60GB memory and 50-400GB disk space per sample (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps. Snakemake v5+ is required, and the workflows have been tested using v5.19.3.
 
-- Clone the Taxonomic-Profiling-Nucleotide directory.
-- Download MEGAN6 community edition from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html) to obtain `sam2rma`. **Ensure you have at least version 6.19.+**
+- Clone the Taxonomic-Profiling-Minimap-Megan directory.
+- Download MEGAN6 community edition from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html) to obtain `sam2rma` and `rma2info`. **Ensure you have at least version 6.19.+**
 - Download and unpack the newest MEGAN mapping file for genomic DNA accessions from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html).
-- Download the NCBI-nt database from: ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz*
+- Download the partial or complete NCBI-nt database from: ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz*
 - Index the NCBI-nt database with minimap2 using `minimap2 -k 19 -w 10 -d mm2_nt_db.mmi nt.gz`. This will result in a `mm_nt_db.mmi` file that is ~850GB.
-- Specify the full path to `sam2rma`, full path to the MEGAN database file , and full path to the indexed NCBI-nt database in `config.yaml`.
+- Specify the full path to `sam2rma`, full path to `rma2info`, full path to the MEGAN database file , and full path to the indexed NCBI-nt database in `config.yaml`.
 - Include all input HiFi fasta files (`SAMPLE.fasta`) in the `inputs/` folder. These can be files or symlinks. 
 - Edit sample names in `Sample-Config.yaml` configuration file in `configs/` for your project. 
 - Execute snakemake using the general commands below: 
 ```
-snakemake --snakefile Snakefile-taxnuc --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]
+snakemake --snakefile Snakefile-minimap-megan --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]
 ```
 The choice of additional arguments to include depends on where and how you choose to run snakemake. Please refer to the [Executing Snakemake](#EXS) section for more details.
 
@@ -55,10 +57,10 @@ The choice of additional arguments to include depends on where and how you choos
 
 # **1. Snakemake Contents** <a name="SMC"></a>
 
-To run the workflow, you will need to obtain all contents within the [Taxonomic-Profiling-Nucleotide folder](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Nucleotide). The default contents should look like this:
+To run the workflow, you will need to obtain all contents within the [Taxonomic-Profiling-Minimap-Megan folder](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Nucleotide). The default contents should look like this:
 
 ```
-Taxonomic-Profiling-Nucleotide
+Taxonomic-Profiling-Minimap-Megan
 │
 ├── configs/
 │	└── Sample-Config.yaml
@@ -70,14 +72,17 @@ Taxonomic-Profiling-Nucleotide
 │	└── README.md (this is just a placeholder file, and not required)
 │
 ├── scripts/
+│	├── Convert_MEGAN_RMA_NCBI_c2c-snake.py
+│	├── Parse-SAM.py
+│	├── Run_ete3_NCBI_update.py
 │	├── sam-merger-minimap.py
 │	└── Sort-Fasta-Records-BioPython.py
 │
-├── Snakefile-taxnuc
+├── Snakefile-minimap-megan
 │
 └── config.yaml
 ```
-The `Snakefile-taxnuc` file is the Snakefile for this snakemake workflow. It contains all of the rules of the workflow. 
+The `Snakefile-minimap-megan` file is the Snakefile for this snakemake workflow. It contains all of the rules of the workflow. 
 
 The `config.yaml` file is the main configuration file used in the snakemake workflow. It contains the main settings that will be used for various programs. 
 
@@ -114,7 +119,7 @@ If you intend to generate a graphic for the snakemake workflow graph, you will a
 
 ## Download MEGAN6 and MEGAN database file
 
-MEGAN6 community edition should be downloaded from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). The `sam2rma` binary is required for this pipeline. The `sam2rma` binary should be present in the `tools` bin distributed with MEGAN. **The full path to `sam2rma` must be specified in `config.yaml`.**
+MEGAN6 community edition should be downloaded from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). The `sam2rma` and `rma2info` binaries are required for this pipeline. Both binaries should be present in the `tools` bin distributed with MEGAN. **The full path to `sam2rma` and `rma2info` must be specified in `config.yaml`.**
 
 The newest MEGAN mapping file for genomic DNA accessions should also be downloaded from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). It must be unpacked to use it. The current unpacked file is ~4.5GB. **The full path to the unpacked database file (ending with `.db`) must be specified in `config.yaml`.**
 
@@ -152,12 +157,12 @@ Depending on your system resources, you may choose to change the number of threa
 **If you are attempting to identify microbial contamination in targeted sequencing datasets:**
 Make sure to change the `sam2rma`:`minPercentReadCover` value to 40 or greater. This parameter controls the minimum percent of a HiFi read that must be covered by alignments to be considered. In general, small alignments (<1,000 bp) can occur with low quality bacteria sequences, and introduce false positives. By increasing the stringency requirements, these false positives can be eliminated.
 
-**You must also specify the full paths to `sam2rma`, the MEGAN mapping database file, and the indexed NCBI-nt database**. 
+**You must also specify the full paths to `sam2rma`, `rma2info`, the MEGAN mapping database file, and the indexed NCBI-nt database**. 
 
 #### Sample configuration file (`configs/Sample-Config.yaml`)
 The example sample configuration file is called `Sample-Config.yaml` and is located in the `configs/` directory. Here you should specify the sample names that you wish to include in the analysis. 
 
-For the Taxonomic-Profiling-Nucleotide pipeline, all samples specified in the sample configuration file must have a fasta file of HiFi reads (`SAMPLE.fasta`) in the `inputs/` folder. The pipeline can be run for any number of samples (though be aware of disk space requirements). You can also configure the file to only run for a subset of the samples present in the `inputs/` folder. Please note that if the input files do not follow the naming convention (`SAMPLE.fasta`), they will not be recognized by the workflow. You can use the actual files or symlinks to those files, both are compatible with snakemake.
+All samples specified in the sample configuration file must have a fasta file of HiFi reads (`SAMPLE.fasta`) in the `inputs/` folder. The pipeline can be run for any number of samples (though be aware of disk space requirements). You can also configure the file to only run for a subset of the samples present in the `inputs/` folder. Please note that if the input files do not follow the naming convention (`SAMPLE.fasta`), they will not be recognized by the workflow. You can use the actual files or symlinks to those files, both are compatible with snakemake.
 
 [Back to top](#TOP)
 
@@ -178,13 +183,13 @@ The workflow must be executed from within the directory containing all the snake
 ### Test workflow
 It is a good idea to test the workflow for errors before running it. This can be done with the following command:
 ```
-snakemake -np --snakefile Snakefile-taxnuc --configfile configs/Sample-Config.yaml
+snakemake -np --snakefile Snakefile--minimap-megan --configfile configs/Sample-Config.yaml
 ```
 
 Let's unpack this command:
 - `snakemake` calls snakemake.
 - `-np` performs a 'dry-run' where the rule compatibilities are tested but they are not executed.
-- `--snakefile Snakefile-taxnuc` tells snakemake to run this particular snakefile.
+- `--snakefile Snakefile-minimap-megan` tells snakemake to run this particular snakefile.
 - `--configfile configs/Sample-Config.yaml` tells snakemake to include the samples listed in the sample configuration file.
 
 The dry run command should result in a sequence of jobs being displayed on screen. 
@@ -192,14 +197,14 @@ The dry run command should result in a sequence of jobs being displayed on scree
 ### Create workflow figure
 If there are no errors, you may wish to generate a figure of the directed acyclic graph (the workflow steps). You can do this using the following command:
 ```
-snakemake --dag --snakefile Snakefile-taxnuc --configfile configs/Sample-Config.yaml | dot -Tsvg > taxfunc_analysis.svg
+snakemake --dag --snakefile Snakefile-minimap-megan --configfile configs/Sample-Config.yaml | dot -Tsvg > taxfunc_analysis.svg
 ```
 Here the `--dag` flag creates an output that is piped to `dot`, and an svg file is created. This will show the workflow visually.
 
 ### Execute workflow
 Finally, you can execute the workflow using:
 ```
-snakemake --snakefile Snakefile-taxnuc --configfile configs/Sample-Config.yaml -j 48 --use-conda
+snakemake --snakefile Snakefile-minimap-megan --configfile configs/Sample-Config.yaml -j 48 --use-conda
 ```
 
 There are a couple important arguments that were added here:
@@ -221,12 +226,12 @@ One easy way to run snakemake is to start an interactive session, and execute sn
 The same general commands are used as with "local" execution, but with some additional arguments to support cluster configuration. Below is an example of cluster configuration using SLURM:
 
 ```
-snakemake --snakefile Snakefile-taxnuc --configfile configs/Sample-Config.yaml --use-conda --cluster "sbatch --partition=compute --cpus-per-task={threads}" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+snakemake --snakefile Snakefile-minimap-megan --configfile configs/Sample-Config.yaml --use-conda --cluster "sbatch --partition=compute --cpus-per-task={threads}" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
 ```
 
 Let's unpack this command:
 - `snakemake` calls snakemake.
-- `--snakefile Snakefile-taxprot` tells snakemake to run this particular snakefile.
+- `--snakefile Snakefile-minimap-megan` tells snakemake to run this particular snakefile.
 - `--configfile configs/Sample-Config.yaml` tells snakemake to use this sample configuration file in the `configs/` directory. This file can have any name, as long as that name is provided here.
 -  `--use-conda` this allows conda to install the programs and environments required for each step. It is essential.
 - `--cluster "sbatch --partition=compute --cpus-per-task={threads}"` are the settings for execution with SLURM, where 'compute' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule. Note that the entire section in quotes can be replaced with an SGE equivalent (see below).
@@ -237,7 +242,7 @@ Let's unpack this command:
 And here is an example using SGE instead:
 
 ```
-snakemake --snakefile Snakefile-taxnuc --configfile configs/Sample-Config.yaml --use-conda --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+snakemake --snakefile Snakefile-minimap-megan --configfile configs/Sample-Config.yaml --use-conda --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
 ```
 - `--cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash"` are the settings for execution with SGE, where 'default' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule.
 
@@ -258,41 +263,41 @@ For information on how to run snakemake with AWS (Amazon Web Services), Google C
 Successful runs will result in several new directories:
 
 ```
-Taxonomic-Profiling-Nucleotide
+Taxonomic-Profiling-Minimap-Megan
 │
 ├── configs/
 ├── envs/
 ├── inputs/
 ├── scripts/
-├── Snakefile-genomebinning
+├── Snakefile-minimap-megan
 ├── config.yaml
 │
 ├── benchmarks/
 ├── logs/
 │
-├── 1-fasta-sort/
+├── 4-merged/
 │
-├── 2-chunks/
+├── 5-fasta-sort/
 │
-├── 3-minimap/
+├── 6-rma/
 │
-├── 4-sorted/
+├── 7-r2c/
 │
-├── 5-merged/
+├── 8-c2c/
 │
-└── 6-rma/
+└── 9-kraken-mpa-reports/
 ```
 
 - `benchmarks/` contains benchmark information on memory usage and I/O for each rule executed.
 - `logs/` contains log files for each rule executed. 
-- `1-fasta-sort/` contains the sorted HiFi reads fasta files. *These can be deleted if no other RMA files will be created.*
-- `2-chunks/` temporarily holds the two chunks for each sorted input reads file. Will be empty if no errors occur.
-- `3-minimap/` temporarily holds the two unsorted SAM files generated per sample (e.g., the direct outputs from minimap2). Will be empty if no errors occur.
-- `4-sorted/` temporarily holds the two sorted SAM files generated per sample. Will be empty if no errors occur.
-- `5-merged/` contains the sorted and merged SAM files for each sample. *These can be deleted if no other RMA files will be created.*
-- `6-rma/` contains final RMA files for MEGAN. **These are the main files of interest.**
+- `4-merged/` contains the sorted and merged SAM files for each sample. *These can be deleted if no other RMA files will be created.*
+- `5-fasta-sort/` contains the sorted HiFi reads fasta files. *These can be deleted if no other RMA files will be created.*
+- `6-rma/` contains final RMA files for MEGAN. This includes `{sample}_filtered.nucleotide.{mode}.rma` and `{sample}_unfiltered.nucleotide.{mode}.rma`, which are the optimal filtered and unfiltered RMA files, respectively. **These are the main files of interest.**
+- `7-r2c/` holds the per-sample read assignment files for each database. For protein RMA, this includes EC, EGGNOG, GTDB, INTERPRO2GO, NCBI (full and bacteria-only), and SEED. For nucleotide RMA, this will only include NCBI reads. These files are temporary and will be deleted before completion if no errors occur.
+- `8-c2c/` holds the per-sample class count files for each database. For protein RMA, this includes EC, EGGNOG, GTDB, INTERPRO2GO, NCBI (full and bacteria-only), and SEED class counts. For nucleotide RMA, this will only include NCBI class counts.
+- `9-kraken-mpa-reports/` contains the taxonomic class counts in kraken report (kreport) and metaphlan (mpa) format. **These two taxonomic count files allow comparisons to other taxonomic profiling programs.**
 
-If no additional RMA files are to be generated, you should remove all the sorted fasta files in `1-fasta-sort/` and the large SAM files from the `5-merged/` folder. 
+If no additional RMA files are to be generated, you should remove the large SAM files from the `4-merged/` folder. 
 
 [Back to top](#TOP)
 
@@ -333,6 +338,37 @@ sam2rma -i {input.sam} -r {input.reads} -o {output} -lg -alg longReads -t {threa
 ```
 
 In this case, we are using a MEGAN database that maps genomic DNA accessions to taxonomic classes.
+
+### rma2info
+
+The `rma2info` program is run in two different ways: 1) to obtain all reads assigned to each class per database, and 2) to obtain all class counts per database. 
+
+To obtain the lists of all classes and corresponding read names assigned to those classes, the following command is used:
+
+```
+rma2info -i {input.rma} -o {output.name} -r2c {database} &> {log}
+```
+
+The database argument can include: `EC`, `EGGNOG`, `INTERPRO2GO`, `SEED`, `Taxonomy` (for NCBI), and `GTDB`. The `-n` flag can also be included for `Taxonomy` and `GTDB` to include taxon names rather than a numerical code for the class. 
+
+
+To obtain all class counts per database, the following command is used:
+
+```
+rma2info -i {input.rma} -o {output.name} -c2c {database} &> {log}
+```
+
+The database argument can include: `EC`, `EGGNOG`, `INTERPRO2GO`, `SEED`, `Taxonomy` (for NCBI), and `GTDB`. The `-p` flag is used with `EC`, `EGGNOG`, `INTERPRO2GO`, and `SEED` to include the full name of the functional classes, rather than numeric codes. The `-n` flag is used with `Taxonomy` and `GTDB` to include taxon names rather than a numerical code for the class. 
+
+To include the taxonomic rank of the class for NCBI as an additional column, the following can be used:
+```
+rma2info -i {input.rma} -o {output.name} -c2c Taxonomy -n -r &> {log}
+```
+
+### MEGAN c2c format to kraken and metaphlan formats
+
+The conversion from c2c format to kreport and mpa format is done using a modified version of the `Convert_MEGAN-NCBI-c2c_to_kreport-mpa.py` script available in the [pb-metagenomics-scripts](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-metagenomics-scripts) folder. The version used here was modified to make inputs and outputs more explicit for snakemake.
+
 
 [Back to top](#TOP)
 

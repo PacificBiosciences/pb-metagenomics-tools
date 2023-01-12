@@ -9,7 +9,7 @@
 + [3. Configuring the Analysis](#CTA)
 + [4. Executing Snakemake](#EXS)
 + [5. Outputs](#OTPS)
-
++ [6. Benchmarks](#BENCH)
 ---------------
 
 # **Taxonomic-Profiling-Sourmash Overview** <a name="PO"></a>
@@ -18,9 +18,9 @@ The purpose of this snakemake workflow is to generate a taxonomic profile for me
 
 Each fasta file is decomposed into k-mers and then searched against the provided database(s). Sourmash will find the minimum set of reference genomes that cover the information in the reads, and then use the lineage information from those genomes to build a taxonomic profile.
 
-For HiFi datasets, sourmash outperformed other available long-read classifiers. In mock communities, it detected species down to 0.001% relative abundance, displayed the best recall, and had high precision:
+This pipeline performed favorably in a recent benchmarking study evaluating several methods for taxonomic classification with long reads ([Portik et al. 2022](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-022-05103-0)), which used mock communities as the ground truth. For HiFi datasets, sourmash outperformed other available long-read classifiers. In mock communities, it detected species down to 0.001% relative abundance, displayed the best recall, and had high precision:
 
-![sourslam](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/FigureS2-Species-Precision-Recall-F1-HiFi.png)
+![benchy](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-Profiling-Benchmarks-HiFi.png)
 
 
 [Back to top](#TOP)
@@ -242,3 +242,9 @@ Taxonomic-Profiling-sourmash
 - `3-taxprofile/` contains the LCA taxonomic profiles built from the genome match information
 
 [Back to top](#TOP)
+
+---------------
+
+# **6. Benchmarks** <a name="BENCH"></a>
+
+![benchy](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-sourmash-benchmark.png)

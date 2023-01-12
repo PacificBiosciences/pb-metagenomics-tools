@@ -2,19 +2,19 @@
 
 Welcome! Here you can find a variety of tools and pipelines tailored to using PacBio HiFi Reads for metagenomics. In addition to the resources currently available, we will continue to add new tools as they are developed.
 
-## Example HiFi Datasets
+The current version is v1.6.0. Please see the release notes for changes.
 
-Several publicly available HiFi shotgun metagenomics datasets are listed on the   [**PacBio-Data**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/PacBio-Data.md) page. These include multiple mock communities, reference standards, and empirical samples (human, chicken, and sheep gut microbiome, and environmental samples).
+## HiFi Metagenomic Datasets
+
+Several publicly available HiFi shotgun metagenomics datasets are listed on the   [**PacBio-Data**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/PacBio-Data.md) page. These include multiple mock communities, reference standards, and empirical samples (human, chicken, and sheep gut microbiome, and environmental samples). Associated publications are also listed here.
 
 ## Available pipelines
 
 + [**HiFi-MAG-Pipeline**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/HiFi-MAG-Pipeline): Identify high-quality MAGs from HiFi metagenomic assemblies. Streamlined workflow includes a customized binning strategy (MetaBAT2, MaxBin2, CONCOCT, & circular-aware binning), bin merging with DAS_Tool, QC with CheckM, and taxonomy with GTDB-Tk. Outputs high-quality MAG sequences and associated metadata. 
 
-+ [**Taxonomic-Functional-Profiling-Protein**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Functional-Profiling-Protein): Align HiFi reads to a **protein** database using DIAMOND and prepare inputs for MEGAN-LR, for the purpose of taxonomic and functional profiling. Provides access to taxonomic annotations (NCBI and GTDB), and allows functional annotations based on several databases (EC, SEED, InterPro2GO, eggNOG). Easily summarize taxonomic and functional results using [MEGAN-RMA-Summary](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/MEGAN-RMA-summary).
++ [**Taxonomic-Profiling-Diamond-Megan**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Diamond-Megan): Perform translation alignment of HiFi reads to a **protein** database using DIAMOND and summarize with MEGAN-LR, for the purpose of taxonomic and functional profiling. Provides access to taxonomic annotations from NCBI and GTDB, and outputs NCBI taxonomic counts in kraken (kreport) and metaphlan (mpa) formats. Also provides functional annotations based on multiple databases (EC, SEED, InterPro2GO, eggNOG).
 
-+ [**Taxonomic-Profiling-Nucleotide**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Nucleotide): Align HiFi reads to a **nucleotide** database using minimap2 and prepare inputs for MEGAN-LR, for the purpose of taxonomic profiling. This only provides access to NCBI taxonomic annotations. Easily summarize taxonomic results using [MEGAN-RMA-Summary](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/MEGAN-RMA-summary). **If you are attempting to identify microbial contamination reads in targeted sequencing datasets, use this pipeline!** 
-
-+ [**MEGAN-RMA-Summary**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/MEGAN-RMA-summary): Obtain functional and taxonomic class count summaries for a set of RMA files created from the above MEGAN-LR pipelines. Outputs absolute read counts and normalized read counts across samples for classes of each database, and summarizes the proportion of HiFi reads receiving functional and taxonomic annotations. **New feature: Outputs NCBI taxonomic counts in kraken (kreport) and metaphlan (mpa) formats.** Workflows are available for both protein-based RMA files and for nucleotide-based RMA files. 
++ [**Taxonomic-Profiling-Minimap-Megan**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Minimap-Megan): Align HiFi reads to a **nucleotide** database using minimap2 and summarize with MEGAN-LR, for the purpose of taxonomic profiling. Provides access to NCBI and GTDB taxonomic annotations. Outputs NCBI taxonomic counts in kraken (kreport) and metaphlan (mpa) formats.
 
 + [**Taxonomic-Profiling-Sourmash**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Sourmash): Obtain taxonomic proflies using `sourmash gather` --> `taxonomy` approach. Sourmash provides GTDB and NCBI databases, or you can build your own database.
 
@@ -34,9 +34,8 @@ All documentation for snakemake pipelines can be found in the `docs/` folder abo
 
 Available pipeline documentation: 
 - [**Tutorial: HiFi-MAG-Pipeline**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-HiFi-MAG-Pipeline.md)
-- [**Tutorial: Taxonomic-Functional-Profiling-Protein**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Functional-Profiling-Protein.md)
-- [**Tutorial: Taxonomic-Profiling-Nucleotide**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Profiling-Nucleotide.md)
-- [**Tutorial: MEGAN-RMA-Summary**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-MEGAN-RMA-summary.md)
+- [**Tutorial: Taxonomic-Profiling-Diamond-Megan**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Profiling-Diamond-Megan.md)
+- [**Tutorial: Taxonomic-Profiling-Minimap-Megan**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Profiling-Minimap-Megan.md)
 - [**Tutorial: Taxonomic-Profiling-Sourmash**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Profiling-Sourmash.md)
 
 The documentation for [pb-metagenomics-scripts](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-metagenomics-scripts) is provided in the folder.
