@@ -1,1 +1,0 @@
-Your starting data would be placed in this folder. This is just a placeholder.
