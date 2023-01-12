@@ -22,7 +22,7 @@ This workflow will output absolute read counts and read-based classifications of
 
 The general steps of the Taxonomic-Profiling-Diamond-Megan pipeline are shown below:
 
-![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-Taxonomic-Profiling-Diamond-Megan.png.png)
+![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-Taxonomic-Profiling-Diamond-Megan.png)
 
 This pipeline performed favorably in a recent benchmarking study evaluating several methods for taxonomic classification with long reads ([Portik et al. 2022](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-022-05103-0)), which used mock communities as the ground truth. A summary figure of performance is shown below, with Taxonomic-Profiling-Diamond-Megan labeled below as MEGAN-LR-Prot:
 
