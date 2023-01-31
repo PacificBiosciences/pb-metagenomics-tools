@@ -80,7 +80,7 @@ rule RunDiamond:
     benchmark: 
         os.path.join(CWD, "benchmarks", "{sample}.{piece}.RunDiamond.tsv")
     shell:
-        "diamond blastx -d {params.db} -q {input} -o {output} -f 101 -F 5000 --fast "
+        "diamond blastx -d {params.db} -q {input} -o {output} -f 101 -F 5000 "
         "--range-culling {params.hits} -b {params.block} -p {threads} 2> {log}"
 
 ##################################################
