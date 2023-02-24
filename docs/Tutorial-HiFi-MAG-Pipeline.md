@@ -23,9 +23,9 @@ The new version of this workflow is "completeness-aware". Long contigs >500kb ar
 
 The long contigs that are <93% complete are pooled with other shorter incomplete contigs from the starting set, and this contig set is subjected to binning. Binning algorithms include MetaBat2 and SemiBin2 (using long read settings). The two bin sets are compared and merged using DAS_Tool. 
 
-The dereplicated bin set consists of the merged bin set from above and all long complete contigs found. The dereplicated bin set is examined using CheckM2, and subsequently filtered based on several qualities (defaults = >70% completeness, <10% contamination, <20 contigs). The filtered bins are then moved to the final MAG set.
+The dereplicated bin set consists of the merged bin set from above and all long complete contigs found. The dereplicated bin set is examined using CheckM2, and subsequently filtered based on several qualities (defaults = >70% completeness, <10% contamination, <20 contigs). 
 
-The final MAG set then undergoes taxonomic assignment using GTDB-Tk. The final MAGs are written as a set of fasta files, several figures are produced, and a summary file of metadata is generated.
+All bins/MAGs passing filtering undergo taxonomic assignment using GTDB-Tk. The final MAGs are written as a set of fasta files, several figures are produced, and a summary file of metadata is generated.
 
 The new "completeness-aware" strategy is highly effective at preventing improper binning of complete contigs. It is more effective than the previous "circular-aware" binning used in v1.5 and v1.6. Compared to a standard binning pipeline (e.g., MetaBat2), it results in a 14-67% increase in total MAGs (average 36%) and 13-186% increase in single contig MAGs (average 87%). Compared to the "circular-aware" binning in v1.5, it results in a 14-39% increase in total MAGs (average 27%) and 10-28% increase in single contig MAGs (average 20%). The figure below shows side-by-side comparisons for several publicly available datasets (listed [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/PacBio-Data.md)). 
 
