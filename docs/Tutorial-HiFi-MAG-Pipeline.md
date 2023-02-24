@@ -36,7 +36,7 @@ The new "completeness-aware" strategy is highly effective at preventing improper
 ![Improvement](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-HiFi-MAG-Pipeline-Update.png)
 
 
-### Benchmarking improvements
+### Additional improvements
 
 Beyond the "completeness-aware" strategy, there are several other important updates to this pipeline. 
 + It now uses CheckM2 instead of CheckM, and no longer requires the manual download of the Checkm database.
