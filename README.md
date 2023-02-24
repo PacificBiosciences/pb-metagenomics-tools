@@ -10,7 +10,7 @@ Several publicly available HiFi shotgun metagenomics datasets are listed on the 
 
 ## Available pipelines
 
-+ [**HiFi-MAG-Pipeline**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/HiFi-MAG-Pipeline): Identify high-quality MAGs from HiFi metagenomic assemblies. Streamlined workflow includes a customized binning strategy (MetaBAT2, MaxBin2, CONCOCT, & circular-aware binning), bin merging with DAS_Tool, QC with CheckM, and taxonomy with GTDB-Tk. Outputs high-quality MAG sequences and associated metadata. 
++ [**HiFi-MAG-Pipeline**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/HiFi-MAG-Pipeline): Identify high-quality MAGs from HiFi metagenomic assemblies. Streamlined workflow includes a custom "completeness-aware" strategy to identify and protect long and complete contigs. Binning is performed with MetaBAT2 and SemiBin2, bin merging occurs with DAS_Tool, QC with CheckM2, and taxonomic assignments with GTDB-Tk. Outputs include high-quality MAG sequences, summary figures, and associated metadata. 
 
 + [**Taxonomic-Profiling-Diamond-Megan**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Diamond-Megan): Perform translation alignment of HiFi reads to a **protein** database using DIAMOND and summarize with MEGAN-LR, for the purpose of taxonomic and functional profiling. Provides access to taxonomic annotations from NCBI and GTDB, and outputs NCBI taxonomic counts in kraken (kreport) and metaphlan (mpa) formats. Also provides functional annotations based on multiple databases (EC, SEED, InterPro2GO, eggNOG).
 
