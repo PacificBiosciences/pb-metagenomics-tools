@@ -346,7 +346,7 @@ HiFi-MAG-Pipeline
 Within `8-summary/`, there will be a folder for each sample. Within a sample folder there are several items:
 
 + `MAGs/`: A folder that contains the fasta files for all high-quality MAGs/bins.
-+ `SAMPLE.All-DASTool-Bins.pdf`: Figure that shows the dereplicated and merged bins that were created from the set of incomplete contigs (using MetaBat2 and SemiBin2).
++ `SAMPLE.All-DASTool-Bins.pdf`: Figure that shows the dereplicated bins that were created from the set of incomplete contigs (using MetaBat2 and SemiBin2) as well as the long complete contigs.
 + `SAMPLE.Complete.txt`: This is a blank file that is created when the workflow stopping point is reached. 
 + `SAMPLE.Completeness-Contamination-Contigs.pdf`: A plot showing the relationship between completeness and contamination for each high-quality MAG recovered, colored by the number of contigs per MAG.
 + `SAMPLE.GenomeSizes-Depths.pdf`:  A plot showing the relationship between genome size and depth of coverage for each high-quality MAG recovered, colored by % GC content per MAG.
