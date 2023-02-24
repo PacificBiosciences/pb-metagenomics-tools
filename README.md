@@ -2,7 +2,7 @@
 
 Welcome! Here you can find a variety of tools and pipelines tailored to using PacBio HiFi Reads for metagenomics. In addition to the resources currently available, we will continue to add new tools as they are developed.
 
-The current version is v1.6.0. Please see the release notes for changes.
+The current version is v2.0.0. Please see the [**release notes**](https://github.com/PacificBiosciences/pb-metagenomics-tools/releases) for changes.
 
 ## HiFi Metagenomic Datasets
 
