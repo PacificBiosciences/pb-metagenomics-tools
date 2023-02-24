@@ -1,0 +1,6 @@
+name: semibin_env
+channels:
+  - bioconda
+dependencies:
+  - semibin == 1.5.0
+#  - semibin=1.5.0=pyh7cba7a3_0
