@@ -19,6 +19,8 @@ The purpose of this snakemake workflow is to obtain high-quality metagenome-asse
 
 ![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-HiFi-MAG-Summary.png)
 
+### "Completeness-aware" strategy
+
 The new version of this workflow is "completeness-aware". Long contigs >500kb are identified and placed in individual fasta files. They are then examined using CheckM2 to determine percent completeness. All long contigs that are >93% complete are then moved directly to the final MAG set. 
 
 The long contigs that are <93% complete are pooled with other shorter incomplete contigs from the starting set, and this contig set is subjected to binning. Binning algorithms include MetaBat2 and SemiBin2 (using long read settings). The two bin sets are compared and merged using DAS_Tool. 
@@ -27,16 +29,30 @@ The dereplicated bin set consists of the merged bin set from above and all long 
 
 All bins/MAGs passing filtering undergo taxonomic assignment using GTDB-Tk. The final MAGs are written as a set of fasta files, several figures are produced, and a summary file of metadata is generated.
 
+### Benchmarking improvements
+
 The new "completeness-aware" strategy is highly effective at preventing improper binning of complete contigs. It is more effective than the previous "circular-aware" binning used in v1.5 and v1.6. Compared to a standard binning pipeline (e.g., MetaBat2), it results in a 14-67% increase in total MAGs (average 36%) and 13-186% increase in single contig MAGs (average 87%). Compared to the "circular-aware" binning in v1.5, it results in a 14-39% increase in total MAGs (average 27%) and 10-28% increase in single contig MAGs (average 20%). The figure below shows side-by-side comparisons for several publicly available datasets (listed [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/PacBio-Data.md)). 
 
 ![Improvement](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-HiFi-MAG-Pipeline-Update.png)
 
-Beyond the "completeness-aware" strategy, there are several other important updates to this pipeline. It now uses CheckM2 instead of CheckM, and no longer requires the manual download of the Checkm database. For binning, Concoct and MaxBin2 have been retired, and SemiBin2 is used  in conjunction with MetaBat2. SemiBin2 is highly effective at binning contigs from long-read assemblies and obtains better results. This version also introduces checkpoints to create forked workflows depending on the properties of the sample, thereby preventing crashes when no bins pass filtering. This applies to the long contig completeness evaluation stage and the binning of incomplete contigs. Finally, new figures are produced as part of the long contig evaluations and final summary steps, as shown below.
+
+### Benchmarking improvements
+
+Beyond the "completeness-aware" strategy, there are several other important updates to this pipeline. 
++ It now uses CheckM2 instead of CheckM, and no longer requires the manual download of the Checkm database.
++ For binning, Concoct and MaxBin2 have been retired, and SemiBin2 is used  in conjunction with MetaBat2. SemiBin2 is highly effective at binning contigs from long-read assemblies and obtains better results.
++ This version also introduces checkpoints to create forked workflows depending on the properties of the sample, thereby preventing crashes when no bins pass filtering. This applies to the long contig completeness evaluation stage and the binning of incomplete contigs.
++ New figures are produced as part of the long contig evaluations and final summary steps, as shown below.
+
+Figures associated with long contig completeness evaluation:
 
 ![Longbins](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-HiFi-MAGs-Example-Outputs-LongBins.png)
 
+Figures associated with final summary steps:
+
 ![Longbins](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-HiFi-MAGs-Example-Outputs-Summary.png)
 
+For explanations of these figures, please see the [5. Outputs](#OTPS) section below.
 
 [Back to top](#TOP)
 
@@ -53,7 +69,7 @@ This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](h
 - Check settings in `config.yaml`, and ensure the `tmpdir` argument is set correctly in `config.yaml`. The default is `/scratch`.
 - Execute snakemake using the general commands below: 
 ```
-snakemake --snakefile Snakefile-hifimags --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]
+snakemake --snakefile Snakefile-hifimags.smk --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]
 ```
 The choice of additional arguments to include depends on where and how you choose to run snakemake. Please refer to the [4. Executing Snakemake](#EXS) section for more details.
 
