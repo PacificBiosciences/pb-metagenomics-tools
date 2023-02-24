@@ -9,29 +9,32 @@
 + [3. Configuring the Analysis](#CTA)
 + [4. Executing Snakemake](#EXS)
 + [5. Outputs](#OTPS)
-+ [6. Usage Details for Main Programs](#UDMP)
 
 
 ---------------
 
 # **HiFi-MAG-Pipeline Overview** <a name="PO"></a>
 
-The purpose of this snakemake workflow is to obtain high-quality metagenome-assembled genomes (MAGs) from previously generated assemblies. The general steps of the HiFi-MAG-Pipeline are shown below:
+The purpose of this snakemake workflow is to obtain high-quality metagenome-assembled genomes (MAGs) from previously generated assemblies. This workflow received major improvements in v2.0 (Feb 2023). The new steps of the HiFi-MAG-Pipeline are shown below:
 
 ![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-HiFi-MAG-Summary.png)
 
-HiFi reads are first mapped to contigs using minimap2 to generate BAM files. The BAM files are used to obtain coverage estimates for the contigs. The coverages and contigs are used as inputs to MetaBAT2, CONCOCT, and MaxBin2 which construct the genome bins. Circular-aware binning is also employed in an attempt to identify complete, circular contigs alongside the binning. All bins are subsequently compared and merged using DAS_Tool. 
+The new version of this workflow is "completeness-aware". Long contigs >500kb are identified and placed in individual fasta files. They are then examined using CheckM2 to determine percent completeness. All long contigs that are >93% complete are then moved directly to the final MAG set. 
 
-![Binning](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-HiFi-MAG-Binning.png)
+The long contigs that are <93% complete are pooled with other shorter incomplete contigs from the starting set, and this contig set is subjected to binning. Binning algorithms include MetaBat2 and SemiBin2 (using long read settings). The two bin sets are de-replicated and merged using DAS_Tool. The dereplicated bin set is examined using CheckM2, and subsequently filtered based on several qualities (defaults = >70% completeness, <10% contamination, <20 contigs). The filtered bins are then moved to the final MAG set.
 
-The multiple binning algorithms and circular-aware strategy tend to prevent improper binning of complete, circular contigs. It provides a 15–64% increase in total MAGs and an 8–100% increase in single contig MAGs (relative to using MetaBat2 only). The figure below shows side-by-side comparisons for several publicly available datasets (listed [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/PacBio-Data.md); **std** = binning with MetaBat2 only, **HiFi** = HiFi-MAG-Pipeline). 
+The final MAG set then undergoes taxonomic assignment using GTDB-Tk. The final MAGs are written as a set of fasta files, several figures are produced, and a summary file of metadata is generated.
+
+The new "completeness-aware" strategy is highly effective at preventing improper binning of complete contigs. It is more effective than the previous "circular-aware" binning used in v1.5 and v1.6. Compared to a standard binning pipeline (e.g., MetaBat2), it results in a 14-67% increase in total MAGs (average 36%) and 13-186% increase in single contig MAGs (average 87%). Compared to the "circular-aware" binning in v1.5, it results in a 14-39% increase in total MAGs (average 27%) and 10-28% increase in single contig MAGs (average 20%). The figure below shows side-by-side comparisons for several publicly available datasets (listed [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/PacBio-Data.md)). 
 
 ![Improvement](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-HiFi-MAG-Pipeline-Update.png)
 
+Beyond the "completeness-aware" strategy, there are several other important updates to this pipeline. It now uses CheckM2 instead of CheckM, and no longer requires the manual download of the Checkm database. For binning, Concoct and MaxBin2 have been retired, and SemiBin2 is used  in conjunction with MetaBat2. SemiBin2 is highly effective at binning contigs from long-read assemblies and obtains better results. This version also introduces checkpoints to create forked workflows depending on the properties of the sample, thereby preventing crashes when no bins pass filtering. This applies to the long contig completeness evaluation stage and the binning of incomplete contigs. Finally, new figures are produced as part of the long contig evaluations and final summary steps, as shown below.
 
-The merged bin set is then screened with CheckM to assess the quality of the resulting genome bins. It provides measures of genome completeness, contamination, and other useful metrics. A custom filtering step is used to eliminate genome bins with <70% genome completeness, >10% genome contamination, and >10 contigs per bin. These are default values, and they can be changed. The genome bins which pass the default thresholds can be considered high-quality MAGs. Finally, the Genome Taxonomy Database Toolkit (GTDB-Tk) is used to identify the closest reference match to each high-quality MAG. It will report the taxonomy of the closest reference. **This does not guarantee the identity of the MAG, but serves as a starting point for understanding which genus, species, or strain it is most closely related to.** Outputs include several visualizations of the final bin/MAG characteristics, the sequences for all bins/MAGs passing filters, and pairs of bins:reference sequences when a GTDB closest match was found.
+![Longbins](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-HiFi-MAGs-Example-Outputs-LongBins.png)
 
-![MAGs](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-MAG-characteristics.png)
+![Longbins](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-HiFi-MAGs-Example-Outputs-Summary.png)
+
 
 [Back to top](#TOP)
 
@@ -42,11 +45,10 @@ The merged bin set is then screened with CheckM to assess the quality of the res
 This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require 45-150GB memory and >250GB temporary disk space (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps. Snakemake v5+ is required, and the workflows have been tested using v5.19.3.
 
 - Clone the HiFi-MAG-Pipeline directory.
-- Download and unpack the databases for CheckM (<2GB) and GTDB (~66GB). Specify paths to each database in `config.yaml`.
-- Include all input HiFi fasta files (`SAMPLE.fasta`) and contig fasta files (`SAMPLE.contigs.fasta`) in the `inputs/` folder. These can be files or symlinks. If you assembled with metaFlye, you must also include the `SAMPLE-assembly_info.txt` file here.
+- Download and unpack the database for GTDB (~66GB). The current requirement is for GTDB-Tk v 2.1.1, which requires database R207_v2. Specify the path to the database in `config.yaml`. **Starting with version 2.0, there is no need to download the CheckM database.**
+- Include all input HiFi fasta files (`SAMPLE.fasta`) and contig fasta files (`SAMPLE.contigs.fasta`) in the `inputs/` folder. These can be files or symlinks.
 - Edit sample names in `Sample-Config.yaml` configuration file in `configs/` for your project. 
-- Edit the assembly method used to generate the contigs in `config.yaml`. This choice will be used to identify which contigs are circular in the assembly. Default is `hifiasm-meta`, but other supported options include `hicanu` and `metaflye`.
-- Check that the `tmpdir` argument is set correctly in `config.yaml`. The default is `/scratch`.
+- Check settings in `config.yaml`, and ensure the `tmpdir` argument is set correctly in `config.yaml`. The default is `/scratch`.
 - Execute snakemake using the general commands below: 
 ```
 snakemake --snakefile Snakefile-hifimags --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]
@@ -68,32 +70,34 @@ HiFi-MAG-Pipeline
 │	└── Sample-Config.yaml
 │
 ├── envs/
-│	├── checkm.yml
-│	├── concoct.yml
+│	├── checkm2.yml
 │	├── dastool.yml
 │	├── gtdbtk.yml
-│	├── maxbin.yml
 │	├── metabat.yml
 │	├── python.yml
-│	└── samtools.yml
+│	├── samtools.yml
+│	└── semibin.yml
 │
 ├── inputs/
 │	└── README.md (this is just a placeholder file, and not required)
 │
 ├── scripts/
-│	├── CheckBins.py
-│	├── CheckM-to-batch-GTDB.py
-│	├── Copy-Circ-Contigs.py
-│	├── Filter-CircLin-Contigs.py
-│	├── Metabat-Plot.py
-│	├── Summary-Plots.py
-│	└── genome-binning-summarizer.py
+│	├── Convert-JGI-Coverages.py
+│	├── Copy-Final-MAGs.py
+│	├── Fasta-Make-Long-Seq-Bins.py
+│	├── Filter-Checkm2-Bins.py
+│	├── Filter-Complete-Contigs.py
+│	├── GTDBTk-Organize.py
+│	├── MAG-Summary.py
+│	├── Make-Incomplete-Contigs.py
+│	├── Maxbin2-organize-outputs.py
+│	└── Plot-Figures.py
 │
-├── Snakefile-hifimags
+├── Snakefile-hifimags.smk
 │
 └── config.yaml
 ```
-The `Snakefile-hifimags` file is the Snakefile for this snakemake workflow. It contains all of the rules of the workflow. 
+The `Snakefile-hifimags.smk` file is the Snakefile for this snakemake workflow. It contains all of the rules of the workflow. 
 
 The `config.yaml` file is the main configuration file used in the snakemake workflow. It contains the main settings that will be used for various programs. 
 
@@ -113,7 +117,7 @@ Finally, the `envs/` directory contains the several files which are needed to in
 
 ## Memory and disk space requirements
 
-Running certain steps in this pipeline will potentially require ~45GB of memory. There is a step in GTDB-Tk (pplacer) that can require large amounts memory (~150GB) and temporary disk space (~250GB). This workflow allows writing temporary files in GTDB-Tk using the `--scratch_dir /scratch` setting, which reduces the memory requirements drastically (e.g., 150GB rather than 1TB). These are known issues with pplacer. If run into memory issues with this step please see the discussion [here](https://github.com/Ecogenomics/GTDBTk/issues/124) for potential solutions.
+Running certain steps in this pipeline will potentially require ~45GB of memory. The step in GTDB-Tk (pplacer) that used to require large amounts memory (~150GB) and temporary disk space (~250GB) has been fixed in the v2.+ release.
 
 ## Dependencies
 
@@ -127,7 +131,9 @@ If you intend to generate a graphic for the snakemake workflow graph, you will a
 
 For assembly of metagenomic samples with HiFi reads, you can use [hifiasm-meta](https://github.com/xfengnefx/hifiasm-meta), [HiCanu](https://github.com/marbl/canu), or [metaFlye](https://github.com/fenderglass/Flye). 
 
-For hifiasm-meta, the default settings work very well. The same is true for metaFlye, but of course make sure to use the `--pacbio-hifi` and `--meta` flags! 
+For hifiasm-meta, the default settings work very well. For very large datasets (>100Gb total data), you may benefit from using the `-S` flag to invoke read selection. It will reduce memory requirements.
+
+For metaFlye the defaults also work well, but of course make sure to use the `--pacbio-hifi` and `--meta` flags! 
 
 For Canu v2.1, we strongly recommend the following settings:
 
@@ -139,27 +145,19 @@ The additional batOptions previously recommended for metagenomics with Canu 2.0 
 
 ## Download required databases
 
-Two databases must be downloaded prior to running analyses, one for `CheckM` and one for `GTDB-Tk`.
-
-**CheckM database**
-
-Complete instructions for the CheckM database can be found at: https://github.com/Ecogenomics/CheckM/wiki/Installation
-
-Briefly, the CheckM database can be obtained from: https://data.ace.uq.edu.au/public/CheckM_databases/
-
-The downloaded file must be decompressed to use it. The unpacked contents will be ~1.7GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`distributions/`, `genome_tree/`, `hmms/`, `hmms_ssu/`, `img/`, `pfam/`, `test_data/`) and two tsv files.
+The database for for `GTDB-Tk` must be downloaded prior to running analyses. The CheckM database is no longer required as of HiFi-MAG-Pipeline v2.0.
 
 **GTDB-Tk database**
 
 Complete instructions for the GTDB-Tk database can be found at: https://ecogenomics.github.io/GTDBTk/installing/index.html
 
-**This workflow currently uses GTDB-Tk v2.1+, which requires GTDB 07-RS207 (release 207).**
+**This workflow currently uses GTDB-Tk v 2.1.1, which requires database R207_v2.**
 
 The current GTDB release can be downloaded from: 
 https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_data.tar.gz
 
 ```
-wget https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_data.tar.gz
+wget https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_v2_data.tar.gz
 tar -xvzf gtdbtk_data.tar.gz  
 ```
 
@@ -175,15 +173,14 @@ It must also be decompressed prior to usage. The unpacked contents will be ~66GB
 To configure the analysis, the main configuration file (`config.yaml`) and sample configuration file (`configs/Sample-Config.yaml`) should be edited. 
 
 #### Main configuration file (`config.yaml`)
-The main configuration file contains several parameters, each of which is described in the configuration file. Depending on your system resources, you may choose to change the number of threads used in the minimap, metabat, checkm, or gtdbtk settings. In particular, the use of `pplacer` in gtdbtk can cause very high memory/disk usage depending on the threads used (see [here](https://github.com/Ecogenomics/GTDBTk/issues/124)). You may wish to change this setting if you encounter issues.
+The main configuration file contains several parameters, each of which is described in the configuration file. Depending on your system resources, you may choose to change the number of threads used in minimap, MetaBat2, SemiBin2, CheckM2, or GTDB-Tk. 
 
-Please also check that the `tmpdir` argument is set correctly. The default is `/scratch`, which may be available to most users on HPC. This can be changed if `/scratch` is not available, or if you are running snakemake locally. Change it to a valid output directory that can be used to write many large files. This is used in conjunction with the `--tmpdir` flag in CheckM and the `--scratch_dir` flag in GTDB-Tk. If you would rather not use these flags, you can edit the `RunCheckM` and `RunGTDBTkIndividual`rules.
+Please also check that the `tmpdir` argument is set correctly. The default is `/scratch`, which may be available to most users on HPC. This can be changed if `/scratch` is not available, or if you are running snakemake locally. Change it to a valid output directory that can be used to write many large files. This is used in conjunction with the `--tmpdir` flag in CheckM2, the `--tmpdir` in SemiBin2, and the `--scratch_dir` flag in GTDB-Tk. 
 
-**You must specify the full paths to the databases that were downloaded for checkm and gtdbtk**. In the configuration file, this is the `datapath` parameter in the checkm settings, and the `gtdbtk_data` parameter in the gtdbtk settings. See above section for where to obtain these databases.
 
-You may also wish to change the thresholds for filtering in the gtdbtk settings: `min_completeness` (default 70), `max_contamination` (default 10), and `max_contigs` (default 10).
+It is not recommended to change settings related to the long contig binning step. However,  you may wish to change the thresholds for filtering bins: `min_completeness` (default 70), `max_contamination` (default 10), and `max_contigs` (default 10).
 
-Finally, make sure to select the appropriate `assembler` used, with supported options including: `hicanu`, `hifiasm-meta`, and `metaflye`. This option will help locate circular contigs in the assembly, and enable the three binning approaches (all contigs binned, linear contigs binned, circular contigs assigned to bins).
+**You must specify the full path to the GTDB-TK database**. In the configuration file, this is the `gtdbtk_data` parameter. See above section for where to obtain the database.
 
 
 #### Sample configuration file (`configs/Sample-Config.yaml`)
@@ -212,13 +209,13 @@ The workflow must be executed from within the directory containing all the snake
 ### Test workflow
 It is a good idea to test the workflow for errors before running it. This can be done with the following command:
 ```
-snakemake -np --snakefile Snakefile-hifimags --configfile configs/Sample-Config.yaml
+snakemake -np --snakefile Snakefile-hifimags.smk --configfile configs/Sample-Config.yaml
 ```
 
 Let's unpack this command:
 - `snakemake` calls snakemake.
 - `-np` performs a 'dry-run' where the rule compatibilities are tested but they are not executed.
-- `--snakefile Snakefile-hifimags` tells snakemake to run this particular snakefile.
+- `--snakefile Snakefile-hifimags.smk` tells snakemake to run this particular snakefile.
 - `--configfile configs/Sample-Config.yaml` tells snakemake to include the samples listed in the sample configuration file.
 
 The dry run command should result in the jobs being displayed on screen. 
@@ -226,14 +223,14 @@ The dry run command should result in the jobs being displayed on screen.
 ### Create workflow figure
 If there are no errors, you may wish to generate a figure of the directed acyclic graph (the workflow steps). You can do this using the following command:
 ```
-snakemake --dag --snakefile Snakefile-hifimags --configfile configs/Sample-Config.yaml | dot -Tsvg > hifimags_analysis.svg
+snakemake --dag --snakefile Snakefile-hifimags.smk --configfile configs/Sample-Config.yaml | dot -Tsvg > hifimags_analysis.svg
 ```
 Here the `--dag` flag creates an output that is piped to `dot`, and an svg file is created. This will show the workflow visually.
 
 ### Execute workflow
 Finally, you can execute the workflow using:
 ```
-snakemake --snakefile Snakefile-hifimags --configfile configs/Sample-Config.yaml -j 48 --use-conda
+snakemake --snakefile Snakefile-hifimags.smk --configfile configs/Sample-Config.yaml -j 48 --use-conda
 ```
 
 There are a couple important arguments that were added here:
@@ -255,12 +252,12 @@ One easy way to run snakemake is to start an interactive session, and execute sn
 The same general commands are used as with "local" execution, but with some additional arguments to support cluster configuration. Below is an example of cluster configuration using SLURM:
 
 ```
-snakemake --snakefile Snakefile-hifimags --configfile configs/Sample-Config.yaml --use-conda --cluster "sbatch --partition=compute --cpus-per-task={threads}" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+snakemake --snakefile Snakefile-hifimags.smk --configfile configs/Sample-Config.yaml --use-conda --cluster "sbatch --partition=compute --cpus-per-task={threads}" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
 ```
 
 Let's unpack this command:
 - `snakemake` calls snakemake.
-- `--snakefile Snakefile-taxprot` tells snakemake to run this particular snakefile.
+- `--snakefile Snakefile-hifimags.smk` tells snakemake to run this particular snakefile.
 - `--configfile configs/Sample-Config.yaml` tells snakemake to use this sample configuration file in the `configs/` directory. This file can have any name, as long as that name is provided here.
 -  `--use-conda` this allows conda to install the programs and environments required for each step. It is essential.
 - `--cluster "sbatch --partition=compute --cpus-per-task={threads}"` are the settings for execution with SLURM, where 'compute' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule. Note that the entire section in quotes can be replaced with an SGE equivalent (see below).
@@ -271,7 +268,7 @@ Let's unpack this command:
 And here is an example using SGE instead:
 
 ```
-snakemake --snakefile Snakefile-hifimags --configfile configs/Sample-Config.yaml --use-conda --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+snakemake --snakefile Snakefile-hifimags.smk --configfile configs/Sample-Config.yaml --use-conda --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
 ```
 - `--cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash"` are the settings for execution with SGE, where 'default' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule.
 
@@ -297,21 +294,19 @@ HiFi-MAG-Pipeline
 ├── envs/
 ├── inputs/
 ├── scripts/
-├── Snakefile-hifimags
+├── Snakefile-hifimags.smk
 ├── config.yaml
 │
 ├── benchmarks/
 ├── logs/
 │
-├── 1-contigs/
+├── 1-long-contigs/
 ├── 2-bam/
-├── 3-concoct/
-├── 3-maxbin/
-├── 3-metabat-bins-full/
-├── 3-metabat-bins-linear-circ/
+├── 3-metabat2/
+├── 3-semibin2/
 ├── 4-DAStool/
-├── 5-checkm/
-├── 6-checkm-summary/
+├── 5-dereplicated-bins/
+├── 6-checkm2/
 ├── 7-gtdbtk/
 └── 8-summary/
 
@@ -320,119 +315,26 @@ HiFi-MAG-Pipeline
 
 - `benchmarks/` contains benchmark information on memory usage and I/O for each rule executed.
 - `logs/` contains log files for each rule executed.
-- `1-contigs/` contains separated fasta files for circular and linear contigs, with a summary file for each (containing names of contigs, lengths).
-- `2-bam/` contains the sorted bam files from mapping reads to full contig set using minimap2.
-- `3-concoct/` contains the outputs from concoct, per sample, using the full contig set for binning.
-- `3-maxbin/` contains the outputs from maxbin2, per sample, using the full contig set for binning.
-- `3-metabat-bins-full/` contains the outputs from metabat2, per sample, using the full contig set for binning.
-- `3-metabat-bins-linear-circ/` contains the outputs from metabat2, per sample, using the linear contig set for binning. Bins are also created for each circular contig here.
-- `4-DAStool/` contains outputs from DAS_Tool for bin merging, per sample.
-- `5-checkm/` contains CheckM results for merged bins, per sample.
-- `6-checkm-summary/` contains intermediate summary files, per sample.
-- `7-gtdb/` contains gtdb-tk results for the CheckM filtered bins, per sample.
+- `1-long-contigs/` contains the outputs from the long contig completeness evaluation. The contents change depending on whether or not any long, complete contigs are found. If none are found, a `SAMPLE.no_passed_bins.txt` file will be here, but if some are found a `SAMPLE.passed_bins.txt` file will be here instead. Additionally some useful figures will be present: `SAMPLE.completeness_histo.pdf`, `SAMPLE.completeness_vs_size_scatter.pdf`.
+- `2-bam/` contains the sorted bam files and depth files needed for binning, and later for depth of coverage calculations per MAG.
+- `3-metabat2/` contains the outputs from MetaBat2, per sample, using the "incomplete" contigs set (e.g., the starting contigs minus and long complete contigs).
+- `3-semibin2/` contains the outputs from SemiBin2, per sample, using the "incomplete" contigs set (e.g., the starting contigs minus and long complete contigs).
+- `4-DAStool/` contains outputs from DAS_Tool for comparing the MetaBat2 and SemiBin2 bin sets of the "incomplete" contigs set (e.g., the starting contigs minus and long complete contigs), per sample.
+- `5-dereplicated-bins/` contains the dereplicated bins from DAS_Tool and any long complete contigs from step 1, per sample.
+- `6-checkm2/` contains the CheckM2 results for the dereplicated bin set above, per sample.
+- `7-gtdbtk/` contains gtdb-tk results for dereplicated bins that passed filtering with CheckM2, per sample.
 - `8-summary/` **contains the main output files of interest**.
 
 Within `8-summary/`, there will be a folder for each sample. Within a sample folder there are several items:
-+ `SAMPLE.HiFi-MAG.summary.txt`: A main summary file that brings together information from metabat2, checkm, and gtdb-tk for all MAGs that pass the filtering step. 
-+ `SAMPLE.Completeness-Contamination-Contigs.pdf`: A plot showing the relationship between completeness, contamination, and number of contigs for each high-quality MAG recovered.
-+ `SAMPLE.GenomeSizes-Depths.pdf`: A plot showing the relationship between genome size and depth of coverage for each high-quality MAG recovered.
-+ `SAMPLE-bins/`: A folder that contains the fasta files for all high-quality MAGs/bins.
-+ `SAMPLE-binplots/`: A folder that contains several plots. One set of plots is for the unfiltered genome bins (e.g., all bins from metabat2), and the other is for the filtered high-quality MAGs. These plots compare % genome completeness vs. % contamination, with variations including bin name labels or the number of contigs per bin labeled.
-+ `SAMPLE-bin-ref-pairs/`: A folder which contains a subfolder for each high-quality MAG/bin. These folders are named using the bin numbers from metabat2. Inside each folder is a fasta file of the MAG and the closest reference (as inferred by GTDK-Tk). These two files can be useful for performing whole genome alignments or further characterization of the MAG.
+
++ `MAGs/`: A folder that contains the fasta files for all high-quality MAGs/bins.
++ `SAMPLE.All-DASTool-Bins.pdf`: Figure that shows the dereplicated and merged bins that were created from the set of incomplete contigs (using MetaBat2 and SemiBin2).
++ `SAMPLE.Complete.txt`: This is a blank file that is created when the workflow stopping point is reached. 
++ `SAMPLE.Completeness-Contamination-Contigs.pdf`: A plot showing the relationship between completeness and contamination for each high-quality MAG recovered, colored by the number of contigs per MAG.
++ `SAMPLE.GenomeSizes-Depths.pdf`:  A plot showing the relationship between genome size and depth of coverage for each high-quality MAG recovered, colored by % GC content per MAG.
++ `SAMPLE.HiFi_MAG.summary.txt`: A main summary file that brings together information from CheckM2 and GTDB-Tk for all MAGs that pass the filtering step. 
 
 
 [Back to top](#TOP)
 
----------------
-
-## **6. Usage Details for Main Programs** <a name="UDMP"></a>
-
-In this section, additional details are provided for the main programs used in the workflow. The commands to call these programs are provided here for quick reference. Curly braces are sections filled automatically by snakemake. For additional details on other steps, please refer to the Snakefile-hifimags file.
-
-### Minimap2
-
-Map HiFi reads to contigs using minimap2 metagenomic HiFi settings, pipe output to samtools sort, write output bam file:
 ```
-minimap2 -a -k 19 -w 10 -I 10G -g 5000 -r 2000 --lj-min-ratio 0.5 -A 2 -B 5 -O 5,56 -E 4,1 -z 400,50 --sam-hit-only -t {threads} {input.contigs} {input.reads} 2> {log} | samtools sort -@ {threads} -o {output}"
-```
-
-### CONCOCT
-
-Usage follows general procedure but default contig cut size is increased to 100,000 bases and minimum contig size for clustering is set to 50000 (accessible in the config file). 
-
-Cut contigs.
-```
-cut_up_fasta.py {input.contigs} -c {params.cut_size} -o 0 --merge_last -b {output.bed} 1> {output.cut} 2> {log} 
-```
-
-Get coverages.
-```
-concoct_coverage_table.py {input.bed} {input.bam} 1> {output} 2> {log} 
-```
-
-Run concoct. The `params.min_contig_size` param is set to 50000 in the config file.
-```
-concoct --composition_file {input.cut} --coverage_file {input.cov} -l {params.min_contig_size} -b {output.outdir} -t {threads} 2> {log}
-```
-
-Merge contigs.
-```
-merge_cutup_clustering.py {input} 1> {output} 2> {log}
-```
-
-Write bins.
-```
-extract_fasta_bins.py {input.contigs} {input.merge} --output_path {input.outdir} 2> {log} && touch {output.complete} 
-```
-
-### MaxBin2
-
-Run maxbin2, default minimum contig size is set to 50000 (accessible in config file).
-```
-run_MaxBin.pl -contig {input.contigs} -out {wildcards.sample}  -abund {input.maxbindepths} -min_contig_length {params.min_contig_size} -thread  {threads} &> {log} && touch {output.complete}
-```
-
-
-### MetaBAT2
-
-Convert bam file to depth file for metabat2 using metabat2 helper tool.
-```
-jgi_summarize_bam_contig_depths --outputDepth {output} {input.bam} 2> {log}
-```
-
-Run metabat2.
-```
-metabat2 -i {input.contigs} -a {input.depths} -o {params.prefix} -t {threads} -m {params.min_contig_size} -v &> {log} && touch {output.complete}
-```
-
-
-### DAS_Tool
-
-Inputs for DAS_Tool are made along the way for other binning methods. This assumes multiple strategies are being used.
-```
-DAS_Tool -i {input.lincirc},{input.full},{input.maxbin},{input.concoct} -c {input.contigs} -l lincirc,metabat2,maxbin2,concoct -o {params.outlabel} --search_engine {params.search}  --write_bins 1 -t {threads} --score_threshold {params.thresh} --debug &> {log} && touch {output.complete}
-```
-
-
-### CheckM
-
-Set the datapath for checkm database and then run checkm.
-```
-checkm data setRoot {params.datapath} &> {log.root} && checkm lineage_wf -x fa -t {threads} --pplacer_threads {params.ppthreads} --tmpdir /scratch {params.indir} {params.outdir} &> {log.run}
-```
-
-Summarize results in tabular format.
-```
-checkm qa -o2 {input} {params.outdir} -f {output} --tab_table &> {log}
-```
-
-### GTDB-Tk
-
-Set datapath and run gtdbtk.
-```
-GTDBTK_DATA_PATH={params.gtdbtk_data:q} gtdbtk classify_wf --batchfile {input} --out_dir {params.outdir} -x fa --prefix {wildcards.sample} --cpus {threads} --pplacer_cpus {params.ppthreads} --scratch_dir /scratch &> {log}
-```
-
-[Back to top](#TOP)
-
----------------

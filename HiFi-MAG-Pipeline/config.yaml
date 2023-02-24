@@ -1,53 +1,57 @@
-
-# Choose the assembler used to generate the contigs. Choices currently include:
-# hicanu 
-# hifiasm-meta
-# metaflye
-
-# If you select metaflye, you must also provide the SAMPLE-assembly_info.txt file
-# for each sample in the inputs/ folder. 
-
-# The choice of assembler changes how the script will look for circular contigs in the 
-# contigs fasta files. This step is important in separating the circular and linear contigs 
-# into different files, as binning is performed several ways using these file sets.
-assembler: "hifiasm-meta"
-
-# The path to use as the temporary directory to write large files to, which is used with the
-# --tmpdir flag in checkm, and the --scratch_dir flag in gtdb. If using HPC, use "/scratch" 
-# if you have access. If you do not have access to "/scratch" on HPC or are running 
+# The path to use as the temporary directory to write large files to, which is used for
+# SemiBin2 and GTDB-Tk. If you do not have access to "/scratch" on HPC or are running
 # snakemake locally, change to a valid directory.
 tmpdir: "/scratch"
+
+checkm2:
+  # The number of threads to use for CheckM.
+  threads: 24
 
 minimap:
   # The number of threads to use for minimap2.
   threads: 24
   
+# The settings below will affect the completeness-aware binning step.
+completeness_aware:
+  # Minimum size of a contig to consider for completeness scores. The default value is set to 500kb.
+  # This value should NOT be increased. It could be decreased, but genomes <500kb are not expected and
+  # contigs this size will likely fail the completeness filtering.
+  min_length: 500000
+
+  # Minimum completeness score (from CheckM2) to mark a contig as "complete" and place 
+  # it in a distinct bin. This should not be lowered below 90.
+  min_completeness: 93
+
 metabat:
   # The number of threads to use for metabat2.
   threads: 12
-  # minimum size of contig to be included in binning
-  min_contig_size: 50000
 
-concoct:
-  # The number of threads to use for concoct.
-  threads: 24
-  # size of chunks to cut contigs into (required)
-  cut_size: 100000
   # minimum size of contig to be included in binning
-  min_contig_size: 50000
+  min_contig_size: 30000
 
-maxbin:
-  # The number of threads to use for maxbin.
-  threads: 24
-  # minimum size of contig to be included in binning
-  min_contig_size: 50000
-  
+semibin:
+  # The number of threads to use for semibin2.
+  threads: 48
+
+  # Set model flag. To change the model use "--environment=MODEL" below.
+  # Choices include: human_gut, human_oral, dog_gut, cat_gut, mouse_gut, pig_gut, chicken_caecum,
+  #                  ocean, soil, built_environment, wastewater,  global
+  # The global model is set as the default. To change, use the following syntax:
+  # model: "--environment=human_gut"
+
+  # To enable a new model to be trained from your data, set the below value to an empty string. Example:
+  # model: ""
+  # Note that new model training will take significantly longer to run (5-20 hours additional, per sample).
+  model: "--environment=global"
+
 dastool:
   # The number of threads to use for DAS Tool.
   threads: 24
+
   # The engine for single copy gene searching, choices include:
   # blast, diamond, usearch.
   search: "diamond"
+
   # Score threshold until selection algorithm will keep selecting bins [0 to 1].
   # This is roughly equivalent to CheckM completeness score (0.2 = 20% completeness).
   # If the desired minimum completeness is changed in the gtdbtk section below, 
@@ -55,42 +59,28 @@ dastool:
   # DAS_Tool score to 0.2 (20%), and later filter out all bins with <70% completeness. 
   score_threshold: 0.2
   
-checkm:
-  # The number of threads to use for CheckM.
-  threads: 24
-  
-  # The number of threads to use for pplacer when it is called within checkm.
-  pplacer_threads: 12
-  
-  # A full path to the data downloaded from: https://data.ace.uq.edu.au/public/CheckM_databases/
-  # The resulting file must be decompressed to use it.
-  # This path is used for the "checkm data setRoot <checkm_data_dir>" command.
-  # The path below must point to the directory that contains the following folders:
-  # distributions, genome_tree, hmms, hmms_ssu, img, pfam, test_data, and the two tsv files.
-  datapath: "/dept/appslab/datasets/dp_checkm/"
-  
-gtdbtk:
+filters:
+  # Set the quality filters that are applied to MAGs
   # The minimum percent completeness for a genome bin.
   min_completeness: 70
-  
+
   # The maximum percent contamination for a genome bin.
   max_contamination: 10
-  
+
   # The maximum number of contigs allowed in a genome bin.
   max_contigs: 20
-  
+
+gtdbtk:
   # The number of threads to use for gtdb-tk.
   threads: 48
-  
-  # The number of threads to use for pplacer when it is called within gtdbtk.
-  pplacer_threads: 24
-  
+
   # The path the database downloaded for gtdbtk.
+  # Current requirement is for GTDB-Tk v 2.1.1, which requires database R207_v2
   # To download the latest release you can use:
-  # wget https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_data.tar.gz
+  # wget https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_v2_data.tar.gz
   # tar -xvzf gtdbtk_data.tar.gz  
   # Please note that the data for release 207 are >68GB in size.
   # The path below must point to the directory than contains the following folders:
   # fastani, markers, masks, metadata, mrca_red, msa, pplacer, radii, split, taxonomy
-  gtdbtk_data: "/dept/appslab/datasets/dp_gtdb/release207"
+  gtdbtk_data: "/dept/appslab/datasets/dp_gtdb/release207_v2"
   
