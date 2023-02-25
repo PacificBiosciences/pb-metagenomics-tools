@@ -121,7 +121,7 @@ The `config.yaml` file is the main configuration file used in the snakemake work
 
 The `configs/` directory contains an example configuration file for specifying which samples are to be run. The configuration file can be renamed. It must be specified in the command line call for snakemake for any samples to be run.
 
-The `inputs/` directory should contain all of the required input files for each sample. In this workflow there must be a `SAMPLE.fasta` file of HiFi reads and a `SAMPLE.contigs.fasta` file that contains the assembled contigs. These can be the actual files, or symbolic links to the files (for example using `ln -s source_file symbolic_name`). If you used metaFlye for assembly, you must also include the `SAMPLE-assembly_info.txt` file
+The `inputs/` directory should contain all of the required input files for each sample. In this workflow there must be a `SAMPLE.fasta` file of HiFi reads and a `SAMPLE.contigs.fasta` file that contains the assembled contigs. These can be the actual files, or symbolic links to the files (for example using `ln -s source_file symbolic_name`).
 
 The `scripts/` directory contains a few Python scripts required for the workflow. These are involved with formatting, filtering, plotting, and summarizing. They are called in different steps of the workflow.
 
@@ -147,7 +147,7 @@ If you intend to generate a graphic for the snakemake workflow graph, you will a
 
 ## Generate assemblies
 
-For assembly of metagenomic samples with HiFi reads, you can use [hifiasm-meta](https://github.com/xfengnefx/hifiasm-meta), [HiCanu](https://github.com/marbl/canu), or [metaFlye](https://github.com/fenderglass/Flye). 
+For assembly of metagenomic samples with HiFi reads, you can use [hifiasm-meta](https://github.com/xfengnefx/hifiasm-meta), [metaFlye](https://github.com/fenderglass/Flye), or [HiCanu](https://github.com/marbl/canu). 
 
 For hifiasm-meta, the default settings work very well. For very large datasets (>100Gb total data), you may benefit from using the `-S` flag to invoke read selection. It will reduce memory requirements.
 
@@ -195,8 +195,9 @@ The main configuration file contains several parameters, each of which is descri
 
 Please also check that the `tmpdir` argument is set correctly. The default is `/scratch`, which may be available to most users on HPC. This can be changed if `/scratch` is not available, or if you are running snakemake locally. Change it to a valid output directory that can be used to write many large files. This is used in conjunction with the `--tmpdir` flag in CheckM2, the `--tmpdir` in SemiBin2, and the `--scratch_dir` flag in GTDB-Tk. 
 
-
 It is not recommended to change settings related to the long contig binning step. However,  you may wish to change the thresholds for filtering bins: `min_completeness` (default 70), `max_contamination` (default 10), and `max_contigs` (default 10).
+
+For SemiBin2, you may wish to change the model flag. The default is set to run a general pre-computed model (`--environment=global`). This can be changed to one of several pre-computed models (`human_gut`, `human_oral`, `dog_gut`, `cat_gut`, `mouse_gut`, `pig_gut`, `chicken_caecum`, `ocean`, `soil`, `built_environment`, `wastewater`,  `global`). To enable a new model to be trained from your dataset, this should be changed to an empty string (`""`). Doing so will invoke the self-supervised learning approach. However, please be aware that this can add a *significant* amount fo run-time to the analysis (~15 additional hours per sample was not uncommon in my tests). The de novo model will likely obtain more bins than a pre-computed model, but this is highly dependent on your dataset. To read more about this, please see the pre-print [**here**](https://www.biorxiv.org/content/10.1101/2023.01.09.523201v1).
 
 **You must specify the full path to the GTDB-TK database**. In the configuration file, this is the `gtdbtk_data` parameter. See above section for where to obtain the database.
 
