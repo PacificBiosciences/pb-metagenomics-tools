@@ -348,7 +348,7 @@ rule CopyDAStoolBins:
     log:
         os.path.join(CWD, "logs", "{sample}.CopyDAStoolBins.log")
     shell:
-        "cp {input.binsdir}*.fa {input.copydir} 2> {log} && touch {output}"
+        "cp {input.binsdir}/*.fa {input.copydir} 2> {log} && touch {output}"
 
 ##################################################################################################
 # CheckM2 analysis and checkpoint, fork to GTDB-Tk & summary (if bins found) or end analysis (no bins found)
