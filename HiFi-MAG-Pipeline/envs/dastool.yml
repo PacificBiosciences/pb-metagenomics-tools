@@ -1,7 +1,8 @@
 name: dastool_env
 channels:
-- bioconda
-- conda-forge
+  - bioconda
+  - conda-forge
+  - defaults
 dependencies:
-- das_tool == 1.1.3
+  - das_tool = 1.1
 

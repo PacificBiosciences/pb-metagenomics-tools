@@ -80,7 +80,7 @@ def histo_completeness(df, plot_histo, min_completeness):
     """
     print("histo_completeness: Making histogram.")
     fig, ax = plt.subplots(figsize=(10, 8))
-    if df.shape[0] <= 1:
+    if df.shape[0] <= 1 or df.shape[0]*100 == df['Completeness'].sum():
         sns.histplot(data=df, x='Completeness')
     else:
         sns.histplot(data=df, x='Completeness', binwidth=1)
