@@ -1,7 +1,7 @@
 name: metabat_env
 channels:
-- bioconda
-- conda-forge
-- defaults
+  - bioconda
+  - conda-forge
+  - defaults
 dependencies:
-- metabat2 == 2.15
+  - metabat2 == 2.15
