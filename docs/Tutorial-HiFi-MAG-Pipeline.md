@@ -172,7 +172,7 @@ Complete instructions for the GTDB-Tk database can be found at: https://ecogenom
 **This workflow currently uses GTDB-Tk v 2.1.1, which requires database R207_v2.**
 
 The current GTDB release can be downloaded from: 
-https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_data.tar.gz
+https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_v2_data.tar.gz
 
 ```
 wget https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_v2_data.tar.gz
