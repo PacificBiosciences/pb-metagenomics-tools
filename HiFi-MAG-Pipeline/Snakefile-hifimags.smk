@@ -261,7 +261,7 @@ rule DASinputMetabat2:
     log:
         os.path.join(CWD, "logs", "{sample}.DASinputMetabat2.log")
     shell:
-        "Fasta_to_Scaffolds2Bin.sh -i {input} -e fa 1> {output} 2> {log}"
+        "Fasta_to_Contig2Bin.sh -i {input} -e fa 1> {output} 2> {log}"
 
 
 ##################################################################################################
@@ -303,7 +303,7 @@ rule DASinputSemiBin2:
     log:
         os.path.join(CWD, "logs", "{sample}.DASinputSemiBin2.log")
     shell:
-        "Fasta_to_Scaffolds2Bin.sh -i {params.indir} -e fa 1> {output} 2> {log}"
+        "Fasta_to_Contig2Bin.sh -i {params.indir} -e fa 1> {output} 2> {log}"
 
 ##################################################################################################
 # Run DAS_Tool
@@ -331,7 +331,7 @@ rule DAStoolAnalysis:
     shell:
         "DAS_Tool -i {input.metabat},{input.semibin} -c {input.contigs} "
         "-l metabat2,semibin2 -o {params.outlabel} --search_engine {params.search} "
-        "--write_bins 1 -t {threads} --score_threshold {params.thresh} --debug "
+        "--write_bins -t {threads} --score_threshold {params.thresh} --debug "
         "&> {log} && touch {output.complete}"
 
 rule CopyDAStoolBins:
