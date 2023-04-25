@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **Name the workflow**
-There are multiple workflows in pb-metagenomics-tools, start by naming the one you are using.
+There are multiple workflows within pb-metagenomics-tools. Please name the workflow you are using here.
 
 **Describe the bug**
 A clear and concise description of what the bug is.
