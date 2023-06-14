@@ -7,6 +7,8 @@ assignees: ''
 
 ---
 
+Please leave the headers below and replace the relevant text. This will expedite addressing the ticket. 
+
 **Name the workflow**
 There are multiple workflows within pb-metagenomics-tools. Please name the workflow you are using here.
 
