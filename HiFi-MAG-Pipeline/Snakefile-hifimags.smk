@@ -158,10 +158,28 @@ rule FilterCompleteContigs:
 ##################################################################################################
 # Get various coverage files (performed after completeness-aware binning steps)
 
-rule MinimapToBam:
+rule MinimapIndex:
     input:
         reads = os.path.join(CWD, "inputs", "{sample}.fasta"),
         contigs = os.path.join(CWD, "inputs", "{sample}.contigs.fasta")
+    output:
+        os.path.join(CWD, "2-bam", "{sample}.contigs.mmi")
+    conda:
+        "envs/samtools.yml"
+    threads: 
+        config['minimap']['threads']
+    log: 
+        os.path.join(CWD, "logs", "{sample}.MinimapIndex.log")
+    benchmark: 
+        os.path.join(CWD, "benchmarks", "{sample}.MinimapIndex.tsv")
+    shell:
+        "minimap2 -x map-hifi -t {threads} " 
+        "-d {output} {input.contigs} 2> {log}"
+
+rule MinimapToBam:
+    input:
+        reads = os.path.join(CWD, "inputs", "{sample}.fasta"),
+        index = os.path.join(CWD, "2-bam", "{sample}.contigs.mmi")
     output:
         os.path.join(CWD, "2-bam", "{sample}.bam")
     conda:
@@ -173,9 +191,8 @@ rule MinimapToBam:
     benchmark: 
         os.path.join(CWD, "benchmarks", "{sample}.MinimapToBam.tsv")
     shell:
-        "minimap2 -a -k 19 -w 10 -I 10G -g 5000 -r 2000 --lj-min-ratio 0.5 "
-        "-A 2 -B 5 -O 5,56 -E 4,1 -z 400,50 --sam-hit-only -t {threads} " 
-        "{input.contigs} {input.reads} 2> {log} | samtools sort -@ {threads} -o {output}"
+        "minimap2 -a --sam-hit-only --secondary=no -t {threads} --split-prefix temp " 
+        "{input.index} {input.reads} 2> {log} | samtools sort -@ {threads} -o {output}"
         
 rule IndexBam:
     input:
