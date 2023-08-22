@@ -1,0 +1,7 @@
+name: diamond_env
+channels:
+- bioconda
+- conda-forge
+- defaults
+dependencies:
+- diamond >= 2.0.8

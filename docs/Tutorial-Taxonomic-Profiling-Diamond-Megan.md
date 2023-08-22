@@ -18,7 +18,7 @@
 
 The purpose of this snakemake workflow is to perform translation alignment of HiFi reads to a protein database, and summarize the resulting alignments using MEGAN-LR. This allows interactive taxonomic and functional analyses to be performed across samples. 
 
-This workflow will output absolute read counts and read-based classifications of the EC, EGGNOG, INTERPRO2GO, and SEED functional classes across all samples, along with read counts and read-based classifications of the NCBI and GTDB taxonomy classes. The NCBI taxonomic counts are now also provided in kraken report (kreport) and metaphlan (mpa) output formats. 
+This workflow will output absolute read counts and read-based classifications of the EC, EGGNOG, INTERPRO2GO, and SEED functional classes across all samples, along with read counts and read-based classifications of the NCBI and GTDB taxonomy classes. The NCBI taxonomic counts are now also provided in kraken report (kreport) and metaphlan (mpa) output formats. The KEGG annotations can be obtained by using MEGAN-UE. 
 
 The general steps of the Taxonomic-Profiling-Diamond-Megan pipeline are shown below:
 
@@ -39,8 +39,8 @@ This pipeline performed favorably in a recent benchmarking study evaluating seve
 This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require ~60GB memory and 40-200GB disk space per sample (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps. Snakemake v5+ is required, and the workflows have been tested using v5.19.3.
 
 - Clone the Taxonomic-Profiling-Diamond-Megan directory.
-- Download MEGAN6 community edition from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html) to obtain `sam2rma`and `rma2info`. **Ensure you have at least version 6.19.+**
-- Download and unpack the newest MEGAN mapping file for NCBI-nr accessions from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html).
+- Download MEGAN6 community edition (or ultimate edition) from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html) to obtain `sam2rma`and `rma2info`. **Ensure you have at least version 6.19.+**
+- Download and unpack the newest MEGAN mapping file for NCBI-nr accessions from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). This should be the community edition or ultimate edition, depending on which MEGAN you've downloaded.
 - Download the NCBI-nr database from: ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz*
 - Index the NCBI-nr database with DIAMOND using `diamond makedb --in nr.gz --db diamond_nr_db --threads 24`. This will result in a `diamond_nr_db.dmnd` file that is ~150GB.
 - Include all input HiFi fasta files (`SAMPLE.fasta`) in the `inputs/` folder. These can be files or symlinks. 
@@ -48,7 +48,7 @@ This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](h
 - Specify the full path to `sam2rma`, full path to `rma2info`, full path to the MEGAN database file , and full path to the indexed NCBI-nr database in `config.yaml`. Ensure the `hit_limit` argument (under `diamond`), `readassignmentmode` (under `sam2rma`), and `minSupportPercent` (under `sam2rma`) arguments are set correctly for your analysis.
 - Execute snakemake using the general commands below: 
 ```
-snakemake --snakefile Snakefile-diamond-megan --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]
+snakemake --snakefile Snakefile-diamond-megan.smk --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]
 ```
 The choice of additional arguments to include depends on where and how you choose to run snakemake. Please refer to the [Executing Snakemake](#EXS) section for more details.
 
@@ -77,11 +77,12 @@ Taxonomic-Profiling-Diamond-Megan
 │	├── Run_ete3_NCBI_update.py
 │	└── sam-merger-screen-cigar.py
 │
-├── Snakefile-diamond-megan
+├── Snakefile-diamond-megan.smk
+├── Snakefile-diamond-megan-ue.smk
 │
 └── config.yaml
 ```
-The `Snakefile-diamond-megan` file is the Snakefile for this snakemake workflow. It contains all of the rules of the workflow. 
+The `Snakefile-diamond-megan.smk` and `Snakefile-diamond-megan-ue.smk` files are the Snakefiles for this snakemake workflow. They contains all of the rules of the workflow. One is for MEGAN community edition, and the other for MEGAN ultimate edition. 
 
 The `config.yaml` file is the main configuration file used in the snakemake workflow. It contains the main settings that will be used for various programs. 
 
@@ -118,9 +119,9 @@ If you intend to generate a graphic for the snakemake workflow graph, you will a
 
 ## Download MEGAN6 and MEGAN database file
 
-MEGAN6 community edition should be downloaded from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). The `sam2rma` and `rma2info` binaries are required for this pipeline. Both binaries should be present in the `tools` bin distributed with MEGAN. **The full path to `sam2rma` and `rma2info` must be specified in `config.yaml`.**
+MEGAN6 community edition or ultimate edition should be downloaded from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). The `sam2rma` and `rma2info` binaries are required for this pipeline. Both binaries should be present in the `tools` bin distributed with MEGAN. **The full path to `sam2rma` and `rma2info` must be specified in `config.yaml`.** The binaries will be slightly different between the community and ultimate editions. If you want to access KEGG annotations, use the ultimate edition.
 
-The newest MEGAN mapping file for NCBI-nr accessions should also be downloaded from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). It must be unpacked to use it. The current unpacked file is ~7GB. **The full path to the unpacked database file (ending with `.db`) must be specified in `config.yaml`.**
+The newest MEGAN mapping file for NCBI-nr accessions should also be downloaded from the [MEGAN download page](https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html). It must be unpacked to use it. The current unpacked file is ~7GB. **The full path to the unpacked database file (ending with `.db`) must be specified in `config.yaml`.** Note that there is one file for the community edition, and one for the ultimate edition. If you want access to KEGG annotations, use the ultimate edition.
 
 ## Download and index the NCBI-nr database
 
@@ -180,13 +181,13 @@ The workflow must be executed from within the directory containing all the snake
 ### Test workflow
 It is a good idea to test the workflow for errors before running it. This can be done with the following command:
 ```
-snakemake -np --snakefile Snakefile-diamond-megan --configfile configs/Sample-Config.yaml
+snakemake -np --snakefile Snakefile-diamond-megan.smk --configfile configs/Sample-Config.yaml
 ```
 
 Let's unpack this command:
 - `snakemake` calls snakemake.
 - `-np` performs a 'dry-run' where the rule compatibilities are tested but they are not executed.
-- `--snakefile Snakefile-diamond-megan` tells snakemake to run this particular snakefile.
+- `--snakefile Snakefile-diamond-megan.smk` tells snakemake to run this particular snakefile.
 - `--configfile configs/Sample-Config.yaml` tells snakemake to include the samples listed in the sample configuration file.
 
 The dry run command should result in a sequence of jobs being displayed on screen. 
@@ -194,14 +195,14 @@ The dry run command should result in a sequence of jobs being displayed on scree
 ### Create workflow figure
 If there are no errors, you may wish to generate a figure of the directed acyclic graph (the workflow steps). You can do this using the following command:
 ```
-snakemake --dag --snakefile Snakefile-diamond-megan --configfile configs/Sample-Config.yaml | dot -Tsvg > taxfunc_analysis.svg
+snakemake --dag --snakefile Snakefile-diamond-megan.smk --configfile configs/Sample-Config.yaml | dot -Tsvg > taxfunc_analysis.svg
 ```
 Here the `--dag` flag creates an output that is piped to `dot`, and an svg file is created. This will show the workflow visually.
 
 ### Execute workflow
 Finally, you can execute the workflow using:
 ```
-snakemake --snakefile Snakefile-diamond-megan --configfile configs/Sample-Config.yaml -j 48 --use-conda
+snakemake --snakefile Snakefile-diamond-megan.smk --configfile configs/Sample-Config.yaml -j 48 --use-conda
 ```
 
 There are a couple important arguments that were added here:
@@ -223,12 +224,12 @@ One easy way to run snakemake is to start an interactive session, and execute sn
 The same general commands are used as with "local" execution, but with some additional arguments to support cluster configuration. Below is an example of cluster configuration using SLURM:
 
 ```
-snakemake --snakefile Snakefile-diamond-megan --configfile configs/Sample-Config.yaml --use-conda --cluster "sbatch --partition=compute --cpus-per-task={threads}" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+snakemake --snakefile Snakefile-diamond-megan.smk --configfile configs/Sample-Config.yaml --use-conda --cluster "sbatch --partition=compute --cpus-per-task={threads}" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
 ```
 
 Let's unpack this command:
 - `snakemake` calls snakemake.
-- `--snakefile Snakefile-diamond-megan` tells snakemake to run this particular snakefile.
+- `--snakefile Snakefile-diamond-megan.smk` tells snakemake to run this particular snakefile.
 - `--configfile configs/Sample-Config.yaml` tells snakemake to use this sample configuration file in the `configs/` directory. This file can have any name, as long as that name is provided here.
 -  `--use-conda` this allows conda to install the programs and environments required for each step. It is essential.
 - `--cluster "sbatch --partition=compute --cpus-per-task={threads}"` are the settings for execution with SLURM, where 'compute' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule. Note that the entire section in quotes can be replaced with an SGE equivalent (see below).
@@ -239,7 +240,7 @@ Let's unpack this command:
 And here is an example using SGE instead:
 
 ```
-snakemake --snakefile Snakefile-diamond-megan --configfile configs/Sample-Config.yaml --use-conda --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+snakemake --snakefile Snakefile-diamond-megan.smk --configfile configs/Sample-Config.yaml --use-conda --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
 ```
 - `--cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash"` are the settings for execution with SGE, where 'default' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule.
 
@@ -267,7 +268,8 @@ Taxonomic-Profiling-Diamond-Megan
 ├── envs/
 ├── inputs/
 ├── scripts/
-├── Snakefile-diamond-megan
+├── Snakefile-diamond-megan.smk
+├── Snakefile-diamond-megan-ue.smk
 ├── config.yaml
 │
 ├── benchmarks/

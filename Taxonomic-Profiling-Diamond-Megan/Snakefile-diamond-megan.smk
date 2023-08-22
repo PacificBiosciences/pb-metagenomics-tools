@@ -34,8 +34,6 @@ rule ReadCounts:
         os.path.join(CWD, "inputs", "{sample}.fasta")
     output: 
         os.path.join(CWD, "4-rma", "{sample}.readcounts.txt")
-    conda:
-        "envs/general.yml"
     threads: 2
     benchmark: 
         os.path.join(CWD, "benchmarks", "{sample}.ReadCounts.tsv")
@@ -52,7 +50,7 @@ rule SplitFasta:
     output: 
         temp(expand(os.path.join(CWD, "1-chunks", "{{sample}}.fasta_chunk_000000{piece}"), piece = CHUNKS))
     conda:
-        "envs/general.yml"
+        "envs/exonerate.yml"
     threads: 2
     benchmark: 
         os.path.join(CWD, "benchmarks", "{sample}.SplitFasta.tsv")
@@ -68,7 +66,7 @@ rule RunDiamond:
     output:
         temp(os.path.join(CWD, "2-diamond", "{sample}.{piece}.sam"))
     conda:
-        "envs/general.yml"
+        "envs/diamond.yml"
     threads: 
         config['diamond']['threads']
     params:
@@ -92,7 +90,7 @@ rule MergeSam:
     output:
         os.path.join(CWD, "3-merged", "{sample}.merged.sam")
     conda:
-        "envs/general.yml"
+        "envs/python.yml"
     threads: 1
     log: 
         os.path.join(CWD, "logs", "{sample}.MergeSam.log")
@@ -107,8 +105,6 @@ rule MakeRMAfiltered:
         reads = os.path.join(CWD, "inputs", "{sample}.fasta")
     output:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_filtered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
-    conda:
-        "envs/general.yml"
     threads: 
         config['sam2rma']['threads']
     params:
@@ -131,8 +127,6 @@ rule MakeRMAunfiltered:
         reads =  os.path.join(CWD, "inputs", "{sample}.fasta")
     output:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_unfiltered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
-    conda:
-        "envs/general.yml"
     threads: 
         config['sam2rma']['threads']
     params:
@@ -156,8 +150,6 @@ rule RunR2CforEC:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_unfiltered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
     output:
         os.path.join(CWD, "5-r2c", "{sample}.EC.reads.txt")
-    conda:
-        "envs/general.yml"
     threads: 
         config['rma2info']['threads']
     params:
@@ -174,8 +166,6 @@ rule RunR2CforEGGNOG:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_unfiltered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
     output:
         os.path.join(CWD, "5-r2c", "{sample}.EGGNOG.reads.txt")
-    conda:
-        "envs/general.yml"
     threads: 
         config['rma2info']['threads']
     params:
@@ -192,8 +182,6 @@ rule RunR2CforINTERPRO2GO:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_unfiltered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
     output:
         os.path.join(CWD, "5-r2c", "{sample}.INTERPRO2GO.reads.txt")
-    conda:
-        "envs/general.yml"
     threads: 
         config['rma2info']['threads']
     params:
@@ -210,8 +198,6 @@ rule RunR2CforSEED:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_unfiltered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
     output:
         os.path.join(CWD, "5-r2c", "{sample}.SEED.reads.txt")
-    conda:
-        "envs/general.yml"
     threads: 
         config['rma2info']['threads']
     params:
@@ -223,13 +209,27 @@ rule RunR2CforSEED:
     shell:
         "{params.rma2info} -i {input} -o {output} -r2c SEED &> {log}"     
 
+rule RunR2CforKEGG:
+    input:
+        expand(os.path.join(CWD, "4-rma", "{{sample}}_unfiltered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
+    output:
+        os.path.join(CWD, "5-r2c", "{sample}.KEGG.reads.txt")
+    threads: 
+        config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        os.path.join(CWD, "logs", "{sample}.RunR2CforKEGG.log")
+    benchmark: 
+        os.path.join(CWD, "benchmarks", "{sample}.RunR2CforKEGG.tsv")
+    shell:
+        "{params.rma2info} -i {input} -o {output} -r2c KEGG &> {log}"     
+
 rule RunR2CforNCBIfiltered:
     input:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_filtered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
     output:
         os.path.join(CWD, "5-r2c", "{sample}.NCBI.reads.filtered.txt")
-    conda:
-        "envs/general.yml"
     threads: 
         config['rma2info']['threads']
     params:
@@ -246,8 +246,6 @@ rule RunR2CforNCBIunfiltered:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_unfiltered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
     output:
         os.path.join(CWD, "5-r2c", "{sample}.NCBI.reads.unfiltered.txt")
-    conda:
-        "envs/general.yml"
     threads: 
         config['rma2info']['threads']
     params:
@@ -264,8 +262,6 @@ rule RunR2CforGTDBfiltered:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_filtered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
     output:
         os.path.join(CWD, "5-r2c", "{sample}.GTDB.reads.filtered.txt")
-    conda:
-        "envs/general.yml"
     threads: 
         config['rma2info']['threads']
     params:
@@ -282,8 +278,6 @@ rule RunR2CforGTDBunfiltered:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_unfiltered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
     output:
         os.path.join(CWD, "5-r2c", "{sample}.GTDB.reads.unfiltered.txt")
-    conda:
-        "envs/general.yml"
     threads: 
         config['rma2info']['threads']
     params:
@@ -300,15 +294,11 @@ rule RunR2CforGTDBunfiltered:
 ##################################################
 # MEGAN RMA summaries - Class counts
 
-
-
 rule RunC2CforEC:
     input:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_unfiltered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
     output:
         os.path.join(CWD, "6-c2c", "{sample}.EC.counts.txt")
-    conda:
-        "envs/general.yml"
     threads: 
         config['rma2info']['threads']
     params:
@@ -325,8 +315,6 @@ rule RunC2CforEGGNOG:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_unfiltered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
     output:
         os.path.join(CWD, "6-c2c", "{sample}.EGGNOG.counts.txt")
-    conda:
-        "envs/general.yml"
     threads: 
         config['rma2info']['threads']
     params:
@@ -343,8 +331,6 @@ rule RunC2CforINTERPRO2GO:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_unfiltered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
     output:
         os.path.join(CWD, "6-c2c", "{sample}.INTERPRO2GO.counts.txt")
-    conda:
-        "envs/general.yml"
     threads: 
         config['rma2info']['threads']
     params:
@@ -361,8 +347,6 @@ rule RunC2CforSEED:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_unfiltered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
     output:
         os.path.join(CWD, "6-c2c", "{sample}.SEED.counts.txt")
-    conda:
-        "envs/general.yml"
     threads: 
         config['rma2info']['threads']
     params:
@@ -374,13 +358,27 @@ rule RunC2CforSEED:
     shell:
         "{params.rma2info} -i {input} -o {output} -c2c SEED -p &> {log}"
 
+rule RunC2CforKEGG:
+    input:
+        expand(os.path.join(CWD, "4-rma", "{{sample}}_unfiltered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
+    output:
+        os.path.join(CWD, "6-c2c", "{sample}.KEGG.counts.txt")
+    threads: 
+        config['rma2info']['threads']
+    params:
+        rma2info = config['rma2info']['path']
+    log: 
+        os.path.join(CWD, "logs", "{sample}.RunC2CforKEGG.log")
+    benchmark: 
+        os.path.join(CWD, "benchmarks", "{sample}.RunC2CforKEGG.tsv")
+    shell:
+        "{params.rma2info} -i {input} -o {output} -c2c KEGG -p &> {log}"     
+
 rule RunC2CforGTDBfiltered:
     input:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_filtered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
     output:
         os.path.join(CWD, "6-c2c", "{sample}.GTDB.counts.filtered.txt")
-    conda:
-        "envs/general.yml"
     threads: 
         config['rma2info']['threads']
     params:
@@ -397,8 +395,6 @@ rule RunC2CforGTDBunfiltered:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_unfiltered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
     output:
         os.path.join(CWD, "6-c2c", "{sample}.GTDB.counts.unfiltered.txt")
-    conda:
-        "envs/general.yml"
     threads: 
         config['rma2info']['threads']
     params:
@@ -415,8 +411,6 @@ rule RunC2CforNCBIfiltered:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_filtered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
     output:
         os.path.join(CWD, "6-c2c", "{sample}.NCBI.counts.filtered.txt")
-    conda:
-        "envs/general.yml"
     threads: 
         config['rma2info']['threads']
     params:
@@ -433,8 +427,6 @@ rule RunC2CforNCBIunfiltered:
         expand(os.path.join(CWD, "4-rma", "{{sample}}_unfiltered.protein.{mode}.rma"), mode = config['sam2rma']['readassignmentmode'])
     output:
         os.path.join(CWD, "6-c2c", "{sample}.NCBI.counts.unfiltered.txt")
-    conda:
-        "envs/general.yml"
     threads: 
         config['rma2info']['threads']
     params:
@@ -456,7 +448,7 @@ rule UpdateNCBI:
         dummy = os.path.join(CWD, "7-kraken-mpa-reports", "NCBI-updated.txt"),
         taxdump = temp(os.path.join(CWD, "taxdump.tar.gz"))
     conda:
-        "envs/general.yml"
+        "envs/python.yml"
     threads: 
         1
     log: 
@@ -478,7 +470,7 @@ rule TaxonomyUnfiltered:
         kreport = os.path.join(CWD, "7-kraken-mpa-reports", "{sample}.diamond_megan.kreport.unfiltered.txt"),
         mpa = os.path.join(CWD, "7-kraken-mpa-reports", "{sample}.diamond_megan.mpa.unfiltered.txt")
     conda:
-        "envs/general.yml"
+        "envs/python.yml"
     threads: 
         1
     log: 
@@ -501,7 +493,7 @@ rule TaxonomyFiltered:
         kreport = os.path.join(CWD, "7-kraken-mpa-reports", "{sample}.diamond_megan.kreport.filtered.txt"),
         mpa = os.path.join(CWD, "7-kraken-mpa-reports", "{sample}.diamond_megan.mpa.filtered.txt")
     conda:
-        "envs/general.yml"
+        "envs/python.yml"
     threads: 
         1
     log: 
