@@ -1,11 +1,9 @@
-name: general_env
+name: python_env
 channels:
 - bioconda
 - conda-forge
 - defaults
 dependencies:
-- exonerate == 2.4.0
-- diamond >= 2.0.8
 - python == 3.7
 - pandas
 - numpy
