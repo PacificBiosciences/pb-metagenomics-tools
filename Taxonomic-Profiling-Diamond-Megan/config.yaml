@@ -36,13 +36,20 @@ diamond:
 sam2rma:
   # The full path to the sam2rma tool.
   # This tool is distributed as part of the MEGAN download, it is a binary.
+  # This can be from MEGAN community edition or ultimate edition. 
   path: "/home/dportik/programs/megan/tools/sam2rma"
+  # below is example for megan-ue
+  #path: "/home/dportik/programs/megan-ue/tools/sam2rma"
   
   # The full path to the MEGAN database file, which can be downloaded from:
   # https://software-ab.informatik.uni-tuebingen.de/download/megan6/welcome.html
   # please note that the name of this file will change depending on the version, 
   # and that this must be the the version for the NCBI-nr accessions.
+  # Also note that there is a file for MEGAN community edition and ultimate edition,
+  # with the ultimate edition containing mappings for KEGG. 
   db: "/home/dportik/programs/megan/db/megan-map-Feb2022.db"
+  # below is example for megan-ue
+  #db: "/home/dportik/programs/megan-ue/db/megan-map-Feb2022-ue.db"
   
   # Number of threads to use for sam2rma, 24 is generally sufficient
   threads: 24
@@ -65,10 +72,14 @@ sam2rma:
 rma2info:
   # The full path to the rma2info tool.
   # This tool is distributed as part of the MEGAN download, it is a binary.
+  # This can be from MEGAN community edition or ultimate edition. 
   path: "/home/dportik/programs/megan/tools/rma2info"
+  # below is example for megan-ue
+  #path: "/home/dportik/programs/megan-ue/tools/rma2info"
     
   # Number of threads to use for rma2info. Set for memory usage of up to 5GB.
   threads: 12
+  
   
 # number of threads for final summary program, this may require up to 5GB memory.
 summary_threads: 8
