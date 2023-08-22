@@ -191,7 +191,7 @@ rule MinimapToBam:
     benchmark: 
         os.path.join(CWD, "benchmarks", "{sample}.MinimapToBam.tsv")
     shell:
-        "minimap2 -a --sam-hit-only --secondary=no -t {threads} --split-prefix temp " 
+        "minimap2 -a --sam-hit-only --secondary=no -t {threads} --split-prefix temp_{wildcards.sample} " 
         "{input.index} {input.reads} 2> {log} | samtools sort -@ {threads} -o {output}"
         
 rule IndexBam:
