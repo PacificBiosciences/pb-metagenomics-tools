@@ -2,7 +2,7 @@
 
 Welcome! Here you can find a variety of tools and pipelines tailored to using PacBio HiFi Reads for metagenomics. In addition to the resources currently available, we will continue to add new tools as they are developed.
 
-The current version is v2.0.2. Please see the [**release notes**](https://github.com/PacificBiosciences/pb-metagenomics-tools/releases) for changes.
+The current version is v2.1.0. Please see the [**release notes**](https://github.com/PacificBiosciences/pb-metagenomics-tools/releases) for changes.
 
 ## HiFi Metagenomic Datasets
 
@@ -12,7 +12,7 @@ Several publicly available HiFi shotgun metagenomics datasets are listed on the 
 
 + [**HiFi-MAG-Pipeline**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/HiFi-MAG-Pipeline): Identify high-quality MAGs from HiFi metagenomic assemblies. Streamlined workflow includes a custom "completeness-aware" strategy to identify and protect long and complete contigs. Binning is performed with MetaBAT2 and SemiBin2, bin merging occurs with DAS_Tool, QC with CheckM2, and taxonomic assignments with GTDB-Tk. Outputs include high-quality MAG sequences, summary figures, and associated metadata. 
 
-+ [**Taxonomic-Profiling-Diamond-Megan**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Diamond-Megan): Perform translation alignment of HiFi reads to a **protein** database using DIAMOND and summarize with MEGAN-LR, for the purpose of taxonomic and functional profiling. Provides access to taxonomic annotations from NCBI and GTDB, and outputs NCBI taxonomic counts in kraken (kreport) and metaphlan (mpa) formats. Also provides functional annotations based on multiple databases (EC, SEED, InterPro2GO, eggNOG).
++ [**Taxonomic-Profiling-Diamond-Megan**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Diamond-Megan): Perform translation alignment of HiFi reads to a **protein** database using DIAMOND and summarize with MEGAN-LR, for the purpose of taxonomic and functional profiling. Provides access to taxonomic annotations from NCBI and GTDB, and outputs NCBI taxonomic counts in kraken (kreport) and metaphlan (mpa) formats. Also provides functional annotations based on multiple databases (EC, SEED, InterPro2GO, eggNOG), with new KEGG option available.
 
 + [**Taxonomic-Profiling-Minimap-Megan**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Minimap-Megan): Align HiFi reads to a **nucleotide** database using minimap2 and summarize with MEGAN-LR, for the purpose of taxonomic profiling. Provides access to NCBI and GTDB taxonomic annotations. Outputs NCBI taxonomic counts in kraken (kreport) and metaphlan (mpa) formats.
 
