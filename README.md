@@ -4,9 +4,11 @@ Welcome! Here you can find a variety of tools and pipelines tailored to using Pa
 
 The current version is v2.1.0. Please see the [**release notes**](https://github.com/PacificBiosciences/pb-metagenomics-tools/releases) for changes.
 
-## HiFi Metagenomic Datasets
+## HiFi Metagenomic Datasets & Publications
 
 Several publicly available HiFi shotgun metagenomics datasets are listed on the   [**PacBio-Data**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/PacBio-Data.md) page. These include multiple mock communities, reference standards, and empirical samples (human, chicken, and sheep gut microbiome, and environmental samples). Associated publications are also listed here.
+
+A running list of publications using HiFi sequencing for metagenomics can be found [**here**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/HiFi-Metagenomics-Publications.md). 
 
 ## Available pipelines
 
