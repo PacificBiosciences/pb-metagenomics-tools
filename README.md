@@ -1,6 +1,10 @@
-# PB-metagenomics-tools
+<h1 align="center"><img width="300px" src="docs/logo_HiFiHLA.svg"/></h1>
 
-Welcome! Here you can find a variety of tools and pipelines tailored to using PacBio HiFi Reads for metagenomics. In addition to the resources currently available, we will continue to add new tools as they are developed.
+<h1 align="center">pb-metagenomics-tools</h1>
+
+Tools for performing metagenomic analyses using HiFi sequencing data.
+
+Welcome! Here you can find a variety of tools and pipelines for HiFi metagenomics. In addition to the resources currently available, we will continue to add new tools as they are developed.
 
 The current version is v2.1.0. Please see the [**release notes**](https://github.com/PacificBiosciences/pb-metagenomics-tools/releases) for changes.
 
