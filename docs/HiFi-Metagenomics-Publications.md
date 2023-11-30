@@ -18,14 +18,18 @@
 
 + Shaw J, and YW Yu. 2023. Metagenome profiling and containment estimation through abundance-corrected k-mer sketching with sylph. bioRxiv, https://doi.org/10.1101/2023.11.20.567879
 
-+ Yu W, Luo H, Yang J, Zhang S, Jiang H, Zhao X, Hui X, Sun D, Li L, Wei X-Q, Lonardi S, and W Pan. 2023. Comprehensive assessment of eleven de novo HiFi assemblers on complex eukaryotic genomes and metagenomes. bioRxiv, https://doi.org/10.1101/2023.06.29.546998
++ Valentin-Alvarado LE, Appler KE, De Anda V, Schoelmerich MC, West-Roberts J, Kivenson V, Crits-Christoph A, Ly L, Sachdeva R, Savage DF, Baker BJ, and JF Banfield. 2023. Asgard archaea modulate potential methanogenesis substrates in wetland soil. bioRxiv, https://doi.org/10.1101/2023.11.21.568159
 
 + Wang G, Zhao L, Shi Y, Qu F, Ding Y, Liu W, Liu C, Luo G, Li M, Bai X, Li L, Ho Y-P, and J Yu. 2023. High-throughput generic single-entity sequencing using droplet microfluidics. bioRxiv, https://doi.org/10.1101/2023.08.15.549386
 
 + Wang Y-C, Mao Y, Fu H-M, Wang F, Weng X, Liu Z-H, Xu X-W, Yan P, Fang F, Guo J-S, Shen Y, and Y-P Chen. 2023. Complete genome-centric analysis reveals functional divergence and adaptive evolution of uncultured bacteria in anammox community. bioRxiv, https://doi.org/10.1101/2023.08.15.553441
 
++ Yu W, Luo H, Yang J, Zhang S, Jiang H, Zhao X, Hui X, Sun D, Li L, Wei X-Q, Lonardi S, and W Pan. 2023. Comprehensive assessment of eleven de novo HiFi assemblers on complex eukaryotic genomes and metagenomes. bioRxiv, https://doi.org/10.1101/2023.06.29.546998
+
 
 ## Online Early
+
++ Jang YJ, Kang J-S, and EH Bae. 2023. Metagenome-assembled genomes of the GU0601 sample (the Han River, South Korea). Microbiology Resource Announcements, Online Early. https://doi.org/10.1128/MRA.00688-23
 
 + Sun C, Chen J, Jin M, Zhao X, Li Y, Dong Y, Gao N, Liu Z, Bork P, Zhao X-M, and W-H Chen. 2023. Long-read sequencing reveals extensive DNA methylations in human gut pangenome contributed by prevalently phage-encoded methyltransferases. Advanced Science, Online Early. https://doi.org/10.1002/advs.202302159
 
