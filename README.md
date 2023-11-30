@@ -2,7 +2,7 @@
 
 <h1 align="center">pb-metagenomics-tools</h1>
 
-Tools for performing metagenomic analyses using HiFi sequencing data.
+<h3 align="center">Tools for performing metagenomic analyses using HiFi sequencing data.</h3>
 
 Welcome! Here you can find a variety of tools and pipelines for HiFi metagenomics. In addition to the resources currently available, we will continue to add new tools as they are developed.
 
