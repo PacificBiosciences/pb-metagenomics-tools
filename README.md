@@ -1,4 +1,4 @@
-<h1 align="center"><img width="300px" src="docs/logo_HiFiHLA.svg"/></h1>
+<h1 align="center"><img width="300px" src="docs/logo_pb-metagenomics-tools.svg"/></h1>
 
 <h1 align="center">pb-metagenomics-tools</h1>
 
