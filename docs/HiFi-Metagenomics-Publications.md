@@ -1,38 +1,45 @@
 # HiFi Metagenomics Publications
 
-(Updated November 27, 2023)
+(Updated 02/24)
+
 
 ## Pre-prints 
 
-+ Benoit G, Raguideau S, James R, Phillippy AM, Chikhi R, and C Quince. 2023. Efficient high-quality metagenome assembly from long accurate reads using minimizer-space de Bruijn graphs. bioRxiv, https://doi.org/10.1101/2023.07.07.548136
-
-+ Eisenhofer R, Nesme J, Santos-Bay L, Koziol A, Sorenson SJ, Alberdi A, and O Aizpurua. 2023. A comparison of short-read, HiFi long-read and hybrid strategies for genome-resolved metagenomics. bioRxiv, https://doi.org/10.1101/2023.10.04.560907 
-
-+ Chen W-H, Chen J, Sun C, Dong Y, Jin M, Lai S, Jia L, Zhao X, Gao NL, Liu Z, Bork P, and X-M Zhao. 2022. Efficient recovery of complete gut phage genomes by combined short- and long-sequencing. bioRxiv, https://doi.org/10.1101/2022.07.03.498593
++ Chen X, Yin X, Shi X, Yan W, Yang Y, Liu L, and T Zhang. 2023. Melon: metagenomic long-read-based taxonomic identification and quantification using marker genes. bioRxiv, https://doi.org/10.1101/2023.12.17.572079
 
 + Kutuzova S, Nielsen M, Piera P, Nissen JN, and S Rasmussen. 2023. Taxometer: improving taxonomic classification of metagenomic contigs. bioRxiv, https://doi.org/10.1101/2023.11.23.568413
-
-+ Masuda S, Gan P, Kiguchi Y, Anda M, Sasaki K, Shibata A, Iwasaki W, Suda W, and K Shirasu. 2023. Uncovering plant microbiomes using long-read metagenomic sequencing. bioRxiv, https://doi.org/10.1101/2023.03.20.533568
-
-+ Priest T, Vidal-Melgosa S, Hehemann J-H, Amann R, and BM Fuchs. 2023. Spatial heterogeneity in carbohydrates and their utilisation by microbes in the high North Atlantic. bioRxiv, https://doi.org/10.1101/2023.05.11.540373
 
 + Shaw J, and YW Yu. 2023. Metagenome profiling and containment estimation through abundance-corrected k-mer sketching with sylph. bioRxiv, https://doi.org/10.1101/2023.11.20.567879
 
 + Valentin-Alvarado LE, Appler KE, De Anda V, Schoelmerich MC, West-Roberts J, Kivenson V, Crits-Christoph A, Ly L, Sachdeva R, Savage DF, Baker BJ, and JF Banfield. 2023. Asgard archaea modulate potential methanogenesis substrates in wetland soil. bioRxiv, https://doi.org/10.1101/2023.11.21.568159
 
++ Valentin-Alvarado LE, Shi L-D, Appler KE, Crits-Christoph A, Cui M, De Anda V, Leao P, Adler BA, Roberts RJ, Sachdeva R, Baker BJ, Savage DF, and JF Banfield. 2024. Genetic elements and defense systems drive diversification and evolution in Asgard archaea. bioRxiv, https://doi.org/10.1101/2024.03.22.586370
+
 + Wang G, Zhao L, Shi Y, Qu F, Ding Y, Liu W, Liu C, Luo G, Li M, Bai X, Li L, Ho Y-P, and J Yu. 2023. High-throughput generic single-entity sequencing using droplet microfluidics. bioRxiv, https://doi.org/10.1101/2023.08.15.549386
 
-+ Wang Y-C, Mao Y, Fu H-M, Wang F, Weng X, Liu Z-H, Xu X-W, Yan P, Fang F, Guo J-S, Shen Y, and Y-P Chen. 2023. Complete genome-centric analysis reveals functional divergence and adaptive evolution of uncultured bacteria in anammox community. bioRxiv, https://doi.org/10.1101/2023.08.15.553441
-
-+ Yu W, Luo H, Yang J, Zhang S, Jiang H, Zhao X, Hui X, Sun D, Li L, Wei X-Q, Lonardi S, and W Pan. 2023. Comprehensive assessment of eleven de novo HiFi assemblers on complex eukaryotic genomes and metagenomes. bioRxiv, https://doi.org/10.1101/2023.06.29.546998
++ Yamamura T, Takewaki D, Kiguchi Y, Masuoka H, Manu M, Raveney B, Narushima S, Kurokawa R, Ogata Y, Kimura Y, Sato N, Ozawa Y, Yagishita S, Araki T, Miyake S, Sato W, and W Suda. 2023. Horizontal gene transfer shapes pathogenic bacteria in multiple sclerosis. Research Square, https://dx.doi.org/10.21203/rs.3.rs-3716024/v1
 
 
-## Online Early
 
-+ Jang YJ, Kang J-S, and EH Bae. 2023. Metagenome-assembled genomes of the GU0601 sample (the Han River, South Korea). Microbiology Resource Announcements, Online Early. https://doi.org/10.1128/MRA.00688-23
+## 2024
 
-+ Sun C, Chen J, Jin M, Zhao X, Li Y, Dong Y, Gao N, Liu Z, Bork P, Zhao X-M, and W-H Chen. 2023. Long-read sequencing reveals extensive DNA methylations in human gut pangenome contributed by prevalently phage-encoded methyltransferases. Advanced Science, Online Early. https://doi.org/10.1002/advs.202302159
++ Benoit G, Raguideau S, James R, Phillippy AM, Chikhi R, and C Quince. 2024. High-quality metagenome assembly from long accurate reads with metaMDBG. Nature Biotechnology, https://doi.org/10.1038/s41587-023-01983-6
 
++ Chen J, Sun C, Dong Y, Jin M, Lai S, Jia L, Zhao X, Wang H, Gao NL, Bork P, Liu Z, Chen W-H, and X-M Zhao. 2024. Efficient recovery of complete gut phage genomes by combined short- and long-sequencing. Advanced Science, 2305818. https://doi.org/10.1002/advs.202305818
+
++ Eisenhofer R, Nesme J, Santos-Bay L, Koziol A, Sorenson SJ, Alberdi A, and O Aizpurua. 2024. A comparison of short-read, HiFi long-read and hybrid strategies for genome-resolved metagenomics. Microbiology Spectrum, 12: e03590-23. https://doi.org/10.1128/spectrum.03590-23
+
++ Maric J, Krizanovic K, Riondet S, Nagarajan N, and M Sikic. 2024. Comparative analysis of metagenomic classifiers for long-read sequencing datasets. BMC Bioinformatics, 25: 15. https://doi.org/10.1186/s12859-024-05634-8
+
++ Masuda S, Gan P, Kiguchi Y, Anda M, Sasaki K, Shibata A, Iwasaki W, Suda W, and K Shirasu. 2024. Uncovering microbiomes of the rice phyllosphere using long-read metagenomic sequencing. Communications Biology, 7: 357. https://doi.org/10.1038/s42003-024-05998-w
+
++ Saini JS, Adler A, Cardona L, Rodilla Ramirez PN, Pei R, and C Holliger. 2024. Microbial genome collection of aerobic granular sludge cultivated in sequencing batch reactors using different carbon source mixtures. Microbiology Resource Announcements, e00102-24. https://doi.org/10.1128/mra.00102-24
+
++ Sakurai R, Fukuda Y, and C Tada. 2024. Circular metagenome-assembled genome of Candidatus Patescibacteria recovered from anaerobic digestion sludge. Microbiology Resource Announcements, https://doi.org/10.1128/mra.00083-24
+
++ Wang Y-C, Mao Y, Fu H-M, Wang J, Weng X, Liu Z-H, Xu X-W, Yan P, Fang F, Guo J-S, Shen Y, and Y-P Chen. 2024. New insights into functional divergence and adaptive evolution of uncultured bacteria in anammox community by complete genome-centric analysis. Science of the Total Environment, 924: 171530. https://doi.org/10.1016/j.scitotenv.2024.171530
+
++ Yu W, Luo H, Yang J, Zhang S, Jiang H, Zhao X, Hui X, Sun D, Li L, Wei X-Q, Lonardi S, and W Pan. 2024. Comprehensive assessment of 11 de novo HiFi assemblers on complex eukaryotic genomes and metagenomes. Genome Research, 34: 326-340. https://www.genome.org/cgi/doi/10.1101/gr.278232.123
 
 
 ## 2023
@@ -43,11 +50,15 @@
 
 + Haro-Moreno JM, Cabello-Yeves PJ, Garcillan-Barcia MP, Zakharenko A, Zemskaya TI, and F Rodrigue-Valera. 2023. A novel and diverse group of Candidatus Patescibacteria from bathypelagic Lake Baikal revealed through long-read metagenomics. Environmental Microbiome, 18: 12. https://doi.org/10.1186%2Fs40793-023-00473-1
 
++ Jang YJ, Kang J-S, and EH Bae. 2023. Metagenome-assembled genomes of the GU0601 sample (the Han River, South Korea). Microbiology Resource Announcements, 12: e00688-23. https://doi.org/10.1128/MRA.00688-23
+
 + Jia L, Wu Y, Dong Y, Chen J, Chen W-H, and X-M Zhao. 2023. A survey on computational strategies for genome-resolved gut metagenomics. Briefings in Bioinformatics, 2023, 1-13. https://doi.org/10.1093/bib/bbad162
 
 + Jiang F, Li Q, Wang S, Shen T, Wang H, Wang A, Xu D, Yuan L, Lei L, Chen R, Yang B, Deng Y, and W Fan. 2023. Recovery of metagenome-assembled microbial genomes from a full-scale biogas plant of food waste by Pacific Biosciences high-fidelity sequencing. Frontiers in Microbiology, 13: 1095497. https://doi.org/10.3389/fmicb.2022.1095497
 
 + Merges D, Dal Grande F, Valim H, Singh G, and I Schmitt. 2023. Gene abundance linked to climate zone: parallel evolution of gene content along elevation gradients in lichenized fungi. Frontiers in Microbiology, 14: 1097787. https://doi.org/10.3389/fmicb.2023.1097787
+
++ Nesbo CL, Fitamo TM, Lee H, and EA Edwards. 2023. Metagenomes and metagenome-assembled genomes from a sequentially fed anaerobic digester treating solid organic municipal waste. Microbiology Resource Announcements, 13: e00919-23. https://doi.org/10.1128/mra.00919-23 
 
 + Nielsen TK, Forero-Junco LM, Kot W, Moineau S, Hansen LH, and L Riber. 2023. Detection of nucleotide modifications in bacteria and bacteriophages: strengths and limitations of current technologies and software. Molecular Ecology, 32: 1236-1247. https://doi.org/10.1111/mec.16679
 
@@ -55,17 +66,24 @@
 
 + Priest T, von Appen W-J, Oldenburg E, Popa O, Torres-Valdes S, Bienhold C, Metfies K, Boulton W, Mock T, Fuchs BM, Amann R, Boetius A, and M Wietz. 2023. Atlantic water influx and sea-ice cover drive taxonomic and functional shifts in Arctic marine bacterial communities. The ISME Journal, https://doi.org/10.1038/s41396-023-01461-6
 
++ Priest T, Vidal-Melgosa S, Hehemann J-H, Amann R, and BM Fuchs. 2023. Carbohydrates and carbohydrate degradation gene abundance and transcription in Atlantic waters of the Arctic. ISME Communications, 3: 130. https://doi.org/10.1038/s43705-023-00324-7
+
++ Rodriguez Ruiz A, and AR Van Dam. 2023. Metagenomic binning of PacBio HiFi data prior to assembly reveals a complete genome of Cosmopolites sordidus (Germar) (Coleopterea: Curculionidae, Dryophthorinae) the most damaging arthropod pest of bananas and plantains. PeerJ 11: e16276. https://doi.org/10.7717/peerj.16276
+
 + Saak CC, Pierce EC, Dinh CB, Portik D, Hall R, Ashby M, and RJ Dutton. 2023. Longitudinal, multi-platform metagenomics yields a high-quality genomic catalog and guides an in vitro model for cheese communities. mSystems, 8:e00701-22. https://doi.org/10.1128/msystems.00701-22
 
 + Schaerer L, Putman L, Bigcraft I, Byrne E, Kulas D, Zolghadr A, Aloba S, Ong R, Shonnard D, and S Techtmann. 2023. Coexistence of specialist and generalist species within mixed plastic derivative-utilizing microbial communities. Microbiome, 11: 224. https://doi.org/10.1186/s40168-023-01645-4
 
 + Sidhu C, Kirstein IV, Meunier CL, Rick J, Fofonova V, Wiltshire KH, Steinke N, Vidal-Melgosa S, Hehemann J-H, Huettel B, Schweder T, Fuchs BM, Amann RI, and H Teeling. 2023. Dissolved storage glycans shaped the community composition of abundant bacterioplankton clades during a North Sea spring phytoplankton bloom. Microbiome, 11: 77. https://doi.org/10.1186/s40168-023-01517-x
 
++ Sun C, Chen J, Jin M, Zhao X, Li Y, Dong Y, Gao N, Liu Z, Bork P, Zhao X-M, and W-H Chen. 2023. Long-read sequencing reveals extensive DNA methylations in human gut pangenome contributed by prevalently phage-encoded methyltransferases. Advanced Science, 10: 2302159. https://doi.org/10.1002/advs.202302159
+
 + Tao Y, Xun F, Zhao C, Mao Z, Li B, Xing P, and QL Wu. 2023. Improved assembly of metagenome-assembled genomes and viruses in Tibetan saline lake sediment by HiFi metagenomic sequencing. Microbiology Spectrum, 11: e03328-22. https://doi.org/10.1128/spectrum.03328-22 
 
 + Zhang Z, Yang C, Veldsman WP, Fang X, and L Zhang. 2023. Benchmarking genome assembly methods on metagenomic sequencing data. Briefings in Bioinformatics, 24: 1-17. https://doi.org/10.1093/bib/bbad087
 
 + Zhang Z-F, Liu L-R, Pan Y-P, Pan J, and M Li. 2023. Long-read assembled metagenomic approaches improve our understanding on metabolic potentials of microbial community in mangrove sediments. Microbiome, 11: 188. https://doi.org/10.1186/s40168-023-01630-x
+
 
 ## 2022
 
@@ -74,6 +92,8 @@
 + Antipov D, Rayko M, Kolmogorov M, and PA Pevzner. 2022. viralFlye: assembling viruses and identifying their hosts from long-read metagenomics data. Genome Biology, 23: 57. https://doi.org/10.1186/s13059-021-02566-x
 
 + Bickhart DM, Kolmogorov M, Tseng E, Portik DM, Korobeynikov A, Tolstoganov I, Uritskiy G, Liachko I, Sullivan ST, Shin SB, Zorea A, Andreu VP, Panke-Buisse K, Medema MH, Mizrahi I, Pevzner PA, and TPL Smith. 2022. Generating lineage-resolved, complete metagenome-assembled genomes from complex microbial communities. Nature Biotechnology, 40: 711-719. https://doi.org/10.1038/s41587-021-01130-z
+
++ Fedarko MW, Kolmogorov M, and PA Pevzner. 2022. Analyzing rare mutations in metagenomes assembled using long and accurate reads. Genome Research, 32: 2119-2133. https://doi.org/10.1101%2Fgr.276917.122
 
 + Feng X, Cheng H, Portik D, and H Li. 2022. Metagenome assembly of high-fidelity long reads with hifiasm-meta. Nature Methods, 19: 671–674. https://doi.org/10.1038/s41592-022-01478-3 
 
@@ -126,11 +146,13 @@
 
 + Priest T, Orellana LH, Huettel B, Fuchs BM, and R Amann. 2021. Microbial metagenome-assembled genomes of the Fram Strait from short and long read sequencing platforms. PeerJ, 9: e11721. https://doi.org/10.7717/peerj.11721
 
+
 ## 2020
 
 + Holm JB, France MT, Ma B, McComb E, Robinson CK, Mehta A, Tallon LJ, Brotman RM, and J Ravel. 2020. Comparative metagenome-assembled genome analysis of "Candidatus Lachnocurva vaginae", formerly known as bacterial vaginosis-associated bacterium-1 (BVAB1). Frontiers in Cellular and Infection Microbiology, 10: 117. https://doi.org/10.3389/fcimb.2020.00117
 
 + Xie H, Yang C, Sun Y, Igarashi Y, Jin T, and F Luo. 2020. PacBio Long Reads Improve Metagenomic Assemblies, Gene Catalogs, and Genome Binning. Frontiers in Genetics, 11: 516269. https://doi.org/10.3389/fgene.2020.516269
+
 
 ## 2019
 
@@ -138,13 +160,16 @@
 
 + Suzuki Y, Nishijima S, Furuta Y, Yoshimura J, Suda W, Oshima K, Hattori M, and S Morishita. 2019. Long-read metagenomic exploration of extrachromosomal mobile genetic elements in the human gut. Microbiome, 7: 119. https://doi.org/10.1186/s40168-019-0737-z
 
+
 ## 2018
 
 + Liu Y-R, Johs A, Bi L, Lu X, Hu H-W, Sun D, He J-Z, and B Gu. 2018. Unraveling microbial communities associated with methylmercury production in paddy soils. Environmental Science and Technology, 52: 13110-13118. https://doi.org/10.1021/acs.est.8b03052
 
+
 ## 2017
 
 + Driscoll CB, Otten TG, Brown NM, and TW Dreher. 2017. Towards long-read metagenomics: complete assembly of three novel genomes from bacteria dependent on a diazotrophic cyanobacterium in a freshwater lake co-culture. Standards in Genomic Sciences, 12: 9. https://doi.org/10.1186/s40793-017-0224-8
+
 
 ## 2016
 
