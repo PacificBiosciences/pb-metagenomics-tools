@@ -48,7 +48,7 @@ This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](h
 
 - Clone the pb-MAG-mirror directory.
 - Download the CheckM2 database and put path in the configuration file. The database file can be downloaded directly from this [link](https://zenodo.org/records/5571251/files/checkm2_database.tar.gz). Alternate instructions can be found [here](https://github.com/chklovski/CheckM2?tab=readme-ov-file#database). 
-- Include two directories in the `inputs/` folder. Use the following the naming scheme: `SAMPLE.bins1/`, `SAMPLE.bins2`. The directories must contain all bins/MAGs to be used in the analysis, for which each bin/MAG is represented by an individual fasta file. The fasta files must have the extensions `.fa`, `.fna`, or `.fasta`.
+- Include two directories in the `inputs/` folder. Use the following the naming scheme: `SAMPLE.bins1/`, `SAMPLE.bins2/`. The directories must contain all bins/MAGs to be used in the analysis, for which each bin/MAG is represented by an individual fasta file. The fasta files must have the extensions `.fa`, `.fna`, or `.fasta`.
 - Edit sample names in `Sample-Config.yaml` configuration file in `configs/` for your project. 
 - Check settings in `config.yaml`, and ensure the `tmpdir` argument is set correctly in `config.yaml`. The default is `/scratch`.
 - Execute snakemake using the general commands below: 
@@ -95,7 +95,7 @@ The `config.yaml` file is the main configuration file used in the snakemake work
 
 The `configs/` directory contains an example configuration file for specifying which samples are to be run. The configuration file can be renamed. It must be specified in the command line call for snakemake for any samples to be run.
 
-The `inputs/` directory should contain all of the required input files for each sample. In this workflow there must be two directories in the `inputs/` folder. Use the following the naming scheme: `SAMPLE.bins1/`, `SAMPLE.bins2`. The directories must contain all bins/MAGs to be used in the analysis, for which each bin/MAG is represented by an individual fasta file. The fasta files must have the extensions `.fa`, `.fna`, or `.fasta`.
+The `inputs/` directory should contain all of the required input files for each sample. In this workflow there must be two directories in the `inputs/` folder. Use the following the naming scheme: `SAMPLE.bins1/`, `SAMPLE.bins2/`. The directories must contain all bins/MAGs to be used in the analysis, for which each bin/MAG is represented by an individual fasta file. The fasta files must have the extensions `.fa`, `.fna`, or `.fasta`.
 These can be the actual files, or symbolic links to the files (for example using `ln -s source_file symbolic_name`). An example of this is shown below:
 
 ```
@@ -103,18 +103,18 @@ pb-MAG-mirror
 │
 ├── inputs/
 │	├── SAMPLE.bins1/
-│	│		├──	bin23.fa
-│	│		├──	bin43.fa
-│	│		├──	bin67.fa
-│	│		└──	bin96.fa
+│	│		├── bin23.fa
+│	│		├── bin43.fa
+│	│		├── bin67.fa
+│	│		└── bin96.fa
 │	│		
 │	└── SAMPLE.bins2/
-│			├──	metabat_23.fna
-│			├──	metabat_43.fna
-│			├──	metabat_67.fna
-│			├──	metabat_67.fna
-│			├──	metabat_67.fna
-│			└──	metabat_96.fna
+│			├── metabat_23.fna
+│			├── metabat_43.fna
+│			├── metabat_67.fna
+│			├── metabat_73.fna
+│			├── metabat_98.fna
+│			└── metabat_105.fna
 ```
 
 The `scripts/` directory contains a few Python scripts required for the workflow. These are involved with formatting, filtering, plotting, and summarizing. They are called in different steps of the workflow.
@@ -182,7 +182,7 @@ Finally, you should check the method for consolidating mixed bins. There are thr
 #### Sample configuration file (`configs/Sample-Config.yaml`)
 The example sample configuration file is called `Sample-Config.yaml` and is located in the `configs/` directory. Here you should specify the sample names that you wish to include in the analysis. 
 
-All samples specified in the sample configuration file must have two corresponding directories in the `inputs/` folder. These include `SAMPLE.bins1/` and `SAMPLE.bins2`. Here, the `SAMPLE` component is a name included in the sample configuration file. The pipeline can be run for any number of samples. You can also configure the file to only run for a subset of the samples present in the `inputs/` folder. Please note that if the input directories do not follow these naming conventions they will not be recognized by the workflow. You can use the actual files or symlinks to the directories.
+All samples specified in the sample configuration file must have two corresponding directories in the `inputs/` folder. These include `SAMPLE.bins1/` and `SAMPLE.bins2/`. Here, the `SAMPLE` component is a name included in the sample configuration file. The pipeline can be run for any number of samples. You can also configure the file to only run for a subset of the samples present in the `inputs/` folder. Please note that if the input directories do not follow these naming conventions they will not be recognized by the workflow. You can use the actual files or symlinks to the directories.
 
 [Back to top](#TOP)
 
@@ -195,8 +195,6 @@ Before attempting to run this snakemake analysis, please ensure that the pre-ana
 There are several ways to execute the workflow. The easiest way is to run snakemake on HPC using an interactive session. The most efficient way is to use cluster or cloud configuration so that snakemake can schedule and run jobs on HPC or cloud environments. 
 
 ## Local execution
-
-**Given the large memory requirements for some programs used in the workflow, execution of this mode is only recommended with interactive HPC sessions.**
 
 Snakemake can be run "locally" (e.g., without cluster configuration). Snakemake will automatically determine how many jobs can be run simultaneously based on the resources specified. This type of snakemake analysis can be run on a local system, but ideally it should be executed using an interactive HPC session (for example, `qrsh` with SGE or the SLURM equivalent).
 
@@ -219,7 +217,7 @@ The dry run command should result in the jobs being displayed on screen.
 ### Create workflow figure
 If there are no errors, you may wish to generate a figure of the directed acyclic graph (the workflow steps). You can do this using the following command:
 ```
-snakemake --dag --snakefile Snakefile-pb-mag-mirror.smk --configfile configs/Sample-Config.yaml | dot -Tsvg > hifimags_analysis.svg
+snakemake --dag --snakefile Snakefile-pb-mag-mirror.smk --configfile configs/Sample-Config.yaml | dot -Tsvg > magmirror_DAG.svg
 ```
 Here the `--dag` flag creates an output that is piped to `dot`, and an svg file is created. This will show the workflow visually.
 
