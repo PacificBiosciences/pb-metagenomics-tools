@@ -1,0 +1,10 @@
+samplenames:
+  # the naming scheme for your samples must follow:
+  # SAMPLE.bins1, SAMPLE.bins2;
+  # where SAMPLE is a name provided below, 
+  # SAMPLE.bins1 = a folder containing the bin files for method 1 (with extensions '.fa', '.fna', or '.fasta'),
+  # SAMPLE.bins2 = a folder containing the bin files for method 2 (with extensions '.fa', '.fna', or '.fasta')
+  # For example, if "SP2" is given as a sample name, the workflow expects SP2.bins1/ and
+  # SP2.bins2/ to both be present in the 'inputs/' directory.
+  - "SP2"
+  - "SP3"

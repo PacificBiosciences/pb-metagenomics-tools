@@ -1,0 +1,51 @@
+checkm2:
+  # The number of full path to: /PATH/CheckM2_database/uniref100.KO.1.dmnd
+  db_path: "/dept/appslab/projects/2023/dp_snake-HiFi-MAG-Pipeline/CheckM2_database/uniref100.KO.1.dmnd"
+
+  # The number of threads to use for CheckM.
+  threads: 24
+
+  # The extension of fasta files in bins1 directory, needs to be 'fa', 'fna', or 'fasta'
+  fasta_ext1: 'fa'
+
+  # The extension of fasta files in bins1 directory, needs to be 'fa', 'fna', or 'fasta'
+  fasta_ext2: 'fasta'
+
+  # The path to use as the temporary directory to write files to.
+  # If you do not have access to "/scratch" on HPC or are running snakemake locally, change to a valid directory.
+  tmpdir: "/scratch"
+
+filters:
+  # Set the quality filters that are applied to MAGs
+  # The minimum percent completeness for a genome bin.
+  min_completeness: 50
+
+  # The maximum percent contamination for a genome bin.
+  max_contamination: 10
+
+  # The maximum number of contigs allowed in a genome bin.
+  max_contigs: 200
+
+consolidation:
+  # The method used to merge mixed bins. For mixed bins, pairwise comparisons are made for all mixed bins in bins1 to all
+  # mixed bins in bins2. The top hit is identified per bin, per method. Note that this can result in several bins from
+  # bins1 to match to a single bin from bins2 (or the opposite). Therefore, a decision must be made how to merge such hits
+  # to prevent MAGs in the final set from sharing any contigs.
+  # There are three options available for merging:
+  # unify - Only select mixed bins which have a consistent match in both pairwise directions, then select the MAG with
+  #         highest completion score.
+  # bins1 - Select only the mixed bins from the bins1 set.
+  # bins2 - Select only the mixed bins from the bins2 set.
+  mixed_method: "unify"
+
+  # Character used for missing data in output tables
+  missing_char: "NA"
+
+  # File extension to use for final fasta file set (ex. fa, fna, fasta)
+  file_extension: "fa"
+
+  # File prefix to use for final fasta file set for bins obtained from bins1 directory
+  label1: "bins1"
+
+  # File prefix to use for final fasta file set for bins obtained from bins1 directory
+  label2: "bins2"
