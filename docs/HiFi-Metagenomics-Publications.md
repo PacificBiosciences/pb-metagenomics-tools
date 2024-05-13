@@ -1,6 +1,6 @@
 # HiFi Metagenomics Publications
 
-(Updated 04/24)
+(Updated 05/24)
 
 
 ## Pre-prints 
@@ -26,6 +26,8 @@
 
 
 ## 2024
+
++ Agustinho DP, Fu Y, Menon VK, Metcalf GA, Treangan TJ, and FJ Sedlazeck. 2024. Unveiling microbial diversity: harnessing long-read sequencing technology. Nature Methods, https://doi.org/10.1038/s41592-024-02262-1
 
 + Benoit G, Raguideau S, James R, Phillippy AM, Chikhi R, and C Quince. 2024. High-quality metagenome assembly from long accurate reads with metaMDBG. Nature Biotechnology, https://doi.org/10.1038/s41587-023-01983-6
 
