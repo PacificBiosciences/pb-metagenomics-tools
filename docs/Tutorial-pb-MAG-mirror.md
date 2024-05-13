@@ -63,7 +63,7 @@ The choice of additional arguments to include depends on where and how you choos
 
 # **1. Snakemake Contents** <a name="SMC"></a>
 
-To run the workflow, you will need to obtain all contents within the [HiFi-MAG-Pipeline folder](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/HiFi-MAG-Pipeline). The default contents should look like this:
+To run the workflow, you will need to obtain all contents within the [pb-MAG-mirror folder](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-MAG-mirror). The default contents should look like this:
 
 ```
 pb-MAG-mirror
