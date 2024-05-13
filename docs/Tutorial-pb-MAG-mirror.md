@@ -322,7 +322,7 @@ Within `3-summary/`, there will be a folder for each sample. Within a sample fol
 
 + `SAMPLE.comparison_categories.contamination.pdf`: Percent contamination scores across comparison categories, per binning method. 
 
-![Fig2](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-pb-MAG-mirror-fig-contamination.png.png)
+![Fig2](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-pb-MAG-mirror-fig-contamination.png)
 
 + `SAMPLE.comparison_categories.contigs.pdf`: Number of contigs per MAG across comparison categories, per binning method. 
 
