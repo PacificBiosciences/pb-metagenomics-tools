@@ -60,10 +60,11 @@ For explanations of these figures, please see the [5. Outputs](#OTPS) section be
 
 # **Quick Start** <a name="QS"></a>
 
-This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require 45-150GB memory and >250GB temporary disk space (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps. Snakemake v5+ is required, and the workflows have been tested using v5.19.3.
+This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require 45-150GB memory and >250GB temporary disk space (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps.
 
 - Clone the HiFi-MAG-Pipeline directory.
-- Download and unpack the database for GTDB (~66GB). The current requirement is for GTDB-Tk v 2.1.1, which requires database R207_v2. Specify the path to the database in `config.yaml`. **Starting with version 2.0, there is no need to download the CheckM database.**
+- Download the CheckM2 database using the software (`checkm2 database --download --path /YourPath/CheckM2_database`) or download and unpack [this site](https://zenodo.org/records/5571251/files/checkm2_database.tar.gz?download=1). The database is ~3Gb. Specify the path to the database in `config.yaml`.
+- Download and unpack the database for GTDB (~66GB). The current requirement is for GTDB-Tk v 2.1.1, which requires database R207_v2. Specify the path to the database in `config.yaml`.
 - Include all input HiFi fasta files (`SAMPLE.fasta`) and contig fasta files (`SAMPLE.contigs.fasta`) in the `inputs/` folder. These can be files or symlinks.
 - Edit sample names in `Sample-Config.yaml` configuration file in `configs/` for your project. 
 - Check settings in `config.yaml`, and ensure the `tmpdir` argument is set correctly in `config.yaml`. The default is `/scratch`.
@@ -100,6 +101,7 @@ HiFi-MAG-Pipeline
 │	└── README.md (this is just a placeholder file, and not required)
 │
 ├── scripts/
+│	├── bam2paf.py
 │	├── Convert-JGI-Coverages.py
 │	├── Copy-Final-MAGs.py
 │	├── Fasta-Make-Long-Seq-Bins.py
@@ -108,7 +110,7 @@ HiFi-MAG-Pipeline
 │	├── GTDBTk-Organize.py
 │	├── MAG-Summary.py
 │	├── Make-Incomplete-Contigs.py
-│	├── Maxbin2-organize-outputs.py
+│	├── paf-mapping-summary.py
 │	└── Plot-Figures.py
 │
 ├── Snakefile-hifimags.smk
@@ -352,6 +354,8 @@ Within `8-summary/`, there will be a folder for each sample. Within a sample fol
 + `SAMPLE.Completeness-Contamination-Contigs.pdf`: A plot showing the relationship between completeness and contamination for each high-quality MAG recovered, colored by the number of contigs per MAG.
 + `SAMPLE.GenomeSizes-Depths.pdf`:  A plot showing the relationship between genome size and depth of coverage for each high-quality MAG recovered, colored by % GC content per MAG.
 + `SAMPLE.HiFi_MAG.summary.txt`: A main summary file that brings together information from CheckM2 and GTDB-Tk for all MAGs that pass the filtering step. 
++ `SAMPLE.ReadsMapped.pdf`: A figure showing the percent of reads that mapped to contigs and MAGs at the 90, 95, and 99% identity level. 
++ `SAMPLE.ReadsMapped.txt`: A table showing the percent of reads that mapped to contigs and MAGs at the 90, 95, and 99% identity level. 
 
 
 [Back to top](#TOP)

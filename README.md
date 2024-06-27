@@ -6,7 +6,7 @@
 
 Welcome! Here you can find a variety of tools and pipelines for HiFi metagenomics. In addition to the resources currently available, we will continue to add new tools as they are developed.
 
-The current version is v2.1.0. Please see the [**release notes**](https://github.com/PacificBiosciences/pb-metagenomics-tools/releases) for changes.
+The current version is v3.1.0. Please see the [**release notes**](https://github.com/PacificBiosciences/pb-metagenomics-tools/releases) for changes.
 
 ## HiFi Metagenomic Datasets & Publications
 
@@ -18,13 +18,16 @@ A running list of publications using HiFi sequencing for metagenomics can be fou
 
 + [**HiFi-MAG-Pipeline**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/HiFi-MAG-Pipeline): Identify high-quality MAGs from HiFi metagenomic assemblies. Streamlined workflow includes a custom "completeness-aware" strategy to identify and protect long and complete contigs. Binning is performed with MetaBAT2 and SemiBin2, bin merging occurs with DAS_Tool, QC with CheckM2, and taxonomic assignments with GTDB-Tk. Outputs include high-quality MAG sequences, summary figures, and associated metadata. 
 
++ [**pb-MAG-mirror**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-MAG-mirror): Compare two sets of MAGs to quantify the numbers of highly similar, mixed, and unique MAGs, and consolidate the sets into a single non-redundant set. This workflow can be used to compare MAGs (intended use-case) or bins, but it requires the contigs to originate from the same assembly method.
+
++ [**Taxonomic-Profiling-Sourmash**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Sourmash): Obtain taxonomic proflies using `sourmash gather` --> `taxonomy` approach. Sourmash provides GTDB and NCBI databases, or you can build your own database.
+
 + [**Taxonomic-Profiling-Diamond-Megan**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Diamond-Megan): Perform translation alignment of HiFi reads to a **protein** database using DIAMOND and summarize with MEGAN-LR, for the purpose of taxonomic and functional profiling. Provides access to taxonomic annotations from NCBI and GTDB, and outputs NCBI taxonomic counts in kraken (kreport) and metaphlan (mpa) formats. Also provides functional annotations based on multiple databases (EC, SEED, InterPro2GO, eggNOG), with new KEGG option available.
 
 + [**Taxonomic-Profiling-Minimap-Megan**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Minimap-Megan): Align HiFi reads to a **nucleotide** database using minimap2 and summarize with MEGAN-LR, for the purpose of taxonomic profiling. Provides access to NCBI and GTDB taxonomic annotations. Outputs NCBI taxonomic counts in kraken (kreport) and metaphlan (mpa) formats.
 
-+ [**Taxonomic-Profiling-Sourmash**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Sourmash): Obtain taxonomic proflies using `sourmash gather` --> `taxonomy` approach. Sourmash provides GTDB and NCBI databases, or you can build your own database.
 
-Each of these pipelines can be found in their respective folders. They are made available as [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html) workflows. Snakemake is a python-based workflow manager. Snakemake workflows are highly portable because dependencies and environments are automatically setup using [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html). Snakemake also allows reproducibility, checkpointing, and the ability to scale workflows using HPC and cloud environments. Snakemake v5+ is required, and the workflows have been tested using v5.26+. You can optionally install snakemake via the provided conda environment file via `conda env create -f environment.yml`, and then activate this environment via `conda activate pb-metagenomics-tools` when you want to run any of these workflows.
+Each of these pipelines can be found in their respective folders. They are made available as [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html) workflows. Snakemake is a python-based workflow manager. Snakemake workflows are highly portable because dependencies and environments are automatically setup using [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html). Snakemake also allows reproducibility, checkpointing, and the ability to scale workflows using HPC and cloud environments. Snakemake v5+ is required. You can optionally install snakemake via the provided conda environment file via `conda env create -f environment.yml`, and then activate this environment via `conda activate pb-metagenomics-tools` when you want to run any of these workflows.
 
 ## Other tools
 
@@ -40,9 +43,11 @@ All documentation for snakemake pipelines can be found in the `docs/` folder abo
 
 Available pipeline documentation: 
 - [**Tutorial: HiFi-MAG-Pipeline**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-HiFi-MAG-Pipeline.md)
+- [**Tutorial: pb-MAG-mirror**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-pb-MAG-mirror.md)
+- [**Tutorial: Taxonomic-Profiling-Sourmash**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Profiling-Sourmash.md)
 - [**Tutorial: Taxonomic-Profiling-Diamond-Megan**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Profiling-Diamond-Megan.md)
 - [**Tutorial: Taxonomic-Profiling-Minimap-Megan**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Profiling-Minimap-Megan.md)
-- [**Tutorial: Taxonomic-Profiling-Sourmash**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Profiling-Sourmash.md)
+
 
 The documentation for [pb-metagenomics-scripts](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-metagenomics-scripts) is provided in the folder.
 
