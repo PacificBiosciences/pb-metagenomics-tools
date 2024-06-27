@@ -2,8 +2,6 @@ import argparse
 import os
 import numpy as np
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 from Bio import SeqIO
 
 def get_args():

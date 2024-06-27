@@ -4,8 +4,14 @@
 tmpdir: "/scratch"
 
 checkm2:
-  # The number of threads to use for CheckM.
+  # The number of threads to use for CheckM2.
   threads: 24
+  # Full path to the diamond database required to run CheckM2.
+  # This can be obtained via checkm2:
+  #   checkm2 database --download --path /YourPath/CheckM2_database
+  # It can also be downloaded directly from here, and unpacked after:
+  #   https://zenodo.org/records/5571251/files/checkm2_database.tar.gz?download=1
+  db: "/dept/appslab/datasets/dp_checkm2/CheckM2_database/uniref100.KO.1.dmnd"
 
 minimap:
   # The number of threads to use for minimap2.

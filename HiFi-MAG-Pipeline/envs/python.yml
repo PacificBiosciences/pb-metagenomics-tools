@@ -4,9 +4,10 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python == 3.7
+  - python
   - numpy
   - pandas
   - seaborn
   - matplotlib
-  - biopython == 1.77
+  - biopython
+  - pysam == 0.22
