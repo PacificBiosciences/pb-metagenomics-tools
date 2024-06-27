@@ -1,9 +1,9 @@
 import os
 
 localrules: 
-    Checkm2Database, LongContigsToBins, CloseLongbinFork, StopLongBinCheckm2, FilterCompleteContigs,
+    LongContigsToBins, CloseLongbinFork, StopLongBinCheckm2, FilterCompleteContigs,
     ConvertJGIBamDepth, DASinputMetabat2, DASinputSemiBin2, CopyDAStoolBins, AssessCheckm2Bins,
-    CloseCheckm2Fork, SkipGTDBAnalysis, GTDBTkCleanup, MAGSummary, MAGPlots, all
+    CloseCheckm2Fork, SkipGTDBAnalysis, GTDBTkCleanup, MAGSummary, MAGContigNames, MAGMappingPlots, MAGPlots, all
 
 configfile: "config.yaml"
 
@@ -18,28 +18,6 @@ rule all:
         expand(os.path.join(CWD,"6-checkm2","{sample}","checkm2","quality_report.tsv"), sample = SAMPLES),
         expand(os.path.join(CWD,"6-checkm2","{sample}","{sample}.BinCount.txt"), sample = SAMPLES),
         expand(os.path.join(CWD,"8-summary","{sample}","{sample}.Complete.txt"), sample = SAMPLES)
-
-##################################################################################################
-# Setup CheckM2
-
-rule Checkm2Database:
-    input:
-        contigs = expand(os.path.join(CWD, "inputs", "{sample}.contigs.fasta"), sample = SAMPLES)
-    output:
-        key = os.path.join(CWD, "CheckM2_database", "uniref100.KO.1.dmnd"),
-        complete = os.path.join(CWD, "CheckM2_database", "CheckM2.complete.txt")
-    conda:
-        "envs/checkm2.yml"
-    threads:
-        1
-    params:
-        installdir = CWD
-    log:
-        os.path.join(CWD, "logs", "Checkm2Database.log")
-    benchmark:
-        os.path.join(CWD, "benchmarks", "Checkm2Database.tsv")
-    shell:
-        "checkm2 database --download --path {params.installdir} &> {log} && touch {output.complete}"
 
 ##################################################################################################
 # Completeness-aware binning steps
@@ -77,15 +55,15 @@ rule CloseLongbinFork:
     input:
         get_long_binning_targets
     output:
-        incomplete_contigs = os.path.join(CWD,"1-long-contigs","{sample}","{sample}.incomplete_contigs.fasta"),
+        incomplete_contigs = os.path.join(CWD, "1-long-contigs", "{sample}", "{sample}.incomplete_contigs.fasta"),
         complete = os.path.join(CWD, "1-long-contigs", "{sample}", "{sample}.LongBinCompleted.txt"),
-        outdir = directory(os.path.join(CWD,"5-dereplicated-bins","{sample}",""))
+        outdir = directory(os.path.join(CWD, "5-dereplicated-bins", "{sample}", ""))
     conda:
         "envs/python.yml"
     threads:
         1
     params:
-        contigs = os.path.join(CWD,"inputs","{sample}.contigs.fasta"),
+        contigs = os.path.join(CWD, "inputs", "{sample}.contigs.fasta"),
         fastadir = os.path.join(CWD, "1-long-contigs", "{sample}", "bins", "")
     log:
         os.path.join(CWD, "logs", "{sample}.CloseLongbinFork.log")
@@ -122,14 +100,15 @@ rule Checkm2ContigAnalysis:
     params:
         indir = os.path.join(CWD, "1-long-contigs", "{sample}", "bins", ""),
         outdir = os.path.join(CWD, "1-long-contigs", "{sample}", "checkm2", ""),
-        tmp = config["tmpdir"]
+        tmp = config["tmpdir"],
+        db = config["checkm2"]["db"]
     log:
         os.path.join(CWD, "logs", "{sample}.Checkm2ContigAnalysis.log")
     benchmark: 
         os.path.join(CWD, "benchmarks", "{sample}.Checkm2ContigAnalysis.tsv")
     shell:
         "checkm2 predict -i {params.indir} -o {params.outdir} -x fa -t {threads} --force "
-        "--database_path {input.db} --remove_intermediates --tmpdir {params.tmp} &> {log}"
+        "--database_path {params.db} --remove_intermediates --tmpdir {params.tmp} &> {log}"
 
 # Checkpoint 1: Fork 2 - Long contigs found, sample moves through Checkm2ContigAnalysis -> FilterCompleteContigs
 rule FilterCompleteContigs:
@@ -211,6 +190,22 @@ rule IndexBam:
     shell:
         "samtools index -@ {threads} {input} &> {log} && touch {output.complete}"
 
+rule Bam2Paf:
+    input:
+        os.path.join(CWD, "2-bam", "{sample}.bam")
+    output:
+        os.path.join(CWD, "2-bam", "{sample}.paf")
+    conda:
+        "envs/python.yml"
+    threads:
+        1
+    log:
+        os.path.join(CWD, "logs", "{sample}.Bam2Paf.log")
+    benchmark:
+        os.path.join(CWD, "benchmarks", "{sample}.Bam2Paf.tsv")
+    shell:
+        "python scripts/bam2paf.py -i {input} -o {output} &> {log}"
+
 rule JGIBamDepth:
     input:
         complete = os.path.join(CWD, "2-bam", "{sample}.index.completed.txt"),
@@ -290,7 +285,7 @@ rule SemiBin2Analysis:
         bam = os.path.join(CWD, "2-bam", "{sample}.bam")
     output:
         bins = os.path.join(CWD, "3-semibin2", "{sample}", "bins_info.tsv"),
-        outdir = directory(os.path.join(CWD,"3-semibin2","{sample}",""))
+        outdir = directory(os.path.join(CWD, "3-semibin2", "{sample}", ""))
     conda:
         "envs/semibin.yml"
     threads:
@@ -310,7 +305,7 @@ rule SemiBin2Analysis:
 
 rule DASinputSemiBin2:
     input:
-        os.path.join(CWD,"3-semibin2","{sample}","")
+        os.path.join(CWD, "3-semibin2", "{sample}", "")
     output:
         os.path.join(CWD, "4-DAStool", "{sample}.semibin2.tsv")
     conda:
@@ -328,7 +323,7 @@ rule DASinputSemiBin2:
 rule DAStoolAnalysis:
     input:
         metabat = os.path.join(CWD, "4-DAStool", "{sample}.metabat2.tsv"),
-        semibin = os.path.join(CWD,"4-DAStool","{sample}.semibin2.tsv"),
+        semibin = os.path.join(CWD, "4-DAStool", "{sample}.semibin2.tsv"),
         contigs = os.path.join(CWD, "1-long-contigs", "{sample}", "{sample}.incomplete_contigs.fasta")
     output:
         binsdir = directory(os.path.join(CWD, "4-DAStool", "{sample}", "{sample}_DASTool_bins", "")),
@@ -355,7 +350,7 @@ rule CopyDAStoolBins:
     input:
         binsdir = os.path.join(CWD, "4-DAStool", "{sample}", "{sample}_DASTool_bins", ""),
         complete = os.path.join(CWD, "4-DAStool", "{sample}.Complete.txt"),
-        copydir = os.path.join(CWD,"5-dereplicated-bins","{sample}","")
+        copydir = os.path.join(CWD, "5-dereplicated-bins", "{sample}","")
     output:
         os.path.join(CWD,"5-dereplicated-bins","{sample}.bins_copied.txt")
     conda:
@@ -372,8 +367,7 @@ rule CopyDAStoolBins:
 
 rule Checkm2BinAnalysis:
     input:
-        db = os.path.join(CWD, "CheckM2_database", "uniref100.KO.1.dmnd"),
-        derep_bins = os.path.join(CWD,"5-dereplicated-bins","{sample}.bins_copied.txt")
+        derep_bins = os.path.join(CWD, "5-dereplicated-bins", "{sample}.bins_copied.txt")
     output:
         qv = os.path.join(CWD, "6-checkm2", "{sample}", "checkm2", "quality_report.tsv")
     conda:
@@ -383,14 +377,15 @@ rule Checkm2BinAnalysis:
     params:
         indir = os.path.join(CWD, "5-dereplicated-bins", "{sample}", ""),
         outdir = os.path.join(CWD, "6-checkm2", "{sample}", "checkm2", ""),
-        tmp = config["tmpdir"]
+        tmp = config["tmpdir"],
+        db = config["checkm2"]["db"]
     log:
         os.path.join(CWD, "logs", "{sample}.Checkm2BinAnalysis.log")
     benchmark:
         os.path.join(CWD, "benchmarks", "{sample}.Checkm2BinAnalysis.tsv")
     shell:
         "checkm2 predict -i {params.indir} -o {params.outdir} -x fa -t {threads} --force "
-        "--remove_intermediates --database_path {input.db} --tmpdir {params.tmp} &> {log}"
+        "--remove_intermediates --database_path {params.db} --tmpdir {params.tmp} &> {log}"
 
 # Checkpoint 2 - Ensure there are bins after CheckM2, before running GTDB-Tk and the summary
 checkpoint AssessCheckm2Bins:
@@ -399,7 +394,7 @@ checkpoint AssessCheckm2Bins:
         depth = os.path.join(CWD, "2-bam", "{sample}.JGI.depth.txt")
     output:
         gtdb = os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.GTDBTk_batch_file.txt"),
-        target = os.path.join(CWD,"6-checkm2","{sample}","{sample}.BinCount.txt"),
+        target = os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.BinCount.txt"),
         output_tsv = os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.quality_report.tsv")
     conda:
         "envs/python.yml"
@@ -424,14 +419,14 @@ def get_post_checkm2_inputs(wildcards):
         if int(fh.read().strip()) > 0:
             return os.path.join(CWD, "8-summary", "{sample}", "{sample}.Completeness-Contamination-Contigs.pdf")
         else:
-            return os.path.join(CWD,"8-summary","{sample}","{sample}.No_MAGs.summary.txt")
+            return os.path.join(CWD, "8-summary", "{sample}", "{sample}.No_MAGs.summary.txt")
 
 # Checkpoint 2 aggregator; close the fork; outputs '/8-summary/SAMPLE/SAMPLE.Complete.txt'
 rule CloseCheckm2Fork:
     input:
         get_post_checkm2_inputs
     output:
-        os.path.join(CWD,"8-summary","{sample}","{sample}.Complete.txt")
+        os.path.join(CWD, "8-summary", "{sample}", "{sample}.Complete.txt")
     shell:
         "touch {output}"
 
@@ -440,10 +435,10 @@ rule CloseCheckm2Fork:
 rule SkipGTDBAnalysis:
     input:
         gtdb = os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.GTDBTk_batch_file.txt"),
-        target = os.path.join(CWD,"6-checkm2","{sample}","{sample}.BinCount.txt"),
-        output_tsv = os.path.join(CWD,"6-checkm2","{sample}","{sample}.quality_report.tsv")
+        target = os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.BinCount.txt"),
+        output_tsv = os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.quality_report.tsv")
     output:
-        os.path.join(CWD,"8-summary","{sample}","{sample}.No_MAGs.summary.txt")
+        os.path.join(CWD, "8-summary", "{sample}", "{sample}.No_MAGs.summary.txt")
     threads:
         1
     params:
@@ -453,16 +448,16 @@ rule SkipGTDBAnalysis:
         "see {input.output_tsv} for more information > {output}"
 
 ##############################
-# Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGPlots
+# Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGContigNames -> MAGmappingPlots -> MAGPlots
 rule GTDBTkAnalysis:
     input:
         gtdb = os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.GTDBTk_batch_file.txt"),
-        target = os.path.join(CWD,"6-checkm2","{sample}","{sample}.BinCount.txt")
+        target = os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.BinCount.txt")
     output:
         dir_align = directory(os.path.join(CWD, "7-gtdbtk", "{sample}", "align", "")),
         dir_classify = directory(os.path.join(CWD, "7-gtdbtk", "{sample}", "classify", "")),
         dir_identify = directory(os.path.join(CWD, "7-gtdbtk", "{sample}", "identify", "")),
-        complete = os.path.join(CWD,"7-gtdbtk","{sample}","{sample}.Complete.txt")
+        complete = os.path.join(CWD, "7-gtdbtk", "{sample}", "{sample}.Complete.txt")
     conda:
         "envs/gtdbtk.yml"
     threads:
@@ -479,11 +474,11 @@ rule GTDBTkAnalysis:
         "--out_dir {params.outdir} -x fa --prefix {wildcards.sample} --cpus {threads} "
         " &> {log} && touch {output.complete}"
 
-# Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGPlots
+# Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGContigNames -> MAGmappingPlots -> MAGPlots
 rule GTDBTkCleanup:
     input:
         dir_classify = os.path.join(CWD, "7-gtdbtk", "{sample}", "classify", ""),
-        complete = os.path.join(CWD,"7-gtdbtk","{sample}","{sample}.Complete.txt")
+        complete = os.path.join(CWD, "7-gtdbtk", "{sample}", "{sample}.Complete.txt")
     output:
         os.path.join(CWD,"7-gtdbtk","{sample}","{sample}.GTDBTk_Summary.txt")
     conda:
@@ -495,13 +490,13 @@ rule GTDBTkCleanup:
     shell:
         "python scripts/GTDBTk-Organize.py -i {input.dir_classify} -o {output} &> {log}"
 
-# Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGPlots
+# Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGContigNames -> MAGmappingPlots -> MAGPlots
 rule MAGSummary:
     input:
-        gtdbtk = os.path.join(CWD,"7-gtdbtk","{sample}","{sample}.GTDBTk_Summary.txt"),
+        gtdbtk = os.path.join(CWD, "7-gtdbtk", "{sample}", "{sample}.GTDBTk_Summary.txt"),
         checkm2 = os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.quality_report.tsv")
     output:
-        os.path.join(CWD,"8-summary","{sample}","{sample}.HiFi_MAG.summary.txt")
+        os.path.join(CWD, "8-summary", "{sample}", "{sample}.HiFi_MAG.summary.txt")
     conda:
         "envs/python.yml"
     threads:
@@ -511,13 +506,13 @@ rule MAGSummary:
     shell:
         "python scripts/MAG-Summary.py -g {input.gtdbtk} -c {input.checkm2} -o {output} &> {log}"
 
-# Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGPlots
+# Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGContigNames -> MAGmappingPlots -> MAGPlots
 rule MAGCopy:
     input:
-        mag_sum = os.path.join(CWD,"8-summary","{sample}","{sample}.HiFi_MAG.summary.txt"),
+        mag_sum = os.path.join(CWD, "8-summary", "{sample}", "{sample}.HiFi_MAG.summary.txt"),
         mag_dir = os.path.join(CWD, "5-dereplicated-bins", "{sample}", "")
     output:
-        directory(os.path.join(CWD,"8-summary","{sample}", "MAGs", ""))
+        directory(os.path.join(CWD, "8-summary", "{sample}", "MAGs", ""))
     conda:
         "envs/python.yml"
     threads:
@@ -527,12 +522,51 @@ rule MAGCopy:
     shell:
         "python scripts/Copy-Final-MAGs.py -i {input.mag_sum} -m {input.mag_dir} -o {output} &> {log}"
 
-# Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGPlots
+# Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGContigNames -> MAGmappingPlots -> MAGPlots
+rule MAGContigNames:
+    input:
+        mag_sum = os.path.join(CWD, "8-summary", "{sample}", "{sample}.HiFi_MAG.summary.txt"),
+        mag_dir = os.path.join(CWD, "8-summary", "{sample}", "MAGs", "")
+    output:
+        os.path.join(CWD, "2-bam", "{sample}.MAG_contigs.txt")
+    threads:
+        1
+    log:
+        os.path.join(CWD, "logs", "{sample}.MAGContigNames.log")
+    benchmark:
+        os.path.join(CWD, "benchmarks", "{sample}.MAGContigNames.tsv")
+    shell:
+        "grep -h '>' {input.mag_dir}*.fa | cut -d'>' -f2 1> {output} 2> {log}"
+
+# Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGContigNames -> MAGmappingPlots -> MAGPlots
+rule MAGMappingPlots:
+    input:
+        contig_names = os.path.join(CWD, "2-bam", "{sample}.MAG_contigs.txt"),
+        reads = os.path.join(CWD, "inputs", "{sample}.fasta"),
+        paf = os.path.join(CWD, "2-bam", "{sample}.paf")
+    output:
+        o1 = os.path.join(CWD, "8-summary", "{sample}", "{sample}.ReadsMapped.pdf"),
+        o2 = os.path.join(CWD, "8-summary", "{sample}", "{sample}.ReadsMapped.txt")
+    conda:
+        "envs/python.yml"
+    threads:
+        4
+    log:
+        os.path.join(CWD, "logs", "{sample}.MAGMappingPlots.log")
+    benchmark:
+        os.path.join(CWD, "benchmarks", "{sample}.MAGMappingPlots.tsv")
+    shell:
+        "python scripts/paf-mapping-summary.py -p {input.paf} -r {input.reads} -c {input.contig_names} "
+        "-o1 {output.o1} -o2 {output.o2} &> {log}"
+
+
+# Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGContigNames -> MAGmappingPlots -> MAGPlots
 rule MAGPlots:
     input:
         checkm2_tsv = os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.quality_report.tsv"),
-        mag_dir = os.path.join(CWD,"8-summary","{sample}", "MAGs", ""),
-        mag_eval = os.path.join(CWD,"8-summary","{sample}","{sample}.HiFi_MAG.summary.txt")
+        mag_dir = os.path.join(CWD, "8-summary", "{sample}", "MAGs", ""),
+        mag_eval = os.path.join(CWD, "8-summary", "{sample}", "{sample}.HiFi_MAG.summary.txt"),
+        mapped_fig = os.path.join(CWD, "8-summary", "{sample}", "{sample}.ReadsMapped.pdf")
     output:
         o1 = os.path.join(CWD, "8-summary", "{sample}", "{sample}.All-DASTool-Bins.pdf"),
         o2 = os.path.join(CWD, "8-summary", "{sample}", "{sample}.Completeness-Contamination-Contigs.pdf"),
