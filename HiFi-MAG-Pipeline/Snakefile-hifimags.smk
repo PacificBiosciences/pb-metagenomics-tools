@@ -301,11 +301,30 @@ rule SemiBin2Analysis:
         "SemiBin single_easy_bin -i {input.contigs} -b {input.bam} -o {output.outdir} --self-supervised "
         "--sequencing-type=long_reads --compression=none -t {threads} --tag-output semibin2 {params.modelflag} "
         "--verbose --tmpdir={params.tmp} &> {log}"
-#--environment=global
+
+rule FilterSuperBins:
+    input:
+        os.path.join(CWD, "3-semibin2", "{sample}", "bins_info.tsv")
+    output:
+        outdir = directory(os.path.join(CWD, "3-semibin2", "{sample}", "superbins")),
+        outfile = os.path.join(CWD, "3-semibin2", "{sample}", "{sample}.superbins.txt")
+    conda:
+        "envs/python.yml"
+    params:
+        indir = os.path.join(CWD, "3-semibin2", "{sample}", "output_bins", "")
+    threads:
+        1
+    log:
+        os.path.join(CWD, "logs", "{sample}.FilterSuperBins.log")
+    benchmark:
+        os.path.join(CWD, "benchmarks", "{sample}.FilterSuperBins.tsv")
+    shell:
+        "python scripts/Filter-Semibin.py -i {params.indir} -o {output.outdir} -f {output.outfile} "
+        " &> {log}"
 
 rule DASinputSemiBin2:
     input:
-        os.path.join(CWD, "3-semibin2", "{sample}", "")
+        os.path.join(CWD, "3-semibin2", "{sample}", "{sample}.superbins.txt")
     output:
         os.path.join(CWD, "4-DAStool", "{sample}.semibin2.tsv")
     conda:
