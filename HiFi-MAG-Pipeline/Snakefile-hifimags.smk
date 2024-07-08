@@ -2,7 +2,7 @@ import os
 
 localrules: 
     LongContigsToBins, CloseLongbinFork, StopLongBinCheckm2, FilterCompleteContigs,
-    ConvertJGIBamDepth, DASinputMetabat2, DASinputSemiBin2, CopyDAStoolBins, AssessCheckm2Bins,
+    ConvertJGIBamDepth, FilterSuperBins, DASinputMetabat2, DASinputSemiBin2, CopyDAStoolBins, AssessCheckm2Bins,
     CloseCheckm2Fork, SkipGTDBAnalysis, GTDBTkCleanup, MAGSummary, MAGContigNames, MAGMappingPlots, MAGPlots, all
 
 configfile: "config.yaml"
@@ -285,33 +285,33 @@ rule SemiBin2Analysis:
         bam = os.path.join(CWD, "2-bam", "{sample}.bam")
     output:
         bins = os.path.join(CWD, "3-semibin2", "{sample}", "bins_info.tsv"),
-        outdir = directory(os.path.join(CWD, "3-semibin2", "{sample}", ""))
     conda:
         "envs/semibin.yml"
     threads:
         config['semibin']['threads']
     params:
         tmp = config["tmpdir"],
-        modelflag = config['semibin']['model']
+        modelflag = config['semibin']['model'],
+        outdir = os.path.join(CWD, "3-semibin2", "{sample}", "")
     log:
         os.path.join(CWD, "logs", "{sample}.SemiBin2Analysis.log")
     benchmark:
         os.path.join(CWD, "benchmarks", "{sample}.SemiBin2Analysis.tsv")
     shell:
-        "SemiBin single_easy_bin -i {input.contigs} -b {input.bam} -o {output.outdir} --self-supervised "
+        "SemiBin single_easy_bin -i {input.contigs} -b {input.bam} -o {params.outdir} --self-supervised "
         "--sequencing-type=long_reads --compression=none -t {threads} --tag-output semibin2 {params.modelflag} "
         "--verbose --tmpdir={params.tmp} &> {log}"
 
 rule FilterSuperBins:
     input:
-        os.path.join(CWD, "3-semibin2", "{sample}", "bins_info.tsv")
+        bins = os.path.join(CWD, "3-semibin2", "{sample}", "bins_info.tsv"),
     output:
-        outdir = directory(os.path.join(CWD, "3-semibin2", "{sample}", "superbins")),
         outfile = os.path.join(CWD, "3-semibin2", "{sample}", "{sample}.superbins.txt")
     conda:
         "envs/python.yml"
     params:
-        indir = os.path.join(CWD, "3-semibin2", "{sample}", "output_bins", "")
+        indir = os.path.join(CWD, "3-semibin2", "{sample}", "output_bins", ""),
+        outdir = os.path.join(CWD, "3-semibin2", "{sample}", "superbins", "")
     threads:
         1
     log:
@@ -319,7 +319,7 @@ rule FilterSuperBins:
     benchmark:
         os.path.join(CWD, "benchmarks", "{sample}.FilterSuperBins.tsv")
     shell:
-        "python scripts/Filter-Semibin.py -i {params.indir} -o {output.outdir} -f {output.outfile} "
+        "python scripts/Filter-Semibin.py -i {params.indir} -o {params.outdir} -f {output.outfile} "
         " &> {log}"
 
 rule DASinputSemiBin2:
