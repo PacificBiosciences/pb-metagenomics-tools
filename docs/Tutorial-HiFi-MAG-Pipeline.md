@@ -165,7 +165,9 @@ The additional batOptions previously recommended for metagenomics with Canu 2.0 
 
 ## Download required databases
 
-The database for for `GTDB-Tk` must be downloaded prior to running analyses. The CheckM database is no longer required as of HiFi-MAG-Pipeline v2.0.
+**CheckM2 database**
+
+Download the CheckM2 database using the software (`checkm2 database --download --path /YourPath/CheckM2_database`) or download and unpack [this site](https://zenodo.org/records/5571251/files/checkm2_database.tar.gz?download=1). The database is ~3Gb. Specify the path to the database in `config.yaml`.
 
 **GTDB-Tk database**
 
