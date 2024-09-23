@@ -1,6 +1,6 @@
 # HiFi Metagenomics Publications
 
-(Updated 08/24)
+(Updated 09/24)
 
 ## Pre-prints 
 
@@ -8,7 +8,11 @@
 
 + Kutuzova S, Nielsen M, Piera P, Nissen JN, and S Rasmussen. 2023. Taxometer: improving taxonomic classification of metagenomic contigs. bioRxiv, https://doi.org/10.1101/2023.11.23.568413
 
++ Mainguy J, Vienne M, Fourquet J, Darbot V, Noirot C, Castinel A, Combes S, Gaspin C, Milan D, Donnadieu C, Iampietro C, Bouchez O, Pascal G, and C Hoede. 2024. metaWGS, a comprehensive workflow to analyze metagenomic data using Illumina or PacBio HiFi reads. bioRxiv, https://doi.org/10.1101/2024.09.13.612854
+
 + Mao Y, Shisler JL, and TH Nguyen. 2024. Enhanced detection for antibiotic resistance genes in wastewater using CRISPR-enriched metagenomic method. bioRxiv, https://doi.org/10.1101/2024.07.30.605462
+
++ Minich JJ, Allsing N, Din MO, Tisza MJ, Maleta K, McDonald D, Hartwick N, Mamerto A, Brennan C, Hansen L, Shaffer J, Murray ER, Duong T, Knight R, Stephenson K, Manary MJ, and TP Michael. 2024. Culture-independent meta-pangenomics enabled by long-read metagenomics reveals novel associations with pediatric undernutrition. Cell, (sneak peak) http://dx.doi.org/10.2139/ssrn.4960739
 
 + Portik DM, Feng X, Benoit G, Nasko DJ, Auch B, Bryson SJ, Cano R, Carlin M, Damerum A, Farthing B, Grove JR, Islam M, Langford KW, Liachko I, Locken K, Mangelson H, Tang S, Zhang S, Quince C, and JE Wilkinson. 2024. Highly accurate metagenome-assembled genomes from human gut microbiota using long-read assembly, binning, and consolidation methods. bioRxiv, https://doi.org/10.1101/2024.05.10.593587
 
@@ -41,15 +45,21 @@
 
 + Agustinho DP, Fu Y, Menon VK, Metcalf GA, Treangan TJ, and FJ Sedlazeck. 2024. Unveiling microbial diversity: harnessing long-read sequencing technology. Nature Methods, https://doi.org/10.1038/s41592-024-02262-1
 
++ Aldeguer-Riquelme B, Conrad RE, Anton J, Rossello-Mora R, and KT Konstantinidis. 2024. A natural ANI gap that can define intra-species units of bacteriophages and other viruses. mBio, 8: e01536-24. https://doi.org/10.1128/mbio.01536-24
+
 + Benoit G, Raguideau S, James R, Phillippy AM, Chikhi R, and C Quince. 2024. High-quality metagenome assembly from long accurate reads with metaMDBG. Nature Biotechnology, https://doi.org/10.1038/s41587-023-01983-6
 
 + Bulka O, and EA Edwards. 2024. Metagenomic sequences from anaerobic chloroform and dichloromethane degrading microbial communities. Microbiology Resource Announcements, e00391-24. https://doi.org/10.1128/mra.00391-24
+
++ Bulka O, Picott K, Mahadevan R, and EA Edwards. 2024. From mec cassette to rdhA: a key Dehalobacter genomic neighborhood in a chloroform and dichloromethane-transforming microbial consortium. Applied and Environmental Microbiology, 90: e0073224. https://doi.org/10.1128/aem.00732-24
 
 + Chen J, Sun C, Dong Y, Jin M, Lai S, Jia L, Zhao X, Wang H, Gao NL, Bork P, Liu Z, Chen W-H, and X-M Zhao. 2024. Efficient recovery of complete gut phage genomes by combined short- and long-sequencing. Advanced Science, 2305818. https://doi.org/10.1002/advs.202305818
 
 + Chen X, Yin X, Shi X, Yan W, Yang Y, Liu L, and T Zhang. 2023. Melon: metagenomic long-read-based taxonomic identification and quantification using marker genes. Genome Biology, 25: 226. https://doi.org/10.1186/s13059-024-03363-y
 
 + Cook R, Brown N, Rihtman B, Michniewski S, Redgwell T, Clokie M, Stekel DJ, Chen Y, Scanlan DJ, Hobman JL, Nelson A, Jones MA, Smith D, and A Millard. 2024. The long and short of it: benchmarking viromics using Illumina, Nanopore, and PacBio sequencing technologies. Microbial Genomics, 10: 001198. https://doi.org/10.1099/mgen.0.001198
+
++ Dong W, Fan X, Guo Y, Wang S, Jia S, Lv N, Yuan T, Pan Y, Xue Y, Chen X, Xiong Q, Yang R, Zhao W, and B Zhu. 2024. An expanded database and analytical toolkit for identifying bacterial virulence factors and their associations with chronic diseases. Nature Communications, 15: 8084. https://doi.org/10.1038/s41467-024-51864-y
 
 + Eisenhofer R, Nesme J, Santos-Bay L, Koziol A, Sorenson SJ, Alberdi A, and O Aizpurua. 2024. A comparison of short-read, HiFi long-read and hybrid strategies for genome-resolved metagenomics. Microbiology Spectrum, 12: e03590-23. https://doi.org/10.1128/spectrum.03590-23
 
@@ -66,6 +76,8 @@
 + Maric J, Krizanovic K, Riondet S, Nagarajan N, and M Sikic. 2024. Comparative analysis of metagenomic classifiers for long-read sequencing datasets. BMC Bioinformatics, 25: 15. https://doi.org/10.1186/s12859-024-05634-8
 
 + Masuda S, Gan P, Kiguchi Y, Anda M, Sasaki K, Shibata A, Iwasaki W, Suda W, and K Shirasu. 2024. Uncovering microbiomes of the rice phyllosphere using long-read metagenomic sequencing. Communications Biology, 7: 357. https://doi.org/10.1038/s42003-024-05998-w
+
++ Myeong NR, Choe Y-H, Shin SC, Kim J, Sul WJ, and M Kim. 2024. Genomic profiling of Antarctic geothermal microbiomes using long-read, Hi-C, and single-cell techniques. Scientific Data, 11: 1023. https://doi.org/10.1038/s41597-024-03875-z
 
 + Peres de Silva R, Suphavilai C, and N Nagrajan. 2024. MetageNN: a memory-efficient neural network taxonomic classifier robust to sequencing errors and missing genomes. BMC Bioinformatics, 25: 153. https://doi.org/10.1186/s12859-024-05760-3
 
