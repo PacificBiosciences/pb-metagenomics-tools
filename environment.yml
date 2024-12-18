@@ -4,5 +4,7 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - python=3.10
-  - snakemake=7.18.2
+  - snakemake >= 8.25
+  - snakemake-executor-plugin-cluster-generic
+  - snakemake-executor-plugin-slurm
+  - conda >= 24.8
