@@ -14,10 +14,10 @@ rule all:
     input:
         expand(os.path.join(CWD, "1-long-contigs", "{sample}", "{sample}.LongBinCompleted.txt"), sample = SAMPLES),
         expand(os.path.join(CWD, "2-bam", "{sample}.JGI.filtered.depth.txt"), sample = SAMPLES),
-        expand(os.path.join(CWD,"5-dereplicated-bins","{sample}.bins_copied.txt"), sample = SAMPLES),
-        expand(os.path.join(CWD,"6-checkm2","{sample}","checkm2","quality_report.tsv"), sample = SAMPLES),
-        expand(os.path.join(CWD,"6-checkm2","{sample}","{sample}.BinCount.txt"), sample = SAMPLES),
-        expand(os.path.join(CWD,"8-summary","{sample}","{sample}.Complete.txt"), sample = SAMPLES)
+        expand(os.path.join(CWD, "5-dereplicated-bins", "{sample}.bins_copied.txt"), sample = SAMPLES),
+        expand(os.path.join(CWD, "6-checkm2", "{sample}", "checkm2","quality_report.tsv"), sample = SAMPLES),
+        expand(os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.BinCount.txt"), sample = SAMPLES),
+        expand(os.path.join(CWD, "8-summary", "{sample}", "{sample}.Complete.txt"), sample = SAMPLES)
 
 ##################################################################################################
 # Completeness-aware binning steps
@@ -102,6 +102,8 @@ rule Checkm2ContigAnalysis:
         outdir = os.path.join(CWD, "1-long-contigs", "{sample}", "checkm2", ""),
         tmp = config["tmpdir"],
         db = config["checkm2"]["db"]
+    resources:
+        mem_mb = config['checkm2']['mem_mb']
     log:
         os.path.join(CWD, "logs", "{sample}.Checkm2ContigAnalysis.log")
     benchmark: 
@@ -165,6 +167,8 @@ rule MinimapToBam:
         "envs/samtools.yml"
     threads: 
         config['minimap']['threads']
+    resources:
+        mem_mb = config['minimap']['mem_mb']
     log: 
         os.path.join(CWD, "logs", "{sample}.MinimapToBam.log")
     benchmark: 
@@ -255,6 +259,8 @@ rule Metabat2Analysis:
     params:
         prefix = os.path.join(CWD, "3-metabat2", "{sample}", "metabat2"),
         min_contig_size = config['metabat']['min_contig_size']
+    resources:
+        mem_mb = config['metabat']['mem_mb']
     log:
         os.path.join(CWD, "logs", "{sample}.Metabat2Analysis.log")
     benchmark:
@@ -291,16 +297,18 @@ rule SemiBin2Analysis:
         config['semibin']['threads']
     params:
         tmp = config["tmpdir"],
-        modelflag = config['semibin']['model'],
+        model = config['semibin']['model'],
         outdir = os.path.join(CWD, "3-semibin2", "{sample}", "")
+    resources:
+        mem_mb = config['semibin']['mem_mb']
     log:
         os.path.join(CWD, "logs", "{sample}.SemiBin2Analysis.log")
     benchmark:
         os.path.join(CWD, "benchmarks", "{sample}.SemiBin2Analysis.tsv")
     shell:
-        "SemiBin single_easy_bin -i {input.contigs} -b {input.bam} -o {params.outdir} --self-supervised "
-        "--sequencing-type=long_reads --compression=none -t {threads} --tag-output semibin2 {params.modelflag} "
-        "--verbose --tmpdir={params.tmp} &> {log}"
+        "SemiBin2 single_easy_bin -i {input.contigs} -b {input.bam} -o {params.outdir} "
+        "--training-type self {params.model} --sequencing-type long_read --compression none "
+        "-t {threads} --tag-output semibin2 --verbose --tmpdir {params.tmp} &> {log}"
 
 rule FilterSuperBins:
     input:
@@ -355,6 +363,8 @@ rule DAStoolAnalysis:
         outlabel = os.path.join(CWD, "4-DAStool", "{sample}", "{sample}"),
         search = config['dastool']['search'],
         thresh = config['dastool']['score_threshold']
+    resources:
+        mem_mb = config['dastool']['mem_mb']
     log:
         os.path.join(CWD, "logs", "{sample}.DAStoolAnalysis.log")
     benchmark:
@@ -398,6 +408,8 @@ rule Checkm2BinAnalysis:
         outdir = os.path.join(CWD, "6-checkm2", "{sample}", "checkm2", ""),
         tmp = config["tmpdir"],
         db = config["checkm2"]["db"]
+    resources:
+        mem_mb = config['checkm2']['mem_mb']
     log:
         os.path.join(CWD, "logs", "{sample}.Checkm2BinAnalysis.log")
     benchmark:
@@ -484,6 +496,8 @@ rule GTDBTkAnalysis:
     params:
         gtdbtk_data = config['gtdbtk']['gtdbtk_data'],
         outdir = os.path.join(CWD, "7-gtdbtk", "{sample}", "")
+    resources:
+        mem_mb = config['gtdbtk']['mem_mb']
     log:
         os.path.join(CWD, "logs", "{sample}.GTDBTkAnalysis.log")
     benchmark:
@@ -555,7 +569,7 @@ rule MAGContigNames:
     benchmark:
         os.path.join(CWD, "benchmarks", "{sample}.MAGContigNames.tsv")
     shell:
-        "grep -h '>' {input.mag_dir}*.fa | cut -d'>' -f2 1> {output} 2> {log}"
+        "grep -h '>' {input.mag_dir}/*.fa | cut -d'>' -f2 1> {output} 2> {log}"
 
 # Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGContigNames -> MAGmappingPlots -> MAGPlots
 rule MAGMappingPlots:
