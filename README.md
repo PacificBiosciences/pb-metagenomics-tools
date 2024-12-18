@@ -26,16 +26,9 @@ A running list of publications using HiFi sequencing for metagenomics can be fou
 
 + [**Taxonomic-Profiling-Minimap-Megan**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Minimap-Megan): Align HiFi reads to a **nucleotide** database using minimap2 and summarize with MEGAN-LR, for the purpose of taxonomic profiling. Provides access to NCBI and GTDB taxonomic annotations. Outputs NCBI taxonomic counts in kraken (kreport) and metaphlan (mpa) formats.
 
+Each of these pipelines can be found in their respective folders. They are made available as [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html) workflows. Snakemake is a python-based workflow manager. Snakemake workflows are highly portable because dependencies and environments are automatically setup using [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html). Snakemake also allows reproducibility, checkpointing, and the ability to scale workflows using HPC and cloud environments. 
 
-Each of these pipelines can be found in their respective folders. They are made available as [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html) workflows. Snakemake is a python-based workflow manager. Snakemake workflows are highly portable because dependencies and environments are automatically setup using [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html). Snakemake also allows reproducibility, checkpointing, and the ability to scale workflows using HPC and cloud environments. Snakemake v5+ is required. You can optionally install snakemake via the provided conda environment file via `conda env create -f environment.yml`, and then activate this environment via `conda activate pb-metagenomics-tools` when you want to run any of these workflows.
-
-## Other tools
-
-Scripts and tools for metagenomics tasks are available in the [**pb-metagenomics-scripts**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-metagenomics-scripts) folder. Currently, there are scripts or notebooks to perform the following tasks: 
-
-+ Convert outputs from common metagenomics profiling/classification programs into standard formats, including kraken report (kreport) and metaphlan report (mpa) formats. 
-
-+ Compare kraken report files across multiple samples, with several visualization options.
+**Snakemake v8+ is now required**. Please note there are some major command-line changes for v8+ (outlined here). You can optionally install snakemake 8.25+ via the provided conda environment file via `conda env create -f environment.yml`, and then activate this environment via `conda activate pb-metagenomics-tools` to run the workflows.
 
 ## Documentation 
 
@@ -48,8 +41,26 @@ Available pipeline documentation:
 - [**Tutorial: Taxonomic-Profiling-Diamond-Megan**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Profiling-Diamond-Megan.md)
 - [**Tutorial: Taxonomic-Profiling-Minimap-Megan**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Tutorial-Taxonomic-Profiling-Minimap-Megan.md)
 
+## Citation
 
-The documentation for [pb-metagenomics-scripts](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-metagenomics-scripts) is provided in the folder.
+The taxonomic profiling and classification workflows (including [Taxonomic-Profiling-Sourmash](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Sourmash), [Taxonomic-Profiling-Diamond-Megan](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Diamond-Megan), and [Taxonomic-Profiling-Minimap-Megan](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Minimap-Megan)) were created for the following publication:
+
+> Portik DM, Brown CT, and NT Pierce-Ward. 2022. Evaluation of taxonomic classification and profiling methods for long-read shotgun metagenomic sequencing datasets. BMC Bioinformatics, 23: 541. https://doi.org/10.1186/s12859-022-05103-0
+
+The [HiFi-MAG-Pipeline](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/HiFi-MAG-Pipeline)(v2+) and [pb-MAG-mirror](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-MAG-mirror) were created for the following pre-print:
+
+> Portik DM, Feng X, Benoit G, Nasko DJ, Auch B, Bryson SJ, Cano R, Carlin M, Damerum A, Farthing B, Grove JR, Islam M, Langford KW, Liachko I, Locken K, Mangelson H, Tang S, Zhang S, Quince C, and JE Wilkinson. 2024. Highly accurate metagenome-assembled genomes from human gut microbiota using long-read assembly, binning, and consolidation methods. bioRxiv, https://doi.org/10.1101/2024.05.10.593587
+
+
+## Other tools
+
+Scripts and tools for metagenomics tasks are available in the [**pb-metagenomics-scripts**](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-metagenomics-scripts) folder. Currently, there are scripts or notebooks to perform the following tasks: 
+
++ Convert outputs from common metagenomics profiling/classification programs into standard formats, including kraken report (kreport) and metaphlan report (mpa) formats. 
+
++ Compare kraken report files across multiple samples, with several visualization options.
+
+The documentation for is provided in the folder.
 
 
 
