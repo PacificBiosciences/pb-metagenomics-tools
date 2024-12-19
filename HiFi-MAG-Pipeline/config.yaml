@@ -58,14 +58,16 @@ semibin:
   threads: 48
 
   # Set model flag. To change the model use "--environment MODEL" below.
-  # Choices include: human_gut, human_oral, dog_gut, cat_gut, mouse_gut, pig_gut, chicken_caecum,
-  #                  ocean, soil, built_environment, wastewater,  global
+  # Choices include: human_gut, human_oral, dog_gut, cat_gut, mouse_gut, pig_gut, 
+  #                  chicken_caecum, ocean, soil, built_environment, wastewater,  
+  #                  or global
   # The global model is set as the default. To change, use the following syntax:
   # model: "--environment human_gut"
 
-  # To enable a new model to be trained from your data, set the below value to an empty string. Example:
-  # model: ""
-  # Note that new model training will take significantly longer to run (5-20 hours additional, per sample).
+  # To enable a new model to be trained from your data, set the value to the following: 
+  # model: "--self-supervised"
+  # Note that new model training will take significantly longer to run (5-20 hours 
+  # additional, per sample).
   model: "--environment global"
   
   # Memory allocation in MB 
@@ -115,7 +117,7 @@ gtdbtk:
   # To download the latest release you can use:
   # wget https://data.ace.uq.edu.au/public/gtdb/data/releases/latest/auxillary_files/gtdbtk_package/full_package/gtdbtk_data.tar.gz
   # tar -xvzf gtdbtk_data.tar.gz  
-  # Please note that the data for release 220 are >68GB in size.
+  # Please note that the data for release 220 are >100GB in size.
   # The path below must point to the directory than contains the following folders:
   # markers, masks, metadata, mrca_red, msa, pplacer, radii, skani, split, taxonomy
   gtdbtk_data: "/dept/appslab/datasets/dp_gtdb-tk/release220"
