@@ -43,11 +43,11 @@ Available pipeline documentation:
 
 ## Citation
 
-The taxonomic profiling and classification workflows (including [Taxonomic-Profiling-Sourmash](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Sourmash), [Taxonomic-Profiling-Diamond-Megan](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Diamond-Megan), and [Taxonomic-Profiling-Minimap-Megan](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/Taxonomic-Profiling-Minimap-Megan)) were created for the following publication:
+The taxonomic profiling and classification workflows (including **Taxonomic-Profiling-Sourmash**, **Taxonomic-Profiling-Diamond-Megan**, and **Taxonomic-Profiling-Minimap-Megan**) were created for the following publication:
 
 > Portik DM, Brown CT, and NT Pierce-Ward. 2022. Evaluation of taxonomic classification and profiling methods for long-read shotgun metagenomic sequencing datasets. BMC Bioinformatics, 23: 541. https://doi.org/10.1186/s12859-022-05103-0
 
-The [HiFi-MAG-Pipeline](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/HiFi-MAG-Pipeline)(v2+) and [pb-MAG-mirror](https://github.com/PacificBiosciences/pb-metagenomics-tools/tree/master/pb-MAG-mirror) were created for the following pre-print:
+The **HiFi-MAG-Pipeline** (v2+) and **pb-MAG-mirror** were created for the following pre-print:
 
 > Portik DM, Feng X, Benoit G, Nasko DJ, Auch B, Bryson SJ, Cano R, Carlin M, Damerum A, Farthing B, Grove JR, Islam M, Langford KW, Liachko I, Locken K, Mangelson H, Tang S, Zhang S, Quince C, and JE Wilkinson. 2024. Highly accurate metagenome-assembled genomes from human gut microbiota using long-read assembly, binning, and consolidation methods. bioRxiv, https://doi.org/10.1101/2024.05.10.593587
 
