@@ -1,0 +1,10 @@
+name: pb-metagenomic-tools
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - snakemake >= 8.25
+  - snakemake-executor-plugin-cluster-generic
+  - snakemake-executor-plugin-slurm
+  - conda >= 24.8

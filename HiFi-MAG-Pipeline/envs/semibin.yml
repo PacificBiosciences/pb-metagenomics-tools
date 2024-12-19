@@ -4,5 +4,4 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - semibin = 1.5
-#  - semibin=1.5.0=pyh7cba7a3_0
+  - semibin >= 2.1

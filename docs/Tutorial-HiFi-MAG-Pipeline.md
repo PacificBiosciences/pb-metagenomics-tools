@@ -19,7 +19,7 @@ The purpose of this snakemake workflow is to obtain high-quality metagenome-asse
 
 ![GBSteps](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-HiFi-MAG-Summary.png)
 
-### "Completeness-aware" strategy
+### "Completeness-aware" strategy (v2+)
 
 The new version of this workflow is "completeness-aware". Long contigs >500kb are identified and placed in individual fasta files. They are then examined using CheckM2 to determine percent completeness. All long contigs that are >93% complete are then moved directly to the final MAG set. 
 
@@ -29,14 +29,14 @@ The dereplicated bin set consists of the merged bin set from above and all long 
 
 All bins/MAGs passing filtering undergo taxonomic assignment using GTDB-Tk. The final MAGs are written as a set of fasta files, several figures are produced, and a summary file of metadata is generated.
 
-### Benchmarking improvements
+### Benchmarking improvements for v2+
 
 The new "completeness-aware" strategy is highly effective at preventing improper binning of complete contigs. It is more effective than the previous "circular-aware" binning used in v1.5 and v1.6. Compared to a standard binning pipeline (e.g., MetaBat2), it results in a 14-67% increase in total MAGs (average 36%) and 13-186% increase in single contig MAGs (average 87%). Compared to the "circular-aware" binning in v1.5, it results in a 14-39% increase in total MAGs (average 27%) and 10-28% increase in single contig MAGs (average 20%). The figure below shows side-by-side comparisons for several publicly available datasets (listed [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/PacBio-Data.md)). 
 
 ![Improvement](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/Image-HiFi-MAG-Pipeline-Update.png)
 
 
-### Additional improvements
+### Additional improvements for v2+
 
 Beyond the "completeness-aware" strategy, there are several other important updates to this pipeline. 
 + It now uses CheckM2 instead of CheckM, and no longer requires the manual download of the Checkm database.
@@ -60,17 +60,17 @@ For explanations of these figures, please see the [5. Outputs](#OTPS) section be
 
 # **Quick Start** <a name="QS"></a>
 
-This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require 45-150GB memory and >250GB temporary disk space (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps.
+This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require 50-200GB memory and >250GB temporary disk space (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps. Snakemake v8+ is required, and the workflows have been tested using v8.25.
 
 - Clone the HiFi-MAG-Pipeline directory.
 - Download the CheckM2 database using the software (`checkm2 database --download --path /YourPath/CheckM2_database`) or download and unpack [this site](https://zenodo.org/records/5571251/files/checkm2_database.tar.gz?download=1). The database is ~3Gb. Specify the path to the database in `config.yaml`.
-- Download and unpack the database for GTDB (~66GB). The current requirement is for GTDB-Tk v 2.1.1, which requires database R207_v2. Specify the path to the database in `config.yaml`.
+- Download and unpack the database for GTDB (~100GB). The current requirement is for GTDB-Tk v 2.4.0, which requires database R220. Specify the path to the database in `config.yaml`.
 - Include all input HiFi fasta files (`SAMPLE.fasta`) and contig fasta files (`SAMPLE.contigs.fasta`) in the `inputs/` folder. These can be files or symlinks.
 - Edit sample names in `Sample-Config.yaml` configuration file in `configs/` for your project. 
 - Check settings in `config.yaml`, and ensure the `tmpdir` argument is set correctly in `config.yaml`. The default is `/scratch`.
 - Execute snakemake using the general commands below: 
 ```
-snakemake --snakefile Snakefile-hifimags.smk --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]
+snakemake --snakefile Snakefile-hifimags.smk --configfile configs/Sample-Config.yaml --software-deployment-method conda [additional arguments for local/HPC execution]
 ```
 The choice of additional arguments to include depends on where and how you choose to run snakemake. Please refer to the [4. Executing Snakemake](#EXS) section for more details.
 
@@ -137,31 +137,27 @@ Finally, the `envs/` directory contains the several files which are needed to in
 
 ## Memory and disk space requirements
 
-Running certain steps in this pipeline will potentially require ~45GB of memory. The step in GTDB-Tk (pplacer) that used to require large amounts memory (~150GB) and temporary disk space (~250GB) has been fixed in the v2.+ release.
+Running certain steps in this pipeline will potentially require ~200GB of memory. For storage of temporary and final output files, it is recommended to have ~250GB disk space available. 
 
 ## Dependencies
 
 In order to run a snakemake workflow, you will need to have an anaconda or conda installation. Conda is essential because it will be used to install the dependencies within the workflow and setup the correct environments. 
 
-Snakemake will also need to be installed. Instructions for installing snakemake using conda can be found [here](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html). Snakemake v5+ is required, and the workflows have been tested using v5.19.3.
+Snakemake will also need to be installed. Snakemake v8+ is now required, and the workflows have been tested using v8.25.
 
-If you intend to generate a graphic for the snakemake workflow graph, you will also need graphviz installed.
+You can install the snakemake environment file in the main directory [snakemake-environment.yaml](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/snakemake-environment.yml) to obtain snakemake v8.25 and the packages required for cluster execution. 
+> You can optionally install snakemake 8.25+ via the provided conda environment file via `conda env create -f environment.yml`, and then activate this environment via `conda activate pb-metagenomics-tools` to run the workflows.
+
+Alternatively, instructions for installing snakemake using conda can be found [here](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html). 
 
 ## Generate assemblies
 
-For assembly of metagenomic samples with HiFi reads, you can use [hifiasm-meta](https://github.com/xfengnefx/hifiasm-meta), [metaFlye](https://github.com/fenderglass/Flye), or [HiCanu](https://github.com/marbl/canu). 
+For assembly of metagenomic samples with HiFi reads, you can use [hifiasm-meta](https://github.com/xfengnefx/hifiasm-meta), 
+[metaDBG](https://github.com/GaetanBenoitDev/metaMDBG), or [metaFlye](https://github.com/fenderglass/Flye). 
 
-For hifiasm-meta, the default settings work very well. For very large datasets (>100Gb total data), you may benefit from using the `-S` flag to invoke read selection. It will reduce memory requirements.
+For hifiasm-meta and metaMDBG, the default settings work very well.
 
 For metaFlye the defaults also work well, but of course make sure to use the `--pacbio-hifi` and `--meta` flags! 
-
-For Canu v2.1, we strongly recommend the following settings:
-
-```
-canu -d DIRECTORY -p OUTPUT_NAME -pacbio-hifi FQ_DATA genomeSize=100m maxInputCoverage=1000 batMemory=200
-```
-
-The additional batOptions previously recommended for metagenomics with Canu 2.0 (`batOptions=-eg 0.0 -sb 0.001 -dg 0 -db 3 -dr 0 -ca 2000 -cp 200`) are apparently no longer necessary if using Canu 2.1. For a brief discussion on these Canu metagenomics assembly settings, please see [here](https://github.com/marbl/canu/issues/1796).
 
 ## Download required databases
 
@@ -173,17 +169,17 @@ Download the CheckM2 database using the software (`checkm2 database --download -
 
 Complete instructions for the GTDB-Tk database can be found at: https://ecogenomics.github.io/GTDBTk/installing/index.html
 
-**This workflow currently uses GTDB-Tk v 2.1.1, which requires database R207_v2.**
+**This workflow currently uses GTDB-Tk v 2.4.0, which requires database R220.**
 
-The current GTDB release can be downloaded from: 
-https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_v2_data.tar.gz
+The current GTDB release can be downloaded from:
+https://data.ace.uq.edu.au/public/gtdb/data/releases/latest/auxillary_files/gtdbtk_package/full_package/gtdbtk_data.tar.gz
 
 ```
-wget https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_v2_data.tar.gz
+wget https://data.ace.uq.edu.au/public/gtdb/data/releases/latest/auxillary_files/gtdbtk_package/full_package/gtdbtk_data.tar.gz
 tar -xvzf gtdbtk_data.tar.gz  
 ```
 
-It must also be decompressed prior to usage. The unpacked contents will be ~66GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`fastani/`, `markers/`, `masks/`, `metadata/`, `mrca_red/`, `msa/`, `pplacer/`, `radii/`, `taxonomy/`).
+It must also be decompressed prior to usage. The unpacked contents will be >60GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`markers`, `masks`, `metadata`, `mrca_red`, `msa`, `pplacer`, `radii`, `skani`, `split`, `taxonomy`).
 
 
 [Back to top](#TOP)
@@ -195,13 +191,13 @@ It must also be decompressed prior to usage. The unpacked contents will be ~66GB
 To configure the analysis, the main configuration file (`config.yaml`) and sample configuration file (`configs/Sample-Config.yaml`) should be edited. 
 
 #### Main configuration file (`config.yaml`)
-The main configuration file contains several parameters, each of which is described in the configuration file. Depending on your system resources, you may choose to change the number of threads used in minimap, MetaBat2, SemiBin2, CheckM2, or GTDB-Tk. 
+The main configuration file contains several parameters, each of which is described in the configuration file. Depending on your system resources, you may choose to change the number of threads used in minimap, MetaBat2, SemiBin2, CheckM2, or GTDB-Tk. Similarly, you may wish to changed the default memory settings, however decreasing the values could cause certain programs to crash.
 
 Please also check that the `tmpdir` argument is set correctly. The default is `/scratch`, which may be available to most users on HPC. This can be changed if `/scratch` is not available, or if you are running snakemake locally. Change it to a valid output directory that can be used to write many large files. This is used in conjunction with the `--tmpdir` flag in CheckM2, the `--tmpdir` in SemiBin2, and the `--scratch_dir` flag in GTDB-Tk. 
 
 It is not recommended to change settings related to the long contig binning step. However,  you may wish to change the thresholds for filtering bins: `min_completeness` (default 70), `max_contamination` (default 10), and `max_contigs` (default 10).
 
-For SemiBin2, you may wish to change the model flag. The default is set to run a general pre-computed model (`--environment=global`). This can be changed to one of several pre-computed models (`human_gut`, `human_oral`, `dog_gut`, `cat_gut`, `mouse_gut`, `pig_gut`, `chicken_caecum`, `ocean`, `soil`, `built_environment`, `wastewater`,  `global`). To enable a new model to be trained from your dataset, this should be changed to an empty string (`""`). Doing so will invoke the self-supervised learning approach. However, please be aware that this can add a *significant* amount fo run-time to the analysis (~15 additional hours per sample was not uncommon in my tests). The de novo model will likely obtain more bins than a pre-computed model, but this is highly dependent on your dataset. To read more about this, please see the pre-print [**here**](https://www.biorxiv.org/content/10.1101/2023.01.09.523201v1).
+For SemiBin2, you may wish to change the model flag. The default is set to run a general pre-computed model (`--environment global`). This can be changed to one of several pre-computed models (`human_gut`, `human_oral`, `dog_gut`, `cat_gut`, `mouse_gut`, `pig_gut`, `chicken_caecum`, `ocean`, `soil`, `built_environment`, `wastewater`,  `global`). To enable a new model to be trained from your dataset, this should be changed to an empty string (`""`). Doing so will invoke the self-supervised learning approach. However, please be aware that this can add a *significant* amount fo run-time to the analysis (~15 additional hours per sample was not uncommon in my tests). The de novo model will likely obtain more bins than a pre-computed model, but this is highly dependent on your dataset. To read more about this, please see [**here**](https://semibin.readthedocs.io/en/latest/usage/).
 
 **You must specify the full path to the GTDB-TK database**. In the configuration file, this is the `gtdbtk_data` parameter. See above section for where to obtain the database.
 
@@ -225,7 +221,7 @@ There are several ways to execute the workflow. The easiest way is to run snakem
 
 **Given the large memory requirements for some programs used in the workflow, execution of this mode is only recommended with interactive HPC sessions.**
 
-Snakemake can be run "locally" (e.g., without cluster configuration). Snakemake will automatically determine how many jobs can be run simultaneously based on the resources specified. This type of snakemake analysis can be run on a local system, but ideally it should be executed using an interactive HPC session (for example, `qrsh` with SGE or the SLURM equivalent).
+Snakemake can be run "locally" (e.g., without cluster configuration). Snakemake will automatically determine how many jobs can be run simultaneously based on the resources specified. This type of snakemake analysis can be run on a local system, but ideally it should be executed using an interactive HPC session.
 
 The workflow must be executed from within the directory containing all the snakemake contents for the HiFi-MAG-Pipeline. 
 
@@ -243,23 +239,16 @@ Let's unpack this command:
 
 The dry run command should result in the jobs being displayed on screen. 
 
-### Create workflow figure
-If there are no errors, you may wish to generate a figure of the directed acyclic graph (the workflow steps). You can do this using the following command:
-```
-snakemake --dag --snakefile Snakefile-hifimags.smk --configfile configs/Sample-Config.yaml | dot -Tsvg > hifimags_analysis.svg
-```
-Here the `--dag` flag creates an output that is piped to `dot`, and an svg file is created. This will show the workflow visually.
-
-### Execute workflow
+### Execute workflow locally
 Finally, you can execute the workflow using:
 ```
-snakemake --snakefile Snakefile-hifimags.smk --configfile configs/Sample-Config.yaml -j 48 --use-conda
+snakemake --snakefile Snakefile-hifimags.smk --configfile configs/Sample-Config.yaml -j 48 --software-deployment-method conda
 ```
 
 There are a couple important arguments that were added here:
 
 - `-j 48` specifies that there are 48 threads available to use. You should change this to match the resources available. If more threads are specified in the configuration file than are available here, snakemake automatically scales them down to this number.
--  `--use-conda` allows conda to install the programs and environments required for each step. This is essential.
+-  `--software-deployment-method conda` allows conda to install the programs and environments required for each step. This is essential.
 
 Upon execution, the first step will be conda downloading packages and creating the correct environment. After, the jobs should begin running. You will see the progress on screen.
 
@@ -268,39 +257,43 @@ Upon execution, the first step will be conda downloading packages and creating t
 
 Executing snakemake on HPC with cluster configuration allows it schedule jobs and run  steps in parallel. This is the most efficient way to run snakemake.
 
-There are several ways to run snakemake on HPC. There are limited instructions on cluster execution in the snakemake documentation [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html).
+There are several ways to run snakemake on HPC using the executor modules introduced in v8+. Instructions on cluster execution is available for the [slurm executor](https://snakemake.github.io/snakemake-plugin-catalog/plugins/executor/slurm.html) and the [cluster generic executor](https://snakemake.github.io/snakemake-plugin-catalog/plugins/executor/cluster-generic.html). The `cluster generic` syntax is described below, as it is most similar to previous instructions. 
 
 One easy way to run snakemake is to start an interactive session, and execute snakemake with the relevant cluster settings as described in the documentation. In this case, only a few threads are required for the interactive session, since most jobs will be run elsewhere. Snakemake will act as a job scheduler and also run local jobs from this location, until all jobs are complete. This can take a while, so it is best to use a detachable screen with the interactive session. 
 
-The same general commands are used as with "local" execution, but with some additional arguments to support cluster configuration. Below is an example of cluster configuration using SLURM:
+ Below is an example of cluster configuration using SLURM:
 
 ```
-snakemake --snakefile Snakefile-hifimags.smk --configfile configs/Sample-Config.yaml --use-conda --cluster "sbatch --partition=compute --cpus-per-task={threads}" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+snakemake --snakefile Snakefile-hifimags.smk --configfile configs/Sample-Config.yaml --software-deployment-method conda --executor cluster-generic --cluster-generic-submit-cmd "mkdir -p HPC_logs/{rule} && sbatch --partition=compute9 --nodes=1 --cpus-per-task={threads} --output=HPC_logs/{rule}/{wildcards}.{jobid}.txt" -j 30 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60
 ```
 
 Let's unpack this command:
 - `snakemake` calls snakemake.
 - `--snakefile Snakefile-hifimags.smk` tells snakemake to run this particular snakefile.
 - `--configfile configs/Sample-Config.yaml` tells snakemake to use this sample configuration file in the `configs/` directory. This file can have any name, as long as that name is provided here.
--  `--use-conda` this allows conda to install the programs and environments required for each step. It is essential.
-- `--cluster "sbatch --partition=compute --cpus-per-task={threads}"` are the settings for execution with SLURM, where 'compute' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule. Note that the entire section in quotes can be replaced with an SGE equivalent (see below).
-- `-j 5` will tell snakemake to run a maximum of 5 jobs simultaneously on the cluster. You can adjust this as needed.
+-  `--software-deployment-method conda` this allows conda to install the programs and environments required for each step. It is essential.
+- `--executor cluster-generic` indicates which HPC module we are using.
+- `--cluster-generic-submit-cmd "mkdir -p HPC_logs/{rule} && sbatch --partition=compute9 --nodes=1 --cpus-per-task={threads} --output=HPC_logs/{rule}/{wildcards}.{jobid}.txt"` are the settings for execution with SLURM. This will make a directory called HPC_logs and populate it with SLURM logs per job. The remaining arguments are pretty typical for sbatch execution, and only the `--pratition` name likely needs to be changed. 
+- `-j 30` will tell snakemake to run a maximum of 30 jobs simultaneously on the cluster. You can adjust this as needed.
 - `--jobname "{rule}.{wildcards}.{jobid}"` provides convenient names for your snakemake jobs running on the cluster.
 - `--latency-wait 60` this is important to include because there may be some delay in file writing between steps, and this prevents errors if files are not immediately found.
 
-And here is an example using SGE instead:
-
-```
-snakemake --snakefile Snakefile-hifimags.smk --configfile configs/Sample-Config.yaml --use-conda --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
-```
-- `--cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash"` are the settings for execution with SGE, where 'default' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule.
-
 Upon the first execution, conda will download packages and create the correct environment. After, the jobs should begin scheduling and running. You can see the progress on screen in the interactive session, and also be able to monitor snakemake jobs running on the cluster. 
+
+**Potential issues with snakemake v8.25**
+
+Note that it might be helpful to include the following flags for HPC execution:
+
+```
+--cores=72 --max-threads=72 --resources mem_mb=500000
+```
+
+This prevents a known issue where submitted jobs are downscaled to the resources on the head node. 
 
 
 ## Cloud Configuration
 
-For information on how to run snakemake with AWS (Amazon Web Services), Google Cloud Life Sciences, or generic cloud computing, please see the snakemake documentation [here](https://snakemake.readthedocs.io/en/stable/executing/cloud.html).
+For information on how to run snakemake with AWS (Amazon Web Services), Google Cloud Life Sciences, or generic cloud computing, please see the other executor modules available on the snakemake documentation [here](https://snakemake.github.io/snakemake-plugin-catalog/index.html).
 
 [Back to top](#TOP)
 
@@ -332,8 +325,6 @@ HiFi-MAG-Pipeline
 ├── 6-checkm2/
 ├── 7-gtdbtk/
 └── 8-summary/
-
-
 ```
 
 - `benchmarks/` contains benchmark information on memory usage and I/O for each rule executed.
@@ -352,7 +343,7 @@ Within `8-summary/`, there will be a folder for each sample. Within a sample fol
 
 + `MAGs/`: A folder that contains the fasta files for all high-quality MAGs/bins.
 + `SAMPLE.All-DASTool-Bins.pdf`: Figure that shows the dereplicated bins that were created from the set of incomplete contigs (using MetaBat2 and SemiBin2) as well as the long complete contigs.
-+ `SAMPLE.Complete.txt`: This is a blank file that is created when the workflow stopping point is reached. 
++ `SAMPLE.Complete.txt`: This is a blank file that is created at the workflow endpoint. 
 + `SAMPLE.Completeness-Contamination-Contigs.pdf`: A plot showing the relationship between completeness and contamination for each high-quality MAG recovered, colored by the number of contigs per MAG.
 + `SAMPLE.GenomeSizes-Depths.pdf`:  A plot showing the relationship between genome size and depth of coverage for each high-quality MAG recovered, colored by % GC content per MAG.
 + `SAMPLE.HiFi_MAG.summary.txt`: A main summary file that brings together information from CheckM2 and GTDB-Tk for all MAGs that pass the filtering step. 

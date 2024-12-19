@@ -4,4 +4,4 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - checkm2 == 1.0.1
+  - checkm2 == 1.0.2

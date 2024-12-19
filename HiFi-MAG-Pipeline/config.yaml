@@ -6,16 +6,29 @@ tmpdir: "/scratch"
 checkm2:
   # The number of threads to use for CheckM2.
   threads: 24
+  
   # Full path to the diamond database required to run CheckM2.
   # This can be obtained via checkm2:
   #   checkm2 database --download --path /YourPath/CheckM2_database
   # It can also be downloaded directly from here, and unpacked after:
   #   https://zenodo.org/records/5571251/files/checkm2_database.tar.gz?download=1
   db: "/dept/appslab/datasets/dp_checkm2/CheckM2_database/uniref100.KO.1.dmnd"
+  
+  # Memory allocation in MB 
+  # (1000 MB = 1 GB)
+  # (100000 MB = 100 GB)
+  # default 50 GB
+  mem_mb: 50000
 
 minimap:
   # The number of threads to use for minimap2.
   threads: 24
+  
+  # Memory allocation in MB 
+  # (1000 MB = 1 GB)
+  # (100000 MB = 100 GB)
+  # default 100 GB
+  mem_mb: 100000
   
 # The settings below will affect the completeness-aware binning step.
 completeness_aware:
@@ -34,21 +47,34 @@ metabat:
 
   # minimum size of contig to be included in binning
   min_contig_size: 30000
+  
+  # Memory allocation in MB 
+  # (1000 MB = 1 GB)
+  # default 50 GB
+  mem_mb: 50000
 
 semibin:
   # The number of threads to use for semibin2.
   threads: 48
 
-  # Set model flag. To change the model use "--environment=MODEL" below.
-  # Choices include: human_gut, human_oral, dog_gut, cat_gut, mouse_gut, pig_gut, chicken_caecum,
-  #                  ocean, soil, built_environment, wastewater,  global
+  # Set model flag. To change the model use "--environment MODEL" below.
+  # Choices include: human_gut, human_oral, dog_gut, cat_gut, mouse_gut, pig_gut, 
+  #                  chicken_caecum, ocean, soil, built_environment, wastewater,  
+  #                  or global
   # The global model is set as the default. To change, use the following syntax:
-  # model: "--environment=human_gut"
+  # model: "--environment human_gut"
 
-  # To enable a new model to be trained from your data, set the below value to an empty string. Example:
-  # model: ""
-  # Note that new model training will take significantly longer to run (5-20 hours additional, per sample).
-  model: "--environment=global"
+  # To enable a new model to be trained from your data, set the value to the following: 
+  # model: "--self-supervised"
+  # Note that new model training will take significantly longer to run (5-20 hours 
+  # additional, per sample).
+  model: "--environment global"
+  
+  # Memory allocation in MB 
+  # (1000 MB = 1 GB)
+  # (100000 MB = 100 GB)
+  # default 100 GB
+  mem_mb: 100000
 
 dastool:
   # The number of threads to use for DAS Tool.
@@ -64,6 +90,12 @@ dastool:
   # ensure this value is lower or DAS_Tool will remove the bins. The default is to set 
   # DAS_Tool score to 0.2 (20%), and later filter out all bins with <70% completeness. 
   score_threshold: 0.2
+  
+  # Memory allocation in MB 
+  # (1000 MB = 1 GB)
+  # (100000 MB = 100 GB)
+  # default 50 GB
+  mem_mb: 50000
   
 filters:
   # Set the quality filters that are applied to MAGs
@@ -81,12 +113,18 @@ gtdbtk:
   threads: 48
 
   # The path the database downloaded for gtdbtk.
-  # Current requirement is for GTDB-Tk v 2.1.1, which requires database R207_v2
+  # Current requirement is for GTDB-Tk v 2.4, which requires database R220
   # To download the latest release you can use:
-  # wget https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_v2_data.tar.gz
+  # wget https://data.ace.uq.edu.au/public/gtdb/data/releases/latest/auxillary_files/gtdbtk_package/full_package/gtdbtk_data.tar.gz
   # tar -xvzf gtdbtk_data.tar.gz  
-  # Please note that the data for release 207 are >68GB in size.
+  # Please note that the data for release 220 are >100GB in size.
   # The path below must point to the directory than contains the following folders:
-  # fastani, markers, masks, metadata, mrca_red, msa, pplacer, radii, split, taxonomy
-  gtdbtk_data: "/dept/appslab/datasets/dp_gtdb/release207_v2"
+  # markers, masks, metadata, mrca_red, msa, pplacer, radii, skani, split, taxonomy
+  gtdbtk_data: "/dept/appslab/datasets/dp_gtdb-tk/release220"
   
+  # Memory allocation in MB 
+  # (1000 MB = 1 GB)
+  # (100000 MB = 100 GB)
+  # default 100 GB
+  mem_mb: 100000
+ 

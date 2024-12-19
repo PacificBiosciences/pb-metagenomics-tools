@@ -36,7 +36,7 @@ def merge_dfs(df_checkm2, df_gtdb):
     df_merged = pd.merge(df_checkm2, df_gtdb, left_on='Name', right_on='user_genome')
     df_trim = df_merged[['Name', 'Completeness', 'Contamination', 'Contig_Number', 'Contig_Names', 'Contig_Lengths',
                          'Contig_Depths', 'Avg_Depth', 'Coding_Density','Average_Gene_Length', 'Genome_Size', 'GC_Content',
-                         'Total_Coding_Sequences', 'classification', 'fastani_reference', 'closest_placement_ani',
+                         'Total_Coding_Sequences', 'classification', 'closest_genome_reference', 'closest_placement_ani',
                          'closest_placement_af', 'classification_method', 'note',
                          'other_related_references(genome_id,species_name,radius,ANI,AF)','warnings']].copy()
     print("merge_dfs: Sorting dataframe.")
