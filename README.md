@@ -28,7 +28,7 @@ A running list of publications using HiFi sequencing for metagenomics can be fou
 
 Each of these pipelines can be found in their respective folders. They are made available as [Snakemake](https://snakemake.readthedocs.io/en/stable/index.html) workflows. Snakemake is a python-based workflow manager. Snakemake workflows are highly portable because dependencies and environments are automatically setup using [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html). Snakemake also allows reproducibility, checkpointing, and the ability to scale workflows using HPC and cloud environments. 
 
-**Snakemake v8+ is now required**. Please note there are some major command-line changes for v8+ (outlined here). You can optionally install snakemake 8.25+ via the provided conda environment file via `conda env create -f environment.yml`, and then activate this environment via `conda activate pb-metagenomics-tools` to run the workflows.
+**Snakemake v8+ is now required**. Please note there are some major command-line changes for v8+ (outlined here). You can install snakemake 8.25+ via the provided conda environment file via `conda env create -f snakemake-environment.yml`, and then activate this environment via `conda activate pb-metagenomics-tools` to run the workflows.
 
 ## Documentation 
 

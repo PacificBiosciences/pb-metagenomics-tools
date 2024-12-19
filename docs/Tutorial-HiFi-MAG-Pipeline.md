@@ -60,7 +60,7 @@ For explanations of these figures, please see the [5. Outputs](#OTPS) section be
 
 # **Quick Start** <a name="QS"></a>
 
-This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require 50-200GB memory and >250GB temporary disk space (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps.
+This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](https://docs.conda.io/projects/conda/en/latest/index.html) and [Snakemake](https://snakemake.readthedocs.io/en/stable/) to be installed, and will require 50-200GB memory and >250GB temporary disk space (see [Requirements section](#RFR)). All dependencies in the workflow are installed using conda and the environments are activated by snakemake for relevant steps. Snakemake v8+ is required, and the workflows have been tested using v8.25.
 
 - Clone the HiFi-MAG-Pipeline directory.
 - Download the CheckM2 database using the software (`checkm2 database --download --path /YourPath/CheckM2_database`) or download and unpack [this site](https://zenodo.org/records/5571251/files/checkm2_database.tar.gz?download=1). The database is ~3Gb. Specify the path to the database in `config.yaml`.
@@ -145,7 +145,7 @@ In order to run a snakemake workflow, you will need to have an anaconda or conda
 
 Snakemake will also need to be installed. Snakemake v8+ is now required, and the workflows have been tested using v8.25.
 
-You can install the snakemake environment file in the main directory [environment.yaml](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/environment.yml) to obtain snakemake v8.25 and the packages required for cluster execution. 
+You can install the snakemake environment file in the main directory [snakemake-environment.yaml](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/snakemake-environment.yml) to obtain snakemake v8.25 and the packages required for cluster execution. 
 > You can optionally install snakemake 8.25+ via the provided conda environment file via `conda env create -f environment.yml`, and then activate this environment via `conda activate pb-metagenomics-tools` to run the workflows.
 
 Alternatively, instructions for installing snakemake using conda can be found [here](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html). 
