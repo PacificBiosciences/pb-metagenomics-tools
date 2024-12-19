@@ -89,7 +89,6 @@ rule StopLongBinCheckm2:
 # Checkpoint 1: Fork 2 - Long contigs found, sample moves through Checkm2ContigAnalysis -> FilterCompleteContigs
 rule Checkm2ContigAnalysis:
     input:
-        db = os.path.join(CWD, "CheckM2_database", "uniref100.KO.1.dmnd"),
         key = os.path.join(CWD, "1-long-contigs", "{sample}", "{sample}.bin_key.txt")
     output:
         os.path.join(CWD, "1-long-contigs", "{sample}", "checkm2", "quality_report.tsv")
@@ -307,7 +306,7 @@ rule SemiBin2Analysis:
         os.path.join(CWD, "benchmarks", "{sample}.SemiBin2Analysis.tsv")
     shell:
         "SemiBin2 single_easy_bin -i {input.contigs} -b {input.bam} -o {params.outdir} "
-        "--training-type self {params.model} --sequencing-type long_read --compression none "
+        "{params.model} --sequencing-type long_read --compression none "
         "-t {threads} --tag-output semibin2 --verbose --tmpdir {params.tmp} &> {log}"
 
 rule FilterSuperBins:
@@ -505,7 +504,7 @@ rule GTDBTkAnalysis:
     shell:
         "GTDBTK_DATA_PATH={params.gtdbtk_data:q} gtdbtk classify_wf --batchfile {input.gtdb} "
         "--out_dir {params.outdir} -x fa --prefix {wildcards.sample} --cpus {threads} "
-        " &> {log} && touch {output.complete}"
+        "--skip_ani_screen &> {log} && touch {output.complete}"
 
 # Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGContigNames -> MAGmappingPlots -> MAGPlots
 rule GTDBTkCleanup:
@@ -566,8 +565,6 @@ rule MAGContigNames:
         1
     log:
         os.path.join(CWD, "logs", "{sample}.MAGContigNames.log")
-    benchmark:
-        os.path.join(CWD, "benchmarks", "{sample}.MAGContigNames.tsv")
     shell:
         "grep -h '>' {input.mag_dir}/*.fa | cut -d'>' -f2 1> {output} 2> {log}"
 
@@ -586,8 +583,6 @@ rule MAGMappingPlots:
         4
     log:
         os.path.join(CWD, "logs", "{sample}.MAGMappingPlots.log")
-    benchmark:
-        os.path.join(CWD, "benchmarks", "{sample}.MAGMappingPlots.tsv")
     shell:
         "python scripts/paf-mapping-summary.py -p {input.paf} -r {input.reads} -c {input.contig_names} "
         "-o1 {output.o1} -o2 {output.o2} &> {log}"
