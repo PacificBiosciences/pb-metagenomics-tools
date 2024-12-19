@@ -138,7 +138,7 @@ In order to run a snakemake workflow, you will need to have an anaconda or conda
 Snakemake will also need to be installed. Snakemake v8+ is now required, and the workflows have been tested using v8.25.
 
 You can install the snakemake environment file in the main directory [snakemake-environment.yaml](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/snakemake-environment.yml) to obtain snakemake v8.25 and the packages required for cluster execution. 
-> You can optionally install snakemake 8.25+ via the provided conda environment file via `conda env create -f environment.yml`, and then activate this environment via `conda activate pb-metagenomics-tools` to run the workflows.
+> You can install snakemake 8.25+ via the provided conda environment file via `conda env create -f snakemake-environment.yml`, and then activate this environment via `conda activate pb-metagenomics-tools` to run the workflows. 
 
 Alternatively, instructions for installing snakemake using conda can be found [here](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html). 
 
@@ -251,7 +251,7 @@ Let's unpack this command:
 - `--configfile configs/Sample-Config.yaml` tells snakemake to use this sample configuration file in the `configs/` directory. This file can have any name, as long as that name is provided here.
 -  `--software-deployment-method conda` this allows conda to install the programs and environments required for each step. It is essential.
 - `--executor cluster-generic` indicates which HPC module we are using.
-- `--cluster-generic-submit-cmd "mkdir -p HPC_logs/{rule} && sbatch --partition=compute9 --nodes=1 --cpus-per-task={threads} --output=HPC_logs/{rule}/{wildcards}.{jobid}.txt"` are the settings for execution with SLURM. This will make a directory called HPC_logs and populate it with SLURM logs per job. The remaining arguments are pretty typical for sbatch execution, and only the `--pratition` name likely needs to be changed. 
+- `--cluster-generic-submit-cmd "mkdir -p HPC_logs/{rule} && sbatch --partition=compute9 --nodes=1 --cpus-per-task={threads} --output=HPC_logs/{rule}/{wildcards}.{jobid}.txt"` are the settings for execution with SLURM. This will make a directory called HPC_logs and populate it with SLURM logs per job. The remaining arguments are pretty typical for sbatch execution, and only the `--partition` name likely needs to be changed. 
 - `-j 30` will tell snakemake to run a maximum of 30 jobs simultaneously on the cluster. You can adjust this as needed.
 - `--jobname "{rule}.{wildcards}.{jobid}"` provides convenient names for your snakemake jobs running on the cluster.
 - `--latency-wait 60` this is important to include because there may be some delay in file writing between steps, and this prevents errors if files are not immediately found.

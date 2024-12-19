@@ -146,7 +146,7 @@ In order to run a snakemake workflow, you will need to have an anaconda or conda
 Snakemake will also need to be installed. Snakemake v8+ is now required, and the workflows have been tested using v8.25.
 
 You can install the snakemake environment file in the main directory [snakemake-environment.yaml](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/snakemake-environment.yml) to obtain snakemake v8.25 and the packages required for cluster execution. 
-> You can optionally install snakemake 8.25+ via the provided conda environment file via `conda env create -f environment.yml`, and then activate this environment via `conda activate pb-metagenomics-tools` to run the workflows.
+> You can install snakemake 8.25+ via the provided conda environment file via `conda env create -f snakemake-environment.yml`, and then activate this environment via `conda activate pb-metagenomics-tools` to run the workflows. 
 
 Alternatively, instructions for installing snakemake using conda can be found [here](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html). 
 
@@ -179,7 +179,7 @@ wget https://data.ace.uq.edu.au/public/gtdb/data/releases/latest/auxillary_files
 tar -xvzf gtdbtk_data.tar.gz  
 ```
 
-It must also be decompressed prior to usage. The unpacked contents will be >60GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`markers`, `masks`, `metadata`, `mrca_red`, `msa`, `pplacer`, `radii`, `skani`, `split`, `taxonomy`).
+It must also be decompressed prior to usage. The unpacked contents will be ~100GB in size. The path to the directory containing the decompressed contents must be specified in the main configuration file (`config.yaml`). The decompressed file should result in several folders (`markers`, `masks`, `metadata`, `mrca_red`, `msa`, `pplacer`, `radii`, `skani`, `split`, `taxonomy`).
 
 
 [Back to top](#TOP)
@@ -195,9 +195,9 @@ The main configuration file contains several parameters, each of which is descri
 
 Please also check that the `tmpdir` argument is set correctly. The default is `/scratch`, which may be available to most users on HPC. This can be changed if `/scratch` is not available, or if you are running snakemake locally. Change it to a valid output directory that can be used to write many large files. This is used in conjunction with the `--tmpdir` flag in CheckM2, the `--tmpdir` in SemiBin2, and the `--scratch_dir` flag in GTDB-Tk. 
 
-It is not recommended to change settings related to the long contig binning step. However,  you may wish to change the thresholds for filtering bins: `min_completeness` (default 70), `max_contamination` (default 10), and `max_contigs` (default 10).
+It is not recommended to change settings related to the long contig binning step. However,  you may wish to change the thresholds for filtering bins: `min_completeness` (default 50), `max_contamination` (default 10), and `max_contigs` (default 10).
 
-For SemiBin2, you may wish to change the model flag. The default is set to run a general pre-computed model (`--environment global`). This can be changed to one of several pre-computed models (`human_gut`, `human_oral`, `dog_gut`, `cat_gut`, `mouse_gut`, `pig_gut`, `chicken_caecum`, `ocean`, `soil`, `built_environment`, `wastewater`,  `global`). To enable a new model to be trained from your dataset, this should be changed to an empty string (`""`). Doing so will invoke the self-supervised learning approach. However, please be aware that this can add a *significant* amount fo run-time to the analysis (~15 additional hours per sample was not uncommon in my tests). The de novo model will likely obtain more bins than a pre-computed model, but this is highly dependent on your dataset. To read more about this, please see [**here**](https://semibin.readthedocs.io/en/latest/usage/).
+For SemiBin2, you may wish to change the model flag. The default is set to run a general pre-computed model (`--environment global`). This can be changed to one of several pre-computed models (`human_gut`, `human_oral`, `dog_gut`, `cat_gut`, `mouse_gut`, `pig_gut`, `chicken_caecum`, `ocean`, `soil`, `built_environment`, `wastewater`,  `global`). To enable a new model to be trained from your dataset, this should be changed to `--self-supervised`. Doing so will invoke the self-supervised learning approach. However, please be aware that this can add a *significant* amount fo run-time to the analysis (~15 additional hours per sample was not uncommon in my tests). The de novo model will likely obtain more bins than a pre-computed model, but this is highly dependent on your dataset. To read more about this, please see [**here**](https://semibin.readthedocs.io/en/latest/usage/).
 
 **You must specify the full path to the GTDB-TK database**. In the configuration file, this is the `gtdbtk_data` parameter. See above section for where to obtain the database.
 
@@ -273,7 +273,7 @@ Let's unpack this command:
 - `--configfile configs/Sample-Config.yaml` tells snakemake to use this sample configuration file in the `configs/` directory. This file can have any name, as long as that name is provided here.
 -  `--software-deployment-method conda` this allows conda to install the programs and environments required for each step. It is essential.
 - `--executor cluster-generic` indicates which HPC module we are using.
-- `--cluster-generic-submit-cmd "mkdir -p HPC_logs/{rule} && sbatch --partition=compute9 --nodes=1 --cpus-per-task={threads} --output=HPC_logs/{rule}/{wildcards}.{jobid}.txt"` are the settings for execution with SLURM. This will make a directory called HPC_logs and populate it with SLURM logs per job. The remaining arguments are pretty typical for sbatch execution, and only the `--pratition` name likely needs to be changed. 
+- `--cluster-generic-submit-cmd "mkdir -p HPC_logs/{rule} && sbatch --partition=compute9 --nodes=1 --cpus-per-task={threads} --output=HPC_logs/{rule}/{wildcards}.{jobid}.txt"` are the settings for execution with SLURM. This will make a directory called HPC_logs and populate it with SLURM logs per job. The remaining arguments are pretty typical for sbatch execution, and only the `--partition` name likely needs to be changed. 
 - `-j 30` will tell snakemake to run a maximum of 30 jobs simultaneously on the cluster. You can adjust this as needed.
 - `--jobname "{rule}.{wildcards}.{jobid}"` provides convenient names for your snakemake jobs running on the cluster.
 - `--latency-wait 60` this is important to include because there may be some delay in file writing between steps, and this prevents errors if files are not immediately found.
@@ -341,14 +341,29 @@ HiFi-MAG-Pipeline
 
 Within `8-summary/`, there will be a folder for each sample. Within a sample folder there are several items:
 
-+ `MAGs/`: A folder that contains the fasta files for all high-quality MAGs/bins.
-+ `SAMPLE.All-DASTool-Bins.pdf`: Figure that shows the dereplicated bins that were created from the set of incomplete contigs (using MetaBat2 and SemiBin2) as well as the long complete contigs.
-+ `SAMPLE.Complete.txt`: This is a blank file that is created at the workflow endpoint. 
-+ `SAMPLE.Completeness-Contamination-Contigs.pdf`: A plot showing the relationship between completeness and contamination for each high-quality MAG recovered, colored by the number of contigs per MAG.
-+ `SAMPLE.GenomeSizes-Depths.pdf`:  A plot showing the relationship between genome size and depth of coverage for each high-quality MAG recovered, colored by % GC content per MAG.
-+ `SAMPLE.HiFi_MAG.summary.txt`: A main summary file that brings together information from CheckM2 and GTDB-Tk for all MAGs that pass the filtering step. 
-+ `SAMPLE.ReadsMapped.pdf`: A figure showing the percent of reads that mapped to contigs and MAGs at the 90, 95, and 99% identity level. 
-+ `SAMPLE.ReadsMapped.txt`: A table showing the percent of reads that mapped to contigs and MAGs at the 90, 95, and 99% identity level. 
+`MAGs/`
+- A folder that contains the fasta files for all high-quality MAGs/bins.
+
+`SAMPLE.All-DASTool-Bins.pdf`
+- Figure that shows the dereplicated bins that were created from the set of incomplete contigs (using MetaBat2 and SemiBin2) as well as the long complete contigs.
+
+`SAMPLE.Complete.txt` 
+- This is a blank file that is created at the workflow endpoint. 
+
+`SAMPLE.Completeness-Contamination-Contigs.pdf`
+- A plot showing the relationship between completeness and contamination for each high-quality MAG recovered, colored by the number of contigs per MAG.
+
+`SAMPLE.GenomeSizes-Depths.pdf`
+- A plot showing the relationship between genome size and depth of coverage for each high-quality MAG recovered, colored by % GC content per MAG.
+
+`SAMPLE.HiFi_MAG.summary.txt`
+- A main summary file that brings together information from CheckM2 and GTDB-Tk for all MAGs that pass the filtering step. 
+
+`SAMPLE.ReadsMapped.pdf`
+- A figure showing the percent of reads that mapped to contigs and MAGs at the 90, 95, and 99% identity level. 
+
+`SAMPLE.ReadsMapped.txt`
+- A table showing the percent of reads that mapped to contigs and MAGs at the 90, 95, and 99% identity level. 
 
 
 [Back to top](#TOP)
