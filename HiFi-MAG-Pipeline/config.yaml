@@ -100,7 +100,7 @@ dastool:
 filters:
   # Set the quality filters that are applied to MAGs
   # The minimum percent completeness for a genome bin.
-  min_completeness: 70
+  min_completeness: 50
 
   # The maximum percent contamination for a genome bin.
   max_contamination: 10
