@@ -38,7 +38,7 @@ This workflow requires [Anaconda](https://docs.anaconda.com/anaconda/)/[Conda](h
 - Edit sample names in `Sample-Config.yaml` configuration file in `configs/` for your project. 
 - Execute snakemake using the general commands below: 
 ```
-snakemake --snakefile Snakefile-sourmash --configfile configs/Sample-Config.yaml --use-conda [additional arguments for local/HPC execution]
+snakemake --snakefile Snakefile-sourmash --configfile configs/Sample-Config.yaml --software-deployment-method conda [additional arguments for local/HPC execution]
 ```
 The choice of additional arguments to include depends on where and how you choose to run snakemake. Please refer to the [Executing Snakemake](#EXS) section for more details.
 
@@ -91,9 +91,12 @@ Running this pipeline using the default settings should require 10-100GB of memo
 
 In order to run a snakemake workflow, you will need to have an anaconda or conda installation. Conda is essential because it will be used to install the dependencies within the workflow and setup the correct environments. 
 
-Snakemake will also need to be installed. Instructions for installing snakemake using conda can be found [here](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html). Snakemake v7+ is required, and the workflows have been tested using v7.18.2. You can use instructions in the main README to create a conda environment with this version of snakemake installed (see README [here](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/README.md)).
+Snakemake will also need to be installed. Snakemake v8+ is now required, and the workflows have been tested using v8.25.
 
-If you intend to generate a graphic for the snakemake workflow graph, you will also need graphviz installed.
+You can install the snakemake environment file in the main directory [environment.yaml](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/environment.yml) to obtain snakemake v8.25 and the packages required for cluster execution. 
+> You can optionally install snakemake 8.25+ via the provided conda environment file via `conda env create -f environment.yml`, and then activate this environment via `conda activate pb-metagenomics-tools` to run the workflows.
+
+Alternatively, instructions for installing snakemake using conda can be found [here](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html). 
 
 ## Download sourmash database file(s)
 
@@ -148,65 +151,61 @@ Let's unpack this command:
 
 The dry run command should result in a sequence of jobs being displayed on screen. 
 
-### Create workflow figure
-If there are no errors, you may wish to generate a figure of the directed acyclic graph (the workflow steps). You can do this using the following command:
-```
-snakemake --dag --snakefile Snakefile-sourmash --configfile configs/Sample-Config.yaml | dot -Tsvg > taxfunc_analysis.svg
-```
-Here the `--dag` flag creates an output that is piped to `dot`, and an svg file is created. This will show the workflow visually.
-
-### Execute workflow
+### Execute workflow locally
 Finally, you can execute the workflow using:
 ```
-snakemake --snakefile Snakefile-sourmash --configfile configs/Sample-Config.yaml -j 48 --use-conda
+snakemake --snakefile Snakefile-sourmash --configfile configs/Sample-Config.yaml -j 48 --software-deployment-method conda
 ```
 
 There are a couple important arguments that were added here:
 
 - `-j 48` specifies that there are 48 threads available to use. You should change this to match the resources available. If more threads are specified in the configuration file than are available here, snakemake automatically scales them down to this number. Note that since sourmash is single-theaded, this will simply change the number of individual jobs that can be run at a single time. Do be aware of memory requirements (~40-100G for `sourmash gather` step when searching GenBank database).
--  `--use-conda` allows conda to install the programs and environments required for each step. This is essential.
+-  `--software-deployment-method conda` allows conda to install the programs and environments required for each step. This is essential.
 
 Upon execution, the first step will be conda downloading packages and creating the correct environment. After, the jobs should begin running. You will see the progress on screen.
 
 
 ## Cluster Configuration
 
-Executing snakemake on HPC with cluster configuration allows it schedule jobs and run steps in parallel. This is the most efficient way to run snakemake.
+Executing snakemake on HPC with cluster configuration allows it schedule jobs and run  steps in parallel. This is the most efficient way to run snakemake.
 
-There are several ways to run snakemake on HPC. There are limited instructions on cluster execution in the snakemake documentation [here](https://snakemake.readthedocs.io/en/stable/executing/cluster.html).
+There are several ways to run snakemake on HPC using the executor modules introduced in v8+. Instructions on cluster execution is available for the [slurm executor](https://snakemake.github.io/snakemake-plugin-catalog/plugins/executor/slurm.html) and the [cluster generic executor](https://snakemake.github.io/snakemake-plugin-catalog/plugins/executor/cluster-generic.html). The `cluster generic` syntax is described below, as it is most similar to previous instructions. 
 
 One easy way to run snakemake is to start an interactive session, and execute snakemake with the relevant cluster settings as described in the documentation. In this case, only a few threads are required for the interactive session, since most jobs will be run elsewhere. Snakemake will act as a job scheduler and also run local jobs from this location, until all jobs are complete. This can take a while, so it is best to use a detachable screen with the interactive session. 
 
-The same general commands are used as with "local" execution, but with some additional arguments to support cluster configuration. Below is an example of cluster configuration using SLURM:
+ Below is an example of cluster configuration using SLURM:
 
 ```
-snakemake --snakefile Snakefile-sourmash --configfile configs/Sample-Config.yaml --use-conda --cluster "sbatch --partition=compute --cpus-per-task={threads}" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
+snakemake --snakefile Snakefile-sourmash --configfile configs/Sample-Config.yaml --software-deployment-method conda --executor cluster-generic --cluster-generic-submit-cmd "mkdir -p HPC_logs/{rule} && sbatch --partition=compute9 --nodes=1 --cpus-per-task={threads} --output=HPC_logs/{rule}/{wildcards}.{jobid}.txt" -j 30 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60
 ```
 
 Let's unpack this command:
 - `snakemake` calls snakemake.
-- `--snakefile Snakefile-sourmash` tells snakemake to run this particular snakefile.
+- `--snakefile Snakefile-hifimags.smk` tells snakemake to run this particular snakefile.
 - `--configfile configs/Sample-Config.yaml` tells snakemake to use this sample configuration file in the `configs/` directory. This file can have any name, as long as that name is provided here.
--  `--use-conda` this allows conda to install the programs and environments required for each step. It is essential.
-- `--cluster "sbatch --partition=compute --cpus-per-task={threads}"` are the settings for execution with SLURM, where 'compute' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule (currently 1, since sourmash is single-threaded). Note that the entire section in quotes can be replaced with an SGE equivalent (see below).
-- `-j 5` will tell snakemake to run a maximum of 5 jobs simultaneously on the cluster. You can adjust this as needed.
+-  `--software-deployment-method conda` this allows conda to install the programs and environments required for each step. It is essential.
+- `--executor cluster-generic` indicates which HPC module we are using.
+- `--cluster-generic-submit-cmd "mkdir -p HPC_logs/{rule} && sbatch --partition=compute9 --nodes=1 --cpus-per-task={threads} --output=HPC_logs/{rule}/{wildcards}.{jobid}.txt"` are the settings for execution with SLURM. This will make a directory called HPC_logs and populate it with SLURM logs per job. The remaining arguments are pretty typical for sbatch execution, and only the `--pratition` name likely needs to be changed. 
+- `-j 30` will tell snakemake to run a maximum of 30 jobs simultaneously on the cluster. You can adjust this as needed.
 - `--jobname "{rule}.{wildcards}.{jobid}"` provides convenient names for your snakemake jobs running on the cluster.
 - `--latency-wait 60` this is important to include because there may be some delay in file writing between steps, and this prevents errors if files are not immediately found.
 
-And here is an example using SGE instead:
-
-```
-snakemake --snakefile Snakefile-sourmash --configfile configs/Sample-Config.yaml --use-conda --cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash" -j 5 --jobname "{rule}.{wildcards}.{jobid}" --latency-wait 60 
-```
-- `--cluster "qsub -q default -pe smp {threads} -V -cwd -S /bin/bash"` are the settings for execution with SGE, where 'default' is the name of the machine. The threads argument will be automatically filled based on threads assigned to each rule.
-
-
 Upon the first execution, conda will download packages and create the correct environment. After, the jobs should begin scheduling and running. You can see the progress on screen in the interactive session, and also be able to monitor snakemake jobs running on the cluster. 
+
+**Potential issues with snakemake v8.25**
+
+Note that it might be helpful to include the following flags for HPC execution:
+
+```
+--cores=72 --max-threads=72 --resources mem_mb=500000
+```
+
+This prevents a known issue where submitted jobs are downscaled to the resources on the head node. 
 
 
 ## Cloud Configuration
 
-For information on how to run snakemake with AWS (Amazon Web Services), Google Cloud Life Sciences, or generic cloud computing, please see the snakemake documentation [here](https://snakemake.readthedocs.io/en/stable/executing/cloud.html).
+For information on how to run snakemake with AWS (Amazon Web Services), Google Cloud Life Sciences, or generic cloud computing, please see the other executor modules available on the snakemake documentation [here](https://snakemake.github.io/snakemake-plugin-catalog/index.html).
 
 [Back to top](#TOP)
 
