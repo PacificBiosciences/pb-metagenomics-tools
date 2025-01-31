@@ -106,7 +106,7 @@ filters:
   max_contamination: 10
 
   # The maximum number of contigs allowed in a genome bin.
-  max_contigs: 20
+  max_contigs: 50
 
 gtdbtk:
   # The number of threads to use for gtdb-tk.
