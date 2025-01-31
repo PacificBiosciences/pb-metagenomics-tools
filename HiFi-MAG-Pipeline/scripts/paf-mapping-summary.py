@@ -133,7 +133,7 @@ def plot_mapped(df_plot, out_plot):
                     ha='center', color="black", fontweight="regular", fontsize='large')
     ax.set_xlabel("Minimum percent ID threshold", fontsize="x-large")
     ax.set_ylabel("Percent reads mapped (%)", fontsize="x-large")
-    ax.figure.savefig("{}".format(out_plot))
+    ax.figure.savefig("{}".format(out_plot), bbox_inches='tight')
     plt.close()
 
 def write_table(df_plot, out_table):
