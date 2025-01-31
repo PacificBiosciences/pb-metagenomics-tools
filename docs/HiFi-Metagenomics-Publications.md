@@ -1,6 +1,6 @@
 # HiFi Metagenomics Publications
 
-(Updated 12/24)
+(Updated 01/25)
 
 ## Pre-prints 
 
@@ -12,7 +12,11 @@
 
 + Mao Y, Shisler JL, and TH Nguyen. 2024. Enhanced detection for antibiotic resistance genes in wastewater using CRISPR-enriched metagenomic method. bioRxiv, https://doi.org/10.1101/2024.07.30.605462
 
++ Markkanen M, Pezzutto D, Virta M, and A Karkman. 2025. Sulfonamide resistance gene sul4 is hosted by common wastewater sludge bacteria and found in various newly described contexts and hosts including clinically relevant species. bioRxiv, https://doi.org/10.1101/2025.01.22.634252
+
 + Martayan I, Robidou L, Shibuya Y, and A Limasset. 2024. Hyper-k-mers: efficient streaming k-mers representation. bioRxiv, https://doi.org/10.1101/2024.11.06.620789
+
++ Martinez-Garcia M, Martinez-Hernandez F, Gomez, ML, Vila-Nistal M, Roux S, and O Fornas. 2024. Limited consensus of marine viral diversity observed across techniques. Research Square, https://doi.org/10.21203/rs.3.rs-5482008/v1
 
 + Minich JJ, Allsing N, Din MO, Tisza MJ, Maleta K, McDonald D, Hartwick N, Mamerto A, Brennan C, Hansen L, Shaffer J, Murray ER, Duong T, Knight R, Stephenson K, Manary MJ, and TP Michael. 2024. Culture-independent meta-pangenomics enabled by long-read metagenomics reveals novel associations with pediatric undernutrition. Cell, (sneak peak) http://dx.doi.org/10.2139/ssrn.4960739
 
@@ -28,12 +32,11 @@
 
 + Suarez-Moo P, Haro-Moreno JM, and F Rodriguez-Valera. 2024. Microdiversity in marine pelagic ammonia-oxidizing archaeal populations. bioRxiv, https://doi.org/10.1101/2024.04.23.590705
 
++ Toth CRA, Molenda O, Nesbo C, Luo F, Devine CE, Chen X, Wu K, Xiao J, Guo S, Bawa N, Flick R, and EA Edwards. 2024. Identification of a cluster of benzene activation enzymes in a strictly anoxic methanogenic consortium. bioRxiv, https://doi.org/10.1101/2024.12.15.628547
+
 + Viver T, Knittel K, Amann R, and LH Orellana. 2024. Deep long-read metagenomic sequencing reveals niche differentiation in carbon cycling potential between benthic and planktonic microbial populations. bioRxiv, https://doi.org/10.1101/2024.06.04.597336
 
 + Wang G, Zhao L, Shi Y, Qu F, Ding Y, Liu W, Liu C, Luo G, Li M, Bai X, Li L, Ho Y-P, and J Yu. 2023. High-throughput generic single-entity sequencing using droplet microfluidics. bioRxiv, https://doi.org/10.1101/2023.08.15.549386
-
-+ Wang H, Sun C, Li Y, Chen J, Zhao X-M, and W-H Chen. 2024. Complementary insights into gut viral genomes: a comparative benchmark of short- and long-read metagenomes using diverse assemblers and binners. Research Square, 
-https://doi.org/10.21203/rs.3.rs-5088576/v1
 
 + West-Roberts J, Valentin-Alvarado L, Mullen S, Sachdeva R, Smith J, Hug LA, Gregoire DS, Liu W, Lin T-Y, Husain G, Amano Y, Ly L, and JF Banfield. 2023. Giant genes are rare but implicated in cell wall degradation by predatory bacteria. bioRxiv, https://doi.org/10.1101/2023.11.21.568195
 
@@ -43,6 +46,9 @@ https://doi.org/10.21203/rs.3.rs-5088576/v1
 
 + Zhang W, Liu Y, Xu J, Chen E, Schonhuth A, and X Luo. 2024. PanTax: strain-level taxonomic classification of metagenomic data using pangenome graphs. bioRxiv: https://doi.org/10.1101/2024.11.15.623887
 
+## 2025
+
++ Liu S, Rodriguez JS, Munteanu V, Ronkowski C, Sharma NK, Alser M, Andreace F, Blekhman R, Blaszczyk D, Chikhi R, Crandall KA, Della LK, Francis D, Frolova A, Gancz AS, Huntley NE, Jaiswal P, Kosciolek T, Labaj PP, Labaj W, Luan T, Mason C, Moustafa AM, Muralidharan HS, Mutlu O, Ghiasi NM, Rahnavard A, Sun F, Tian S, Tierney BT, Van Syoc E, Vicedomini R, Zackular JP, Zelikovsky A, Zielińska K, Ganda E, Davenport ER, Pop M, Koslicki D, and M Serghei. 2025. Analysis of metagenomic data. Nature Reviews Methods Primers, 5: 5. https://doi.org/10.1038/s43586-024-00376-6
 
 ## 2024
 
@@ -94,7 +100,7 @@ https://doi.org/10.21203/rs.3.rs-5088576/v1
 
 + Myeong NR, Choe Y-H, Shin SC, Kim J, Sul WJ, and M Kim. 2024. Genomic profiling of Antarctic geothermal microbiomes using long-read, Hi-C, and single-cell techniques. Scientific Data, 11: 1023. https://doi.org/10.1038/s41597-024-03875-z
 
-+ Nesbo CL, Yang MI, Sharan AA, Meyer T, and EE Edwards. 2024. Metagenomes and metagenome assembled genomes from anaerobic digesters at three Canadian pulp and paper mills. Microbiology Resource Announcements, e00561-24. https://doi.org/10.1128/mra.00561-24
++ Nesbo CL, Yang MI, Sharan AA, Meyer T, and EA Edwards. 2024. Metagenomes and metagenome assembled genomes from anaerobic digesters at three Canadian pulp and paper mills. Microbiology Resource Announcements, e00561-24. https://doi.org/10.1128/mra.00561-24
 
 + Peres de Silva R, Suphavilai C, and N Nagrajan. 2024. MetageNN: a memory-efficient neural network taxonomic classifier robust to sequencing errors and missing genomes. BMC Bioinformatics, 25: 153. https://doi.org/10.1186/s12859-024-05760-3
 
@@ -121,6 +127,8 @@ https://doi.org/10.21203/rs.3.rs-5088576/v1
 + Valentin-Alvarado LE, Appler KE, De Anda V, Schoelmerich MC, West-Roberts J, Kivenson V, Crits-Christoph A, Ly L, Sachdeva R, Greening C, Savage DF, Baker BJ, and JF Banfield. 2024. Asgard archaea modulate potential methanogenesis substrates in wetland soil. Nature Communications, 15: 6384. https://doi.org/10.1038/s41467-024-49872-z
 
 + Wang Y-C, Mao Y, Fu H-M, Wang J, Weng X, Liu Z-H, Xu X-W, Yan P, Fang F, Guo J-S, Shen Y, and Y-P Chen. 2024. New insights into functional divergence and adaptive evolution of uncultured bacteria in anammox community by complete genome-centric analysis. Science of the Total Environment, 924: 171530. https://doi.org/10.1016/j.scitotenv.2024.171530
+
++ Wang H, Sun C, Li Y, Chen J, Zhao X-M, and W-H Chen. 2024. Complementary insights into gut viral genomes: a comparative benchmark of short- and long-read metagenomes using diverse assemblers and binners. Microbiome, 12: 260. https://doi.org/10.1186/s40168-024-01981-z
 
 + Xiao JZ, Nesbo CL, Molenda O, Toth CRA, and EA Edwards. 2024. Metagenomic and genomic sequences from a nitrate-reducing benzene-degrading enrichment culture. Microbiology Resource Announcements, e00294-24. https://doi.org/10.1128/mra.00294-24
 
