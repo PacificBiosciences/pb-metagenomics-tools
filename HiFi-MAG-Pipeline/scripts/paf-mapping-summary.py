@@ -18,7 +18,10 @@ def get_args():
     parser.add_argument("-r", "--reads_fasta",
                         required=True,
                         help="Fasta file with the HiFi reads used for mapping.")
-    parser.add_argument("-c", "--contig_list",
+    parser.add_argument("-c1", "--contig_list_1",
+                        required=True,
+                        help="Optional file containing contig names to search for (format: one contig per line).")
+    parser.add_argument("-c2", "--contig_list_2",
                         required=True,
                         help="Optional file containing contig names to search for (format: one contig per line).")
     parser.add_argument("-o1", "--out_plot",
@@ -69,19 +72,24 @@ def get_read_count(reads_fasta):
     return read_count
 
 def get_contig_names(contig_list):
-    print('get_contig_names: gathering MAG contig names')
+    print('get_contig_names: gathering contig names...')
     with open(contig_list, 'r') as fh:
-        contig_names = [line.strip() for line in fh]
+        contig_names = [line.strip().split()[0] for line in fh]
+    print('get_contig_names: gathered {:,} contig names'.format(len(contig_names)))
     return contig_names
 
 def make_percent(reads, total_reads):
     return round(((reads / total_reads) * 100), 1)
 
-def count_mapped_reads(df, read_count, contig_names):
+def count_mapped_reads(df, read_count, contig_names_1, contig_names_2):
     print('count_mapped_reads: summarizing mappings')
     print("\nTotal reads used for mapping:\n\t{:,}".format(read_count))
     print("Total alignments:\n\t{:,}".format(df.shape[0]))
     print("Total reads mapped:\n\t{:,}\n".format(len(df['query_name'].unique())))
+    print("Total targets (contigs) with mappings:\n\t{:,}".format(len(df['target_name'].unique())))
+    print("Total contigs in bins:\n\t{:,}".format(len(contig_names_1)))
+    print("Total contigs in MAGs:\n\t{:,}\n".format(len(contig_names_2)))
+
 
     # remove multiple entries for a read, keeping the one with the longest aln length
     df = df.sort_values('perc_read_aligned', ascending=False).drop_duplicates('query_name').sort_index()
@@ -95,13 +103,22 @@ def count_mapped_reads(df, read_count, contig_names):
                                                    (df['aln_type'] == "tp:A:P")].shape[0], read_count))
     mapping_dict["contigs"].append(make_percent(df[(df['perc_read_aligned'] >= 90) & (df['perc_identity'] >= 99) &
                                                    (df['aln_type'] == "tp:A:P")].shape[0], read_count))
-    mapping_dict["mags"] = [make_percent(df[(df["target_name"].isin(contig_names)) &
+    mapping_dict["bins"] = [make_percent(df[(df["target_name"].isin(contig_names_1)) &
                                             (df['perc_read_aligned'] >= 90) & (df['perc_identity'] >= 90) &
                                             (df['aln_type'] == "tp:A:P")].shape[0], read_count)]
-    mapping_dict["mags"].append(make_percent(df[(df["target_name"].isin(contig_names)) &
+    mapping_dict["bins"].append(make_percent(df[(df["target_name"].isin(contig_names_1)) &
                                                 (df['perc_read_aligned'] >= 90) & (df['perc_identity'] >= 95) &
                                                 (df['aln_type'] == "tp:A:P")].shape[0], read_count))
-    mapping_dict["mags"].append(make_percent(df[(df["target_name"].isin(contig_names)) &
+    mapping_dict["bins"].append(make_percent(df[(df["target_name"].isin(contig_names_1)) &
+                                                (df['perc_read_aligned'] >= 90) & (df['perc_identity'] >= 99) &
+                                                (df['aln_type'] == "tp:A:P")].shape[0], read_count))
+    mapping_dict["mags"] = [make_percent(df[(df["target_name"].isin(contig_names_2)) &
+                                            (df['perc_read_aligned'] >= 90) & (df['perc_identity'] >= 90) &
+                                            (df['aln_type'] == "tp:A:P")].shape[0], read_count)]
+    mapping_dict["mags"].append(make_percent(df[(df["target_name"].isin(contig_names_2)) &
+                                                (df['perc_read_aligned'] >= 90) & (df['perc_identity'] >= 95) &
+                                                (df['aln_type'] == "tp:A:P")].shape[0], read_count))
+    mapping_dict["mags"].append(make_percent(df[(df["target_name"].isin(contig_names_2)) &
                                                 (df['perc_read_aligned'] >= 90) & (df['perc_identity'] >= 99) &
                                                 (df['aln_type'] == "tp:A:P")].shape[0], read_count))
 
@@ -116,20 +133,22 @@ def plot_mapped(df_plot, out_plot):
     if os.path.exists(out_plot):
         os.remove(out_plot)
 
-    pb_blue = make_palette("#1383C6")
     pb_green = make_palette("#009D4E")
 
-    ax = df_plot.plot.bar(stacked=False, figsize=(6, 7), width=0.7, color=[pb_green[3], pb_blue[4]],
+    ax = df_plot.plot.bar(stacked=False, figsize=(8, 7), width=0.7, color=[pb_green[0], pb_green[3], pb_green[7]],
                           fontsize='x-large', edgecolor='black', linewidth=0.5, ylim=(0, 105))
     handles, labels = ax.get_legend_handles_labels()
-    ax.legend(handles, ["Contigs", "MAGs"], bbox_to_anchor=(1, 0.99),
+    ax.legend(handles, ["All contigs", "All bins", "MAGs"], bbox_to_anchor=(1, 0.99),
               fontsize='large', ncol=1, labelspacing=0.3)
     ax.set_xticklabels(df_plot['percent_ID'], rotation=0, ha='center', fontsize='x-large')
     for x, y in enumerate(df_plot["contigs"]):
-        ax.annotate("{:,}".format(y), (x - 0.175, y + (0.02 * df_plot["contigs"].max())),
+        ax.annotate("{:,}".format(y), (x - 0.23, y + (0.02 * df_plot["contigs"].max())),
+                    ha='center', color="black", fontweight="regular", fontsize='large')
+    for x, y in enumerate(df_plot["bins"]):
+        ax.annotate("{:,}".format(y), (x , y + (0.02 * df_plot["contigs"].max())),
                     ha='center', color="black", fontweight="regular", fontsize='large')
     for x, y in enumerate(df_plot["mags"]):
-        ax.annotate("{:,}".format(y), (x + 0.175, y + (0.02 * df_plot["mags"].max())),
+        ax.annotate("{:,}".format(y), (x + 0.23, y + (0.02 * df_plot["contigs"].max())),
                     ha='center', color="black", fontweight="regular", fontsize='large')
     ax.set_xlabel("Minimum percent ID threshold", fontsize="x-large")
     ax.set_ylabel("Percent reads mapped (%)", fontsize="x-large")
@@ -148,8 +167,9 @@ def main():
         read_count = get_read_count(args.reads_fasta)
     else:
         read_count = int(args.count)
-    contig_names = get_contig_names(args.contig_list)
-    df_plot = count_mapped_reads(df, read_count, contig_names)
+    contig_names_1 = get_contig_names(args.contig_list_1)
+    contig_names_2 = get_contig_names(args.contig_list_2)
+    df_plot = count_mapped_reads(df, read_count, contig_names_1, contig_names_2)
     print(df_plot)
     plot_mapped(df_plot, args.out_plot)
     write_table(df_plot, args.out_table)
