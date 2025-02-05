@@ -2,8 +2,9 @@ import os
 
 localrules: 
     LongContigsToBins, CloseLongbinFork, StopLongBinCheckm2, FilterCompleteContigs,
-    ConvertJGIBamDepth, FilterSuperBins, DASinputMetabat2, DASinputSemiBin2, CopyDAStoolBins, AssessCheckm2Bins,
-    CloseCheckm2Fork, SkipGTDBAnalysis, GTDBTkCleanup, MAGSummary, MAGContigNames, MAGMappingPlots, MAGPlots, all
+    ConvertJGIBamDepth, FilterSuperBins, DASinputMetabat2, DASinputSemiBin2, CopyDAStoolBins, 
+    AssessCheckm2Bins, CloseCheckm2Fork, SkipGTDBAnalysis, GTDBTkCleanup, MAGSummary, 
+    MAGContigNames, BinContigNamesMAGMappingPlots, MAGPlots, all
 
 configfile: "config.yaml"
 
@@ -567,11 +568,26 @@ rule MAGContigNames:
         os.path.join(CWD, "logs", "{sample}.MAGContigNames.log")
     shell:
         "grep -h '>' {input.mag_dir}/*.fa | cut -d'>' -f2 1> {output} 2> {log}"
+        
+# Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGContigNames -> MAGmappingPlots -> MAGPlots
+rule BinContigNames:
+    input:
+        mag_sum = os.path.join(CWD, "8-summary", "{sample}", "{sample}.HiFi_MAG.summary.txt"),
+        bin_dir = os.path.join(CWD, "5-dereplicated-bins", "{sample}", "")
+    output:
+        os.path.join(CWD, "2-bam", "{sample}.bin_contigs.txt")
+    threads:
+        1
+    log:
+        os.path.join(CWD, "logs", "{sample}.BinContigNames.log")
+    shell:
+        "grep -h '>' {input.bin_dir}/*.fa | cut -d'>' -f2 1> {output} 2> {log}"
 
 # Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGContigNames -> MAGmappingPlots -> MAGPlots
 rule MAGMappingPlots:
     input:
-        contig_names = os.path.join(CWD, "2-bam", "{sample}.MAG_contigs.txt"),
+        contig_mags = os.path.join(CWD, "2-bam", "{sample}.MAG_contigs.txt"),
+        contig_bins = os.path.join(CWD, "2-bam", "{sample}.bin_contigs.txt"),
         reads = os.path.join(CWD, "inputs", "{sample}.fasta"),
         paf = os.path.join(CWD, "2-bam", "{sample}.paf")
     output:
@@ -584,8 +600,8 @@ rule MAGMappingPlots:
     log:
         os.path.join(CWD, "logs", "{sample}.MAGMappingPlots.log")
     shell:
-        "python scripts/paf-mapping-summary.py -p {input.paf} -r {input.reads} -c {input.contig_names} "
-        "-o1 {output.o1} -o2 {output.o2} &> {log}"
+        "python scripts/paf-mapping-summary.py -p {input.paf} -r {input.reads} -c1 {input.contig_bins} "
+        "-c2 {input.contig_mags} -o1 {output.o1} -o2 {output.o2} &> {log}"
 
 
 # Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGContigNames -> MAGmappingPlots -> MAGPlots
