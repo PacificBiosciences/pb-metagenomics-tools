@@ -6,13 +6,13 @@
 
 Welcome! Here you can find a variety of tools and pipelines for HiFi metagenomics. In addition to the resources currently available, we will continue to add new tools as they are developed.
 
-The current version is v3.3.0. Please see the [**release notes**](https://github.com/PacificBiosciences/pb-metagenomics-tools/releases) for changes.
+The current version is v3.3.1. Please see the [**release notes**](https://github.com/PacificBiosciences/pb-metagenomics-tools/releases) for changes.
 
 ## HiFi Metagenomic Datasets & Publications
 
-Several publicly available HiFi shotgun metagenomics datasets are listed on the   [**PacBio-Data**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/PacBio-Data.md) page. These include multiple mock communities, reference standards, and empirical samples (human, chicken, and sheep gut microbiome, and environmental samples). Associated publications are also listed here.
+Several publicly available HiFi shotgun metagenomics datasets are listed on the   [**PacBio Datasets**](https://www.pacb.com/connect/datasets/#metagenomics-datasets) page. Please also browse the publications below, which contain a variety of other datasets.
 
-A running list of publications using HiFi sequencing for metagenomics can be found [**here**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/HiFi-Metagenomics-Publications.md). 
+A running list of publications using HiFi sequencing for metagenomics can be found on the [**HiFi Metagenomics Publications**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/HiFi-Metagenomics-Publications.md) page. 
 
 ## Available pipelines
 
@@ -43,11 +43,16 @@ Available pipeline documentation:
 
 ## Citation
 
-The taxonomic profiling and classification workflows (including **Taxonomic-Profiling-Sourmash**, **Taxonomic-Profiling-Diamond-Megan**, and **Taxonomic-Profiling-Minimap-Megan**) were created for the following publication:
+The following taxonomic profiling and classification workflows were created for the publication listed below:
+- **Taxonomic-Profiling-Sourmash**
+- **Taxonomic-Profiling-Diamond-Megan**
+- **Taxonomic-Profiling-Minimap-Megan**
 
 > Portik DM, Brown CT, and NT Pierce-Ward. 2022. Evaluation of taxonomic classification and profiling methods for long-read shotgun metagenomic sequencing datasets. BMC Bioinformatics, 23: 541. https://doi.org/10.1186/s12859-022-05103-0
 
-The **HiFi-MAG-Pipeline** (v2+) and **pb-MAG-mirror** were created for the following pre-print:
+The following metagenome assembly and postprocessing tools were created for the pre-print listed below:
+- **HiFi-MAG-Pipeline** (v2+)
+- **pb-MAG-mirror** 
 
 > Portik DM, Feng X, Benoit G, Nasko DJ, Auch B, Bryson SJ, Cano R, Carlin M, Damerum A, Farthing B, Grove JR, Islam M, Langford KW, Liachko I, Locken K, Mangelson H, Tang S, Zhang S, Quince C, and JE Wilkinson. 2024. Highly accurate metagenome-assembled genomes from human gut microbiota using long-read assembly, binning, and consolidation methods. bioRxiv, https://doi.org/10.1101/2024.05.10.593587
 
