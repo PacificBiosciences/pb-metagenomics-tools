@@ -82,6 +82,8 @@ def create_scatter_completeness_contamination_contigs(df, label, output, complet
     ax.xaxis.grid(color='lightgray', linestyle='solid')
     ax.set_yticklabels(ylabels, size = 10)
     ax.set_xticklabels(ax.get_xticks(), size = 10)
+    ax.set_xlabel("Completeness", fontsize=14)
+    ax.set_ylabel("Contamination", fontsize=14)
     handles, labels = ax.get_legend_handles_labels()
     for h in handles:
         h.set_alpha(0.8)
@@ -107,6 +109,8 @@ def create_scatter_genomesize_depth(df, label, output):
     ax.xaxis.grid(color='lightgray', linestyle='solid')
     ax.set_yticklabels(ylabels, size=10)
     ax.set_xticklabels(xlabels, size=10)
+    ax.set_xlabel("Genome Size", fontsize=14)
+    ax.set_ylabel("Average Depth of Coverage", fontsize=14)
     handles, labels = ax.get_legend_handles_labels()
     for h in handles:
         h.set_alpha(0.7)
