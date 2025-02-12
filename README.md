@@ -6,7 +6,7 @@
 
 Welcome! Here you can find a variety of tools and pipelines for HiFi metagenomics. In addition to the resources currently available, we will continue to add new tools as they are developed.
 
-The current version is v3.3.1. Please see the [**release notes**](https://github.com/PacificBiosciences/pb-metagenomics-tools/releases) for changes.
+The current version is v3.3.2. Please see the [**release notes**](https://github.com/PacificBiosciences/pb-metagenomics-tools/releases) for changes.
 
 ## HiFi Metagenomic Datasets & Publications
 
