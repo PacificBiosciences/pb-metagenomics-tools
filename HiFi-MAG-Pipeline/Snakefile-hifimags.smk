@@ -3,8 +3,8 @@ import os
 localrules: 
     LongContigsToBins, CloseLongbinFork, StopLongBinCheckm2, FilterCompleteContigs,
     ConvertJGIBamDepth, FilterSuperBins, DASinputMetabat2, DASinputSemiBin2, CopyDAStoolBins, 
-    AssessCheckm2Bins, CloseCheckm2Fork, SkipGTDBAnalysis, GTDBTkCleanup, MAGSummary, 
-    MAGContigNames, BinContigNamesMAGMappingPlots, MAGPlots, all
+    AssessCheckm2Bins, CopyAllBinQCnobins, CopyAllBinQCbins, CloseCheckm2Fork, SkipGTDBAnalysis, 
+    GTDBTkCleanup, MAGSummary, MAGContigNames, BinContigNames, MAGMappingPlots, MAGPlots, all
 
 configfile: "config.yaml"
 
@@ -463,19 +463,31 @@ rule CloseCheckm2Fork:
 
 ##############################
 # Checkpoint 2: Fork 1 - No bins passed the filtering criteria.
-rule SkipGTDBAnalysis:
+rule CopyAllBinQCnobins:
     input:
         gtdb = os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.GTDBTk_batch_file.txt"),
         target = os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.BinCount.txt"),
         output_tsv = os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.quality_report.tsv")
     output:
-        os.path.join(CWD, "8-summary", "{sample}", "{sample}.No_MAGs.summary.txt")
+        os.path.join(CWD, "8-summary", "{sample}", "{sample}.AllBinsF.summary.txt")
     threads:
         1
     params:
         outdir = os.path.join(CWD, "8-summary", "{sample}", "")
     shell:
-        "mkdir -p {params.outdir} && echo No bins passed filtering in CheckM2, "
+        "mkdir -p {params.outdir} && cp {input.output_tsv} {output}"
+
+rule SkipGTDBAnalysis:
+    input:
+        gtdb = os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.GTDBTk_batch_file.txt"),
+        target = os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.BinCount.txt"),
+        output_tsv = os.path.join(CWD, "8-summary", "{sample}", "{sample}.AllBinsF.summary.txt")
+    output:
+        os.path.join(CWD, "8-summary", "{sample}", "{sample}.No_MAGs.summary.txt")
+    threads:
+        1
+    shell:
+        "echo No bins passed filtering in CheckM2, "
         "see {input.output_tsv} for more information > {output}"
 
 ##############################
@@ -539,10 +551,22 @@ rule MAGSummary:
     shell:
         "python scripts/MAG-Summary.py -g {input.gtdbtk} -c {input.checkm2} -o {output} &> {log}"
 
+rule CopyAllBinQCbins:
+    input:
+        mag_sum = os.path.join(CWD, "8-summary", "{sample}", "{sample}.HiFi_MAG.summary.txt"),
+        output_tsv = os.path.join(CWD, "6-checkm2", "{sample}", "{sample}.quality_report.tsv")
+    output:
+        os.path.join(CWD, "8-summary", "{sample}", "{sample}.AllBins.summary.txt")
+    threads:
+        1
+    shell:
+        "cp {input.output_tsv} {output}"
+
 # Checkpoint 2: Fork 2 - Bins passed filters; GTDBTkAnalysis -> GTDBTkCleanup -> MAGSummary -> MAGCopy -> MAGContigNames -> MAGmappingPlots -> MAGPlots
 rule MAGCopy:
     input:
         mag_sum = os.path.join(CWD, "8-summary", "{sample}", "{sample}.HiFi_MAG.summary.txt"),
+        allbin_tsv = os.path.join(CWD, "8-summary", "{sample}", "{sample}.AllBins.summary.txt"),
         mag_dir = os.path.join(CWD, "5-dereplicated-bins", "{sample}", "")
     output:
         directory(os.path.join(CWD, "8-summary", "{sample}", "MAGs", ""))
