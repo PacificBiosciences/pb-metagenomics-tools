@@ -359,8 +359,11 @@ Within `8-summary/`, there will be a folder for each sample. Within a sample fol
 `SAMPLE.HiFi_MAG.summary.txt`
 - A main summary file that brings together information from CheckM2 and GTDB-Tk for all MAGs that pass the filtering step. 
 
+`SAMPLE.AllBins.summary.txt`
+- A summary file that reports CheckM2 information for all bins created by DAS_Tool. These represent a combination of bins from SemiBin2 and MetaBat2. The bins will be labeled as `Pass` or `Fail` to indicate if they were ultimately reported as MAGs. This file can be useful for inspecting characteristics of bins that failed QC thresholds. 
+
 `SAMPLE.ReadsMapped.pdf`
-- A figure showing the percent of reads that mapped to contigs and MAGs at the 90, 95, and 99% identity level. 
+- A figure showing the percent of reads that mapped to 1) all assembled contigs, 2) contigs contained in all bins (including those failing QC), and 3) MAGs (e.g., contigs in bins passing QC). This is reported at the 90, 95, and 99% identity level. 
 
 `SAMPLE.ReadsMapped.txt`
 - A table showing the percent of reads that mapped to contigs and MAGs at the 90, 95, and 99% identity level. 
