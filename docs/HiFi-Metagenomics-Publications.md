@@ -1,10 +1,8 @@
 # HiFi Metagenomics Publications
 
-(Updated 05/25)
+(Updated 06/25)
 
 ## Pre-prints 
-
-+ Calayag A, Priest T, Oldenburg E, Muschiol J, Popa O, Wietz M, and DM Needham. 2024. Arctic Ocean virus communities: seasonality, bipolarity, and prokaryotic interactions. bioRxiv, https://doi.org/10.1101/2024.10.11.617772
 
 + Fan Y, Ni M, Aggarwala V, Mead EA, Ksiezarek M, Cao L, Kamm MA, Borody T, Paramsothy S, Kaakoush NO, Grinspan A, Faith JJ, and G Fang. 2024. LongTrack: long read metagenomics-based precise tracking of bacterial strains and their genomic changes after fecal microbiota transplantation. bioRxiv, https://doi.org/10.1101/2024.09.30.615906
 
@@ -24,6 +22,8 @@
 
 + Lindez PP, Danielsen LS, Kovacic I, Avelli MP, Nesme J, Jensen LJ, Nissen JN, Sorensen SJ, and S Rasmussen. Accurate plasmid reconstruction from metagenomics data using assembly-alignment graphs and contrastive learning. bioRxiv, https://doi.org/10.1101/2025.02.26.640269
 
++ Lipovac J, Šikić M, Vicedomini R, and K Križanović. 2025. MADRe: Strain-Level Metagenomic Classification Through Assembly-Driven Database Reduction. bioRxiv, https://doi.org/10.1101/2025.05.12.653324
+
 + Ma J, Kim N, Cha JH, Kim W, Kim CY, Yang S, Beck S, and I Lee. 2024. Exclusive cataloging of near-complete genomes unveils novel functional insights into the human gut microbiome. bioRxiv, https://doi.org/10.1101/2024.12.11.627901
 
 + Mainguy J, Vienne M, Fourquet J, Darbot V, Noirot C, Castinel A, Combes S, Gaspin C, Milan D, Donnadieu C, Iampietro C, Bouchez O, Pascal G, and C Hoede. 2024. metaWGS, a comprehensive workflow to analyze metagenomic data using Illumina or PacBio HiFi reads. bioRxiv, https://doi.org/10.1101/2024.09.13.612854
@@ -42,9 +42,13 @@
 
 + Oladele P, Wickware CL, Trachsel J, Looft T, and TA Johnson. 2025. In-feed bacitracin methylene disalicylate alters microbiota function and increases antibiotic resistance in a dose-dependent manner. bioRxiv, https://doi.org/10.1101/2025.02.16.638580
 
++ Peng Y, Ji B, Wang Y, and H Lu. 2025. Euktect: Enhanced Eukaryotic Sequence Detection and Classification in Metagenomes via the DNA Language Model. bioRxiv, https://doi.org/10.1101/2025.06.19.660294
+
 + Portik DM, Feng X, Benoit G, Nasko DJ, Auch B, Bryson SJ, Cano R, Carlin M, Damerum A, Farthing B, Grove JR, Islam M, Langford KW, Liachko I, Locken K, Mangelson H, Tang S, Zhang S, Quince C, and JE Wilkinson. 2024. Highly accurate metagenome-assembled genomes from human gut microbiota using long-read assembly, binning, and consolidation methods. bioRxiv, https://doi.org/10.1101/2024.05.10.593587
 
 + Priest T, Oldenburg E, Popa O, Dede B, Metfies K, von Appen W-J, Torres-Valdes S, Bienhold C, Fuchs BM, Amann R, Boetius A, and M Wietz. 2024. Seasonal recurrence and modular assembly of an Arctic pelagic marine microbiome. bioRxiv, https://doi.org/10.1101/2024.05.10.593482
+
++ Ryu B, Avalon N, Cuau M, Almaliti J, Din MO, Brennan C, Glukhov E, Knight R, Gerwick L, and W Gerwick. 2025. Cyanobacteria Join the Kahalalide Conversation: Genome and Metabolite Evidence for Structurally Related Peptides. ChemRxiv, https://doi.org/10.26434/chemrxiv-2025-dmqr1
 
 + Sapoval N, Liu Y, Curry K, Kille B, Huang W, Kokroko N, Nute MG, Tyshaieva A, Dilthey AT, Molloy E, and TJ Treangan. 2024. Lightweight taxonomic profiling of long-read sequenced metagenomes with Lemur and Magnet. bioRxiv, https://doi.org/10.1101/2024.06.01.596961
 
@@ -76,33 +80,69 @@
 
 ## 2025
 
++ Calayag A, Priest T, Oldenburg E, Muschiol J, Popa O, Wietz M, and DM Needham. 2024. Arctic Ocean virus communities and their seasonality, bipolarity, and prokaryotic associations. Nature Communications, 16: 6427. https://doi.org/10.1038/s41467-025-61568-6
+
 + Chen X, Yin X, Xu X, and T Zhang. 2025. Species-resolved profiling of antibiotic resistance genes in complex metagenomes through long-read overlapping with Argo. Nature Communications, 16: 1744. https://doi.org/10.1038/s41467-025-57088-y
 
++ Defazio G, Tangaro MA, Pesole G, and B Fosso. 2025. kMetaShot: a fast and reliable taxonomy classifier for metagenome-assembled genomes. Briefings in Bioinformatics, 26: bbae680. https://doi.org/10.1093/bib/bbae680
+
++ Deng F, Han Y, Li M, Peng Y, Chai J, Yang G, Li Y, and J Zhao. 2025. HiFi based metagenomic assembly strategy provides accuracy near isolated genome resolution in MAG assembly. iMetaOmics, e70041. https://doi.org/10.1002/imo2.70041
+
++ Duxbury SJN, Raguideau S, Cremin K, Richards L, Medvecky M, Rosko J, Coates M, Randall K, Chen J, Quince C, and OS Soyer. 2025. Niche formation and metabolic interactions contribute to stable diversity in a spatially structured cyanobacterial community. The ISME Journal, wraf126. https://doi.org/10.1093/ismejo/wraf126
+
 + Florl L, Meyer A, and NA Bokulich. 2025. Exploring sub-species variation in food microbiomes: a roadmap to reveal hidden diversity and functional potential. Applied and Environmental Microbiology, e00524-25. https://doi.org/10.1128/aem.00524-25
+
++ Girard M, Vandamme L, Cazaux B, and A Limasset. 2025. OReO: optimizing read order for practical compression. Bioinformatics Advances, 5: vbaf128. https://doi.org/10.1093/bioadv/vbaf128
+
++ Goffredi SK, Appy R, Martín-Durán JM, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management, Samples and Laboratory Team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics Team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2025. The chromosomal genome sequence of the marine leech, Branchellion lobata Moore, 1952 and its associated microbial metagenome sequences. Wellcome Open Research, 10: 304. https://doi.org/10.12688/wellcomeopenres.24186.1
 
 + Han H, Wang Z, and S Zhu. 2025. Benchmarking metagenomic binning tools on real datasets across sequencing platforms and binning modes. Nature Communications, 16: 2865. https://doi.org/10.1038/s41467-025-57957-6
 
 + Haro-Moreno JM, Lopez-Perez M, Molina-Pardines C, and F Rodriguez-Valera. 2025. Large diversity in the O-chain biosynthetic cluster within populations of Pelagibacterales. Environmental Microbiology, e03455-24. https://doi.org/10.1128/mbio.03455-24
 
++ Hentschel U, Busch K, Rios P, Cristobo J, Xavier JR, Erpenbeck D, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management, Samples and Laboratory Team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics Team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2025. The chromosomal genome sequence of the glass sponge Aphrocallistes beatrix Gray, 1858 and its associated microbial metagenome sequences. Wellcome Open Research, 10: 280. https://doi.org/10.12688/wellcomeopenres.24099.1
+
 + Hubert J, Glowska-Patyniak E, Dowd SE, and PB Klimov. 2025. A novel Erwiniaceae gut symbiont modulates gene expression of the intracellular bacterium Cardinium in the stored product mite Tyrophagus putrescentiae. mSphere, e00879-24. https://doi.org/10.1128/msphere.00879-24
+
++ Hubert J, Xiong Q, Glowska-Patyniak E, Furtek EV, and PB Klimov. 2025. Analysis of the tripartite interactions between two bacterial symbionts, a novel Solitalea-like bacterium (Bacteroidota) and Cardinium, and the stored product mite Tyrophagus putrescentiae based on gene expression data. Microbiology Spectrum, e00609-25. https://doi.org/10.1128/spectrum.00609-25
 
 + Kim H, Ahn J, Kim J, and H-S Kang. Metagenomic insights and biosynthetic potential of Candidatus Entotheonella symbiont associated with Halichondria marine sponges. Enviromental Microbiology, 13: e0235524. https://doi.org/10.1128/spectrum.02355-24
 
 + Koester F, Myers KS, Donohue TJ, and DR Noguera. 2025. Metagenome-assembled genomes from microbial communities producing lactic acid from dairy residues. Microbiology Resource Announcements, e00179-25. https://doi.org/10.1128/mra.00179-25
 
++ Li X, Wang J, Jin H, Cui Y, Zhong H, Zhou T, and J Yan. 2025. Complete genome sequence of Dehalobacter sp. strain CP, an organohalide-respiring anaerobe from a chlorophenol-dechlorinating consortium. Genome Sequences, e00092-25. https://doi.org/10.1128/mra.00092-25
+
 + Liu S, Rodriguez JS, Munteanu V, Ronkowski C, Sharma NK, Alser M, Andreace F, Blekhman R, Blaszczyk D, Chikhi R, Crandall KA, Della LK, Francis D, Frolova A, Gancz AS, Huntley NE, Jaiswal P, Kosciolek T, Labaj PP, Labaj W, Luan T, Mason C, Moustafa AM, Muralidharan HS, Mutlu O, Ghiasi NM, Rahnavard A, Sun F, Tian S, Tierney BT, Van Syoc E, Vicedomini R, Zackular JP, Zelikovsky A, Zielińska K, Ganda E, Davenport ER, Pop M, Koslicki D, and M Serghei. 2025. Analysis of metagenomic data. Nature Reviews Methods Primers, 5: 5. https://doi.org/10.1038/s43586-024-00376-6
 
 + Liu X, Tang Y, Chen H, Liu J-X, and H-Z Sun. 2025. Rumen DNA virome and its relationship with feed efficiency in dairy cows. Microbiome, 13: 14. https://doi.org/10.1186/s40168-024-02019-0
+
++ Maldonado M, Pita L, Hentschel U, Erpenbeck D, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management, Samples and Laboratory Team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics Team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2025. The chromosomal genome sequence of the sponge Crambe crambe (Schmidt, 1862) and its associated microbial metagenome sequences. Wellcome Open Research, 10: 275. https://doi.org/10.12688/wellcomeopenres.24154.1
+
++ Maurice N, Lemaitre C, Vicedomini R, and C Frioux. 2025. Mapler: a pipeline for assessing assembly quality in taxonomically rich metagenomes sequenced with HiFi reads. Bioinformatics, 41: bta334. https://doi.org/10.1093/bioinformatics/btaf334
 
 + Molina-Pardines C, Haro-Moreno JM, Rodriguez-Valera F, and M Lopez-Perez. 2025. Extensive paralogism in the environmental pangenome: a key factor in the ecological success of natural SAR11 populations. Microbiome, 13: 41. https://doi.org/10.1186/s40168-025-02037-6
 
 + Nooij S, Plomp N, Sanders IMJG, Schout L, van der Meulen AE, Terveer EM, Norman JM, Karcher N, Larralde MF, Vossen RHAM, Kloet SL, Faber KN, Harmsen HJM, Zeller GF, Kuijper EJ, Smits WK, and QR Ducarmon. 2025. Metagenomic global survey and in-depth genomic analyses of Ruminococcus gnavus reveal differences across host lifestyle and health status. Nature Communications, 16: 1182. https://doi.org/10.1038/s41467-025-56449-x
 
++ Oehler JB, Burns K, Warner J, and U Schmitz. 2025. Long-read sequencing for the rapid response to infectious diseases outbreaks. Current Clinical Microbiology Reports, 12: 10. https://doi.org/10.1007/s40588-025-00247-y
+
 + Passos GS, Pellegrinetti TA, and MF Fiore. 2025. Metagenome-assembled bacterial genomes from long accurate reads associated with Capilliphycus salinus ALCB114379. Microbiology Resource Announcements, e00807-24. https://doi.org/10.1128/mra.00807-24
+
++ Pita L, Maldonado M, Koutsouveli V, Riesgo A, Hentschel U, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management, Samples and Laboratory Team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics Team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2025. The chromosomal genome sequence of the kidney sponge, Chondrosia reniformis Nardo, 1847, and its associated microbial metagenome sequences. Wellcome Open Research, 10: 283. https://doi.org/10.12688/wellcomeopenres.24166.1
+
++ Pita L, Hentschel U, Steindler L, Maldonado M, Riesgo A, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management, Samples and Laboratory Team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics Team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2025. The chromosomal genome sequence of Aplysina aerophoba (Nardo, 1833) and its associated microbial metagenome sequences. Wellcome Open Research, 10: 250. https://doi.org/10.12688/wellcomeopenres.24098.1
 
 + Rodriguez-Ramos J, Sadler N, Zegeye EK, Farris Y, Purvine S, Couvillion S, Nelson WC, and KS Hofmockel. 2025. Environmental matrix and moisture influence soil microbial phenotypes in a simplified porous media incubation. mSystems, e01616-24. https://doi.org/10.1128/msystems.01616-24
 
++ Song X, Chen G, Zheng L, Shen J, Xue C, Y Chang. 2025. Microbiota Involved in the Degradation of Tremella fuciformis Polysaccharide and Microbial Enzymatic Potential Revealed by Microbiome and Metagenome. Microorganisms, 13: 263. https://doi.org/10.3390/microorganisms13020263
+
++ Viver T, Knittel K, Amann R, and LH Orellana. 2025. Comparative metagenomics indicates metabolic niche differentiation of benthic and planktonic Woeseiaceae. Environmental Microbiome, 20: 74. https://doi.org/10.1186/s40793-025-00732-3
+
 + Wang B, Jia P, Gao S, Zhao H, Zheng G, Xu L, and K Ye. 2025. Long and accurate: how HiFi sequencing is transforming genomics. Genomics, Proteomics & Bioinformatics, qzaf003. https://doi.org/10.1093/gpbjnl/qzaf003
+
++ Wilkinson JE, and DM Portik. 2025. Highly accurate long-read PacBio HiFi sequencing for microbiome and metagenomic applications. In M Rivera & J Izard (Eds.), Metagenomics for Microbiology (2nd Edition). Elsevier.
+
++ Zaidi SSeA, Golyaev V, Mehta D, and H Vanderschuren. 2025. Full-Length Sequencing of Circular DNA Viruses Using CIDER-Seq. In: Zerbini FM, Fiallo-Olivé E, Navas-Castillo J (eds) Geminiviruses. Methods in Molecular Biology, vol 2912. Humana, New York, NY. https://doi.org/10.1007/978-1-0716-4454-6_17
 
 + Zhao D, Salas-Leiva DE, Williams SK, Dunn KA, Shao JD, and AJ Roger. 2025. Eukfinder: a pipeline to retrieve microbial eukaryote genome sequences from metagenomic data. mBio, e00699-25. https://doi.org/10.1128/mbio.00699-25
 
