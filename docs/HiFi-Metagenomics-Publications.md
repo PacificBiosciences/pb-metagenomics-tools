@@ -1,6 +1,6 @@
 # HiFi Metagenomics Publications
 
-(Updated 06/25)
+(Updated 07/25)
 
 ## Pre-prints 
 
@@ -80,7 +80,7 @@
 
 ## 2025
 
-+ Calayag A, Priest T, Oldenburg E, Muschiol J, Popa O, Wietz M, and DM Needham. 2024. Arctic Ocean virus communities and their seasonality, bipolarity, and prokaryotic associations. Nature Communications, 16: 6427. https://doi.org/10.1038/s41467-025-61568-6
++ Calayag A, Priest T, Oldenburg E, Muschiol J, Popa O, Wietz M, and DM Needham. 2025. Arctic Ocean virus communities and their seasonality, bipolarity, and prokaryotic associations. Nature Communications, 16: 6427. https://doi.org/10.1038/s41467-025-61568-6
 
 + Chen X, Yin X, Xu X, and T Zhang. 2025. Species-resolved profiling of antibiotic resistance genes in complex metagenomes through long-read overlapping with Argo. Nature Communications, 16: 1744. https://doi.org/10.1038/s41467-025-57088-y
 
@@ -106,7 +106,7 @@
 
 + Hubert J, Xiong Q, Glowska-Patyniak E, Furtek EV, and PB Klimov. 2025. Analysis of the tripartite interactions between two bacterial symbionts, a novel Solitalea-like bacterium (Bacteroidota) and Cardinium, and the stored product mite Tyrophagus putrescentiae based on gene expression data. Microbiology Spectrum, e00609-25. https://doi.org/10.1128/spectrum.00609-25
 
-+ Kim H, Ahn J, Kim J, and H-S Kang. Metagenomic insights and biosynthetic potential of Candidatus Entotheonella symbiont associated with Halichondria marine sponges. Enviromental Microbiology, 13: e0235524. https://doi.org/10.1128/spectrum.02355-24
++ Kim H, Ahn J, Kim J, and H-S Kang. 2025. Metagenomic insights and biosynthetic potential of Candidatus Entotheonella symbiont associated with Halichondria marine sponges. Enviromental Microbiology, 13: e0235524. https://doi.org/10.1128/spectrum.02355-24
 
 + Koester F, Myers KS, Donohue TJ, and DR Noguera. 2025. Metagenome-assembled genomes from microbial communities producing lactic acid from dairy residues. Microbiology Resource Announcements, e00179-25. https://doi.org/10.1128/mra.00179-25
 
