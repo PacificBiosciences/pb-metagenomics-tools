@@ -100,13 +100,13 @@
 
 + Florl L, Meyer A, and NA Bokulich. 2025. Exploring sub-species variation in food microbiomes: a roadmap to reveal hidden diversity and functional potential. Applied and Environmental Microbiology, e00524-25. https://doi.org/10.1128/aem.00524-25
 
-+ Garcia-Munoz A, and R Pino-Bodas. Evaluating the Assembly Strategy of a Fungal Genome from Metagenomic Data: Solorina crocea (Peltigerales, Ascomycota) as a Case Study. Journal of Fungi, 11: 596. https://doi.org/10.3390/jof11080596
++ Garcia-Munoz A, and R Pino-Bodas. 2025. Evaluating the Assembly Strategy of a Fungal Genome from Metagenomic Data: Solorina crocea (Peltigerales, Ascomycota) as a Case Study. Journal of Fungi, 11: 596. https://doi.org/10.3390/jof11080596
 
 + Girard M, Vandamme L, Cazaux B, and A Limasset. 2025. OReO: optimizing read order for practical compression. Bioinformatics Advances, 5: vbaf128. https://doi.org/10.1093/bioadv/vbaf128
 
 + Goffredi SK, Appy R, Martín-Durán JM, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management, Samples and Laboratory Team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics Team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2025. The chromosomal genome sequence of the marine leech, Branchellion lobata Moore, 1952 and its associated microbial metagenome sequences. Wellcome Open Research, 10: 304. https://doi.org/10.12688/wellcomeopenres.24186.1
 
-+ Gonzalez A, Fullaondo A, and A Odriozola. Why Are Long-Read Sequencing Methods Revolutionizing Microbiome Analysis? Microorganisms, 13: 1861. https://doi.org/10.3390/microorganisms13081861
++ Gonzalez A, Fullaondo A, and A Odriozola. 2025. Why Are Long-Read Sequencing Methods Revolutionizing Microbiome Analysis? Microorganisms, 13: 1861. https://doi.org/10.3390/microorganisms13081861
 
 + Han H, Wang Z, and S Zhu. 2025. Benchmarking metagenomic binning tools on real datasets across sequencing platforms and binning modes. Nature Communications, 16: 2865. https://doi.org/10.1038/s41467-025-57957-6
 
