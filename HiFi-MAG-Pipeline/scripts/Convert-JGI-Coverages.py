@@ -44,7 +44,9 @@ def make_df(f):
     Get initial pandas dataframe (from JGI depth file)
     """
     print("Making df from JGI depth file.")
-    return pd.read_csv(f, sep='\t')
+    df = pd.read_csv(f, sep='\t')
+    df['contigName'] = df['contigName'].astype("str")
+    return df
 
 def filter_df(df, avoid_bins):
     """
