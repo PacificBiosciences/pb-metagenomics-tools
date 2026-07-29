@@ -1,7 +1,6 @@
 # HiFi Metagenomics Publications
 
-(Updated 04/26)
-
+(Updated 07/26)
 
 
 ## Pre-prints 
@@ -13,6 +12,8 @@
 + Audemard J, Creusot N, Leloup J, Duval C, Halary S, Mary L, Eon M, Forjonel T, Mouffok M, Puppo R, Belmonte E, Gautier V, Got J, Lefebvre M, Markov GV, Muller C, Marie B, Diémé B, and C Frioux. 2026. Integrating metagenome-scale metabolic modelling and metabolomics to identify biochemical interactions in Microcystis phycospheres. bioRxiv,  https://doi.org/10.64898/2026.03.18.712574
 
 + Belliardo C, Maurice N, Pere A, Mondy S, Franc A, Bailly-Bechet M, Lemaitre C, Vicedomini R, Frigerio J-M, Salin F, Belmonte E, Sherman DJ, Abad P, Frioux C, and EGJ Danchin. 2025. Accurate MAG reconstruction from complex soil microbiome through combined short- and HiFi long-reads metagenomics. bioRxiv, https://doi.org/10.1101/2025.09.12.675765
+
++ Burch TC, Badrock PG, Boubli JP, and NG Sales. 2026. The primate gut bacterial microbiome: a systematic review of research methodologies, taxonomic coverage, and conservation implications. bioRxiv, https://doi.org/10.64898/2026.06.18.733207
 
 + Bushnell B, Schulz F, and JC Villada. 2025. Rapid terabase-scale simulation of realistic metagenomes for experimental design and pathogen detection with RandomReadsMG. bioRxiv, https://doi.org/10.1101/2025.07.18.665570
 
@@ -28,11 +29,7 @@
 
 + Deng Z-L, Safaei N, and AC McHardy. 2025. Metax: A coverage-informed probabilistic framework for accurate cross-domain taxon profiling. bioRxiv, https://doi.org/10.64898/2025.12.04.692287
 
-+ Diaz-Rua R, Drautz-Moses DI, Zhao X, Perumal S, Esau L, Angelov A, Putra A, Driguez P, Cheung MS, and E Palescandolo. 2025. Comparative metagenomic assessment of short- and long-read sequencing technologies reveals unknown microbial information in a complex environmental sample. bioRxiv, https://doi.org/10.64898/2025.12.22.696079
-
-+ Enuh BM, Myers KS, Ackman P, Weiland T, Beach N, Young M, Donohue TJ, and DR Noguera. 2025. Metagenomes and metagenome-assembled genomes from microbial communities in a biological nutrient removal plant operated at Los Angeles County Sanitation District (LACSD) with High and Low Dissolved Oxygen Conditions. bioRxiv, https://doi.org/10.1101/2025.11.10.687646
-
-+ Enuh BM, Myers KS, Bott C, Klaus S, McCullough K, McIntosh L, Beach N, Young M, Donohue TJ, and DR Noguera. 2025. Metagenomes and metagenome-assembled genomes from microbial communities in a biological nutrient removal plant operated at Hamptons Road Sanitation District (HRSD) with high and low dissolved oxygen conditions. bioRxiv, https://doi.org/10.1101/2025.11.10.687637
++ El Houda Mathlouthi N, Gdoura-Ben Amor M, Belguith I, Derouich R, Keskes LA, and R Gdoura. 2026. First Survey of Publicly Available Metagenomic Sequencing Data Across 24 Middle Eastern and North African Countries: The MENA Microbiome Database. bioRxiv, https://doi.org/10.64898/2026.05.01.722303
 
 + Fan Y, Ni M, Aggarwala V, Mead EA, Ksiezarek M, Cao L, Kamm MA, Borody T, Paramsothy S, Kaakoush NO, Grinspan A, Faith JJ, and G Fang. 2024. LongTrack: long read metagenomics-based precise tracking of bacterial strains and their genomic changes after fecal microbiota transplantation. bioRxiv, https://doi.org/10.1101/2024.09.30.615906
 
@@ -56,6 +53,8 @@
 
 + Gutiérrez-Preciado A, Struillou A, Liang L, Iniesto M, Deschamps P, Eme L, Zivanovic Y, López-García JM, Benzerara K, Moreira D,and P López-García. 2026. Redox distribution of Asgard archaea and co-occurring taxa in microbial mats from an early Proterozoic ecosystem analog. bioRxiv, https://doi.org/10.64898/2026.03.20.713109
 
++ Hiraoka S, Shimamura S, Usui K, Zhang Y, Sumida T, Tsukamoto Y, Kawai S, and A Nishihara. 2026. Epigenomes in thermophilic microbial communities and their impact on the interaction across prokaryotes and mobilomes. bioRxiv, https://doi.org/10.64898/2026.06.24.734251
+
 + Hornett EA, Hayashi M, Nagamine K, Paterson S, Kageyama D, and GDD Hurst. 2025. Concerted genome expansion of heritable symbionts in an insect host. bioRxiv, https://doi.org/10.1101/2025.05.06.652349
 
 + Jin J, Wang X, Zhang X, Mei J, Zheng W, Guo L, Sun H, Zhang L, Liu C, Ye W, and L Guo. 2025. Grapevine phyllosphere pan-metagenomics reveals pan-microbiome structure, diversity, and functional roles in downy mildew resistance. bioRxiv, https://doi.org/10.1101/2025.05.04.652149
@@ -66,13 +65,11 @@
 
 + Kurokawa R, Maskawa R, Arakawa M, Masuoka H, Takayasu H, Yoshikawa Y, Raihan T, Shindo C, Kaida K, Takagi M, Tanokura M, De Vlaminck I, Takayasu L, Takayasu M, and W Suda. 2026. High-resolution temporal profiling reveals synchronized dynamics of the mouse gut microbiome. bioRxiv, https://doi.org/10.64898/2026.03.26.714232
 
-+ Kutuzova S, Lindez PP, Nielsen KN, Olsen NS, Riber L, Gobbi A, Junco LMF, Dougherty PE, Westergaard JC, Christensen S, Hansen LH, Nielsen M, Nissen JN, and S Rasmussen. 2024. Binning meets taxonomy: TaxVAMB improves metagenome binning using bi-modal variational autoencoder. bioRxiv, https://doi.org/10.1101/2024.10.25.620172
-
 + Lindez PP, Danielsen LS, Kovacic I, Avelli MP, Nesme J, Jensen LJ, Nissen JN, Sorensen SJ, and S Rasmussen. 2025. Accurate plasmid reconstruction from metagenomics data using assembly-alignment graphs and contrastive learning. bioRxiv, https://doi.org/10.1101/2025.02.26.640269
 
 + Lipovac J, Šikić M, Vicedomini R, and K Križanović. 2025. MADRe: Strain-Level Metagenomic Classification Through Assembly-Driven Database Reduction. bioRxiv, https://doi.org/10.1101/2025.05.12.653324
 
-+ Liu X, Guo X, Xue L, Lu Z, Wang J, Liu L, Chen Y, Peng Y, Han Y, Wu F, Cheng R, and X Dong. 2025. A global atlas of deep-sea cold seep viruses uncovers extensive genomic novelty, pervasive viral dark matter, and biotechnological potential. bioRxiv, https://doi.org/10.64898/2025.12.10.692286
++ Liu X, Guo X, Xue L, Lu Z, Wang J, Liao J, Liu L, Chen Y, Peng Y, Han Y, Wu F, Cheng R, and X Dong. 2026. A global atlas of deep-sea cold seep viruses uncovers extensive genomic novelty and biotechnological potential. bioRxiv, https://doi.org/10.64898/2025.12.10.692286
 
 + Lui LM, and TN Nielsen. 2026. General-purpose embeddings for long-read metagenomic sequences via β-VAE on multi-scale k-mer frequencies. bioRxiv, https://doi.org/10.64898/2026.03.19.713080
 
@@ -92,9 +89,9 @@
 
 + Nguyen MH, and MC Schatz. 2026. Perseus: lineage-aware refinement of Kraken2 taxonomic classification for long read metagenomes. bioRxiv, https://doi.org/10.64898/2026.03.06.710148
 
-+ Ni M, Fan Y, Liu Y, Li Y, Qiao W, Davey LE, Zhang X-S, Ksiezarek M, Mead E, Touracheau A, Jiang W, Blaser MJ, Valdivia RH, and G Fang. 2025. Epigenetic phase variation in the gut microbiome enhances bacterial adaptation. bioRxiv, https://doi.org/10.1101/2025.01.11.632565
-
 + Oladele P, Wickware CL, Trachsel J, Looft T, and TA Johnson. 2025. In-feed bacitracin methylene disalicylate alters microbiota function and increases antibiotic resistance in a dose-dependent manner. bioRxiv, https://doi.org/10.1101/2025.02.16.638580
+
++ Pellegrinetti TA, Molligan J, Santos AA, Plante N, Jacques J, Grégoire-Taillefer A, Canale MC, Duffeck MR, Faris AM, Olmedo-Velarde A, Valmorbida I, and E Pérez-Lopez. 2026. Genome-resolved metagenomics reveals conserved, flexible and emerging symbioses across global leafhoppers. bioRxiv, https://doi.org/10.64898/2026.05.20.726650
 
 + Peng Y, Ji B, Wang Y, and H Lu. 2025. Euktect: Enhanced Eukaryotic Sequence Detection and Classification in Metagenomes via the DNA Language Model. bioRxiv, https://doi.org/10.1101/2025.06.19.660294
 
@@ -109,6 +106,8 @@
 + Shen C, Wedell E, Pop M, and T Warnow. 2025. TIPP-SD: A New Method for Species Detection in Microbiomes. bioRxiv, https://doi.org/10.1101/2025.08.27.672749
 
 + Shi L-D, Kolody BC, Wang S, Valentin-Alvarado LE, Lei S, Sachdeva R, and JF Banfield. 2026. Jumbo circular extrachromosomal elements of methane-oxidizing archaea with variably extensive metabolic and defense gene repertoires. bioRxiv, https://doi.org/10.64898/2026.01.21.700959
+
++ Shi L-D, Penev PI, Kolody BC, Miloslavich L, Lei S, Sachdeva R, Rasmussen AN, Tolar BB, Francis CA, Probst AJ, Vázquez-Campos X, Payne TE, Jiang Z, Li J, Wang C, He Z, Ni J, Hug LA, and JF Banfield. 2026. The origin and evolution of archaeal Borg extrachromosomal elements. bioRxiv, https://doi.org/10.64898/2026.05.22.727314
 
 + Sidhu C, Bartosik D, Kale V, Trautwein-Schult A, Becher D, Schweder T, Amann RI, and H Teeling. 2024. Resource partitioning in organosulfonate utilization by free-living heterotrophic bacteria during a North Sea microalgal bloom. bioRxiv, https://doi.org/10.1101/2024.12.10.627767
 
@@ -140,11 +139,19 @@
 
 + van Almsick V, Sobkowiak A, and V Schwierzeck. 2026. Long-read sequencing for bacterial plasmid analysis: a brief overview. FEMS Microbiology Letters, 373: fnag014. https://doi.org/10.1093/femsle/fnag014
 
++ Baird AH, Bridge T, Borghi S, Quigley KM, Metz S, Sweet M, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management, Samples and Laboratory team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of the coral, Cyphastrea salae Baird, Hoogenboom & Huang, 2017 (Scleractinia: Merulinidae) and its associated microbial metagenome sequences. Wellcome Open Research, 11: 230. https://doi.org/10.12688/wellcomeopenres.26365.1
+
++ Baird AH, Bridge T, Quigley KM, Borghi S, Metz S, Sweet M, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management, Samples and Laboratory team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of the starry cup coral, Micromussa lordhowensis (Veron & Pichon, 1982) (Scleractinia: Lobophylliidae) and its associated microbial metagenome sequences. Wellcome Open Research, 11: 253. https://doi.org/10.12688/wellcomeopenres.26480.1
+
 + Beinart R, Breusing C, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, Wellcome Sanger Institute Tree of Life Management: Samples and Laboratory team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership, and R O’Brien. 2026. The chromosomal genome sequence of Alviniconcha strummeri S.B.Johnson, Warén, Tunnicliffe, Van Dover, Wheat, T.F.Schultz & Vrijenhoek, 2014 (Provannidae) and its associated microbial metagenome sequences. Wellcome Open Research, 11: 101. https://doi.org/10.12688/wellcomeopenres.25894.1
 
 + Cárdenas P, Busch K, Erpenbeck D, Hentschel U, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management: Samples and Laboratory team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of the sponge, Geodia parva Hansen, 1885 (Tetractinellida: Geodiidae) and its associated microbial metagenome sequences. Wellcome Open Research, 11: 132. https://doi.org/10.12688/wellcomeopenres.25960.1
 
 + Cárdenas P, Busch K, Erpenbeck D, Hentschel U, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management: Samples and Laboratory team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of the demosponge, Geodia phlegraei (Sollas, 1880) (Tetractinellida: Geodiidae) and its associated microbial metagenome sequences. Wellcome Open Research, 11: 142. https://doi.org/10.12688/wellcomeopenres.25984.1
+
++ Chaudhary A, Lin X, Vitaterna MH, Auch B, Liachko I, and SJ Green. 2026. Metagenome-assembled genome sequence of an uncultured Roseburia sp. generated from mouse fecal DNA from the International Space Station. Environmental Microbiology, 15: e01047-25. https://doi.org/10.1128/mra.01047-25
+
++ Chaves-Fonnegra A, Lopez JV, Erpenbeck D, Hentschel U, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management, Samples and Laboratory team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of the blue bleeder, Aiolochroia crassa (Hyatt, 1875) (Verongiida: Aplysinidae) and its associated microbial metagenome sequences. Wellcome Open Research, 11: 140. https://doi.org/10.12688/wellcomeopenres.25903.1
 
 + Chen K, Luo S, Jiang C, Gu S, Yang F, Liu X, Wang S, Qu X, Zhang Q, Zhang P, Gong Y, Zeng H, Qiu D, Miao W, and J Xiong. 2026. HiMBar: A high-fidelity metagenomic barcoding approach for transkingdom species detection and interaction analysis in aquatic ecosystems. Molecular Ecology Resources, 26: e70092. https://doi.org/10.1111/1755-0998.70092
 
@@ -154,7 +161,13 @@
 
 + Dawson MN, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of a scyphozoan jellyfish, Aurelia sp. 3 (Semaeostomeae: Ulmaridae) and its associated microbial metagenome sequences. Wellcome Open Research, 11: 143. https://doi.org/10.12688/wellcomeopenres.25906.1
 
++ Degnan SM, Webster NS, Larroux C, Shao H, Degnan BM, Erpenbeck D, Hentschel U, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management, Samples and Laboratory Team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics Team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of the Indo-Pacific barrel sponge, Xestospongia bergquistia Fromont, 1991, and its associated microbial metagenome sequences. Wellcome Open Research, 11: 186. https://doi.org/10.12688/wellcomeopenres.25872.1
+
 + Della-Negra O, Servien R, Milferstedt K, Hamelin J, Klopp C, and C Hoede. 2026. Metagenome-assembled genomes from oxygenic photogranules obtained from photobioreactors treating synthetic wastewater. Microbiology Resource Announcements, e01310-25. https://doi.org/10.1128/mra.01310-25
+
++ Deng F, Han Y, Peng Y, Xu Z, Yang J, He J, Li D, Dong G, Zhang P, Jiang H, Chai J, Wang C, Zhao J, and Y Li. 2026. Microoxic conditions promote Escherichia-associated cellulase expression in the giant panda gut. The ISME Journal, 20: wrag068. https://doi.org/10.1093/ismejo/wrag068
+
++ Diaz-Rua R, Drautz-Moses DI, Zhao X, Perumal S, Esau L, Angelov A, Putra A, Driguez P, Cheung MS, and E Palescandolo. 2026. Comparative metagenomic assessment of Illumina-compatible library preparation methods, short-read lengths, and PacBio HiFi sequencing reveals differences in microbial and functional diversity recovery from a complex environmental sample. Environmental Microbiology, e00013-26. https://doi.org/10.1128/spectrum.00013-26
 
 + Dong Z, Sun MS, He YD, Zhou L, Xiang W, Li XY, Huang P, and JG Zeng. 2026. Fungal photobiont and microbiome genome composition in the Cladonia uncialis tripartite symbiosis. Scientific Data, https://doi.org/10.1038/s41597-026-06624-6.
 
@@ -162,17 +175,31 @@
 
 + Enuh BM, Myers KS, Ackman P, Weiland T, Beach N, Young M, Donohue TJ, and DR Noguera. 2026. Metagenomes and metagenome-assembled genomes from a nutrient removal plant at Los Angeles County Sanitation Districts (LACSD) that transitioned from high to low dissolved oxygen. MIcrobiology Resource Announcements, e01494-25. https://doi.org/10.1128/mra.01494-25
 
++ Enuh BM, Myers KS, Bott C, Klaus S, McCullough, McIntosh L, Beach N, Young M, Donohue TJ, and DR Noguera. 2026. Metagenomes and metagenome-assembled genomes from microbial communities in a biological nutrient removal plant operated at Hamptons Road Sanitation District (HRSD) with high and low dissolved oxygen conditions. Microbiology Resource Announcements, 15: e01492-25. https://doi.org/10.1128/mra.01492-25
+
 + Guo Z, Xiao Y, Zhao J, Tang Z, Lin Y, and K Yang. 2026. MetaRanker: precise profiling of antibiotic resistome risk in metagenomes by integrating abundance and genetic co-occurrence. Environmental Microbiology, e02422-25. https://doi.org/10.1128/aem.02422-25
 
++ Hentschel U, Steiner L, Marulanda A, Schmittmann L, Bayer K, Carrier T, Pita L, Erpenbeck D, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management, Samples and Laboratory team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of the bread-crumb sponge, Halichondria panicea (Pallas, 1766) (Suberitida: Halichondriidae) and its associated microbial metagenome sequences. Wellcome Open Research, 11: 146. https://doi.org/10.12688/wellcomeopenres.25908.1
+
 + Hirose E, Lopez JV, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management: Samples and Laboratory team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The genome sequence of the photosymbiotic ascidian, Trididemnum nubilum Kott, 1980 and its cyanobacterial symbionts. Wellcome Open Research, 11: 138. https://doi.org/10.12688/wellcomeopenres.25911.1
+
++ Ilan M, Steindler L, Cárdenas P, Piel J, Erpenbeck D, Hentschel U, Bar-Shalom R, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management, Samples and Laboratory team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics team EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of the demosponge, Theonella swinhoei Gray, 1868 (Tetractinellida: Theonellidae) and its associated microbial metagenome sequences. Wellcome Open Research, 11: 259. https://doi.org/10.12688/wellcomeopenres.26482.1
+
++ Kutuzova S, Lindez PP, Danielsen LS, Nielsen KN, Olsen NS, Riber L, Gobbi A, Forero-Junco LM, Dougherty PE, Westergaard JC, Browne PD, Christensen S, Hansen LH, Nielsen M, Andersen JN, and S Rasmussen. 2026. Improving metagenome binning by integrating intrinsic features and taxonomy. Nature Biotechnology, https://doi.org/10.1038/s41587-026-03098-0
 
 + Le B, Jia L, Pang T, Han S, Duan Y, and X-M Zhao. 2026. A review of computational approaches for metagenomics by long-read sequencing. Science China Life Sciences, https://doi.org/10.1007/s11427-025-3133-3
 
 + Lindez PP, Danielsen LS, Kovacic I, Avelli MP, Nesme J, Jensen LJ, Andersen JN, Sorensen SJ, and S Rasmussen. 2026. Accurate plasmid reconstruction from metagenomics data using assembly–alignment graphs and contrastive learning. Nature Biotechnology, https://doi.org/10.1038/s41587-026-03005-7
 
++ Markkanen M, Putkuri H, Kiciatovas D, Mustonen V, Virta M, and A Karkman. 2026. Long-read metagenomics and methylation-based binning support the discovery of antibiotic resistance gene–host associations in complex communities. Genome Biology, https://doi.org/10.1186/s13059-026-04200-0
+
 + McCormack GP, Sandoval K, Erpenbeck D, Hentschel U, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management: Samples and Laboratory team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of Haliclona indistincta (Bowerbank, 1866) (Haplosclerida: Chalinidae) and its associated microbial metagenome sequences. Wellcome Open Research, 11: 139. https://doi.org/10.12688/wellcomeopenres.25928.1
 
 + Middlebrooks M, Lopez JV, Curtis N, Krug PJ, Pettingill J, Pruzinsky N, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management: Samples and Laboratory team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of the lettuce sea slug, Elysia crispata (Mörch, 1863) (Plakobranchidae) and its associated microbial metagenome sequences. Wellcome Open Research, 11: 146. https://doi.org/10.12688/wellcomeopenres.25908.1
+
++ Ni M, Junker K, Liu Y, Fan Y, Li Y, Qiao W, Zhang X-S, Ksiezarek M, Mead E, Tourancheau A, Jiang W, Blaser MJ, Valdivia RH, Davey LE, and G Fang. 2026. Epigenetic phase variation in the gut microbiome enhances bacterial adaptation. Cell Host & Microbe, 34: p1033-1049.e8. https://doi.org/10.1016/j.chom.2026.04.019
+
++ Onumanyi V, Ogola HJO, Ijoma GN, and K Semenya. 2026. PacBio HiFi sequencing datasets of culture-enriched airborne microbial cave communities from dolomitic Sudwala Caves, South Africa. Data in Brief, 67: 112970. https://doi.org/10.1016/j.dib.2026.112970
 
 + Pérez T, Vacelet J, Erpenbeck D, Hentschel U, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management: Samples and Laboratory team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of the carnivorous sponge, Lycopodina hypogea (Vacelet & Boury-Esnault, 1996) (Poecilosclerida: Cladorhizidae) and its associated microbial metagenome sequences. Wellcome Open Research, 11: 130. https://doi.org/10.12688/wellcomeopenres.25959.1
 
@@ -184,11 +211,25 @@
 
 + a Silva AK, de Paula CH, de Matos JP, Ribeiro DF, Cordeiro IF, de Carvalho Lemes CG, Sanchez AB, Garcia CCM, de Abreu VAC, Alves RM, de Medeiros Oliveira M, dos Anjos Almeida JV, Almeida NF, Varani AM, and LM Moreira. 2026. Comparative genomics of Sphingomonas from the cupuassu (Theobroma grandiflorum) phyllosphere reveals signatures of host adaptation and beneficial interactions. Symbiosis, https://doi.org/10.1007/s13199-026-01124-y
 
++ Steindler L, Durán Canché MA, Ilan M, Bar-Shalom R, Lopez JV, Hentschel U, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management, Samples and Laboratory Team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics Team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of the marine sponge Diacarnus erythraeanus Kelly-Borges & Vacelet, 1995, and its associated microbial metagenome sequences. Wellcome Open Research, 10: 466. https://doi.org/10.12688/wellcomeopenres.24763.2
+
++ Sun Y, Kei K, Qiu J-W, Martín-Durán JM, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management, Samples and Laboratory team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of the feather duster worm, Sabellastarte sp. h YS-2021 (Sabellida: Sabellidae) and its associated microbial metagenome sequences. Wellcome Open Research, 11: 274. https://doi.org/10.12688/wellcomeopenres.26503.1
+
 + Taboada S, Riesgo A, Busch K, Erpenbeck D, Hentschel U, Galià C, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management: Samples and Laboratory team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics Team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of the sponge Phakellia ventilabrum (Linnaeus, 1767) and its associated microbial metagenome sequences. Wellcome Open Research, 11: 15. https://doi.org/10.12688/wellcomeopenres.25431.1
+
++ Tashyreva D, Faktorová D, Stříbrná E, Horák E, Lukeš J, Archibald JM, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management, Samples and Laboratory Team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics Team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The genome sequences of the diplonemid protist Diplonema japonicum YPF1604 and its bacterial endosymbionts Ca. Cytomitobacter primus and Ca. Nesciobacter abundans. Wellcome Open Research, 10: 193. https://doi.org/10.12688/wellcomeopenres.23917.2
 
 + Tian W, Petrova E, Sakai S, Nweze JE, Daebeler A, and R Angel. 2026. Cultivation and genomic characterization of novel methanogens from arid desert biocrust. ISME Communications 6: ycag013. https://doi.org/10.1093/ismeco/ycag013
 
 + Trigodet F, Sachdeva R, Banfield JF, and AM Eren. 2026. Troubleshooting common errors in assemblies of long-read metagenomes. Nature Biotechnology, https://doi.org/10.1038/s41587-025-02971-8
+
++ Ubani O, and V M Ngole-Jeme. 2026. Long-read whole-genome sequencing dataset of microbial communities from industrially and municipally impacted freshwater wetlands in South Africa. Data in Brief, 67: 112987. https://doi.org/10.1016/j.dib.2026.112987
+
++ Visci G, Notario E, Defazio G, Caratozzolo MF, Cox SN, Fosso B, Marzano M, and G Pesole. 2026. Benchmarking short- and long-read sequencing technologies for metagenomic profiling of microbiomes. Scientific Reports, 16: 22610. https://doi.org/10.1038/s41598-026-49725-3
+
++ Webster NS, Bell SC, Luter HM, Erpenbeck D, Hentschel U, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management, Samples and Laboratory team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of the sponge, Rhopaloeides odorabile Thompson, Murphy, Bergquist & Evans, 1987 (Dictyoceratida: Spongiidae) and its associated microbial metagenome sequences. Wellcome Open Research, 11: 211. https://doi.org/10.12688/wellcomeopenres.26110.1
+
++ Wong ELY, Otte J, and I Shmitt. 2026. Chloroplast and mitochondrial genomes of the lichen-symbiotic green alga Trebouxia illuminate evolutionary relationships and climate associations and yield new phylogenetic markers. Genome Biology and Evolution, 18: evag129. https://doi.org/10.1093/gbe/evag129
 
 + Wörheide G, Busch K, Schupp P, Erpenbeck D, Hentschel U, Oatley G, Sinclair E, Aunin E, Gettle N, Santos C, Paulini M, Niu H, McKenna V, O’Brien R, Wellcome Sanger Institute Tree of Life Management: Samples and Laboratory team, Wellcome Sanger Institute Scientific Operations: Sequencing Operations, Wellcome Sanger Institute Tree of Life Core Informatics team, EBI Aquatic Symbiosis Genomics Data Portal Team, Aquatic Symbiosis Genomics Project Leadership. 2026. The chromosomal genome sequence of the deep-sea glass sponge sponge, Bolosoma cyanae Tabachnick & Lévi, 2004 (Lyssacinosida: Euplectellidae) and its associated microbial metagenome sequences. Wellcome Open Research, 11: 24. https://doi.org/10.12688/wellcomeopenres.25437.1
 
