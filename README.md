@@ -4,13 +4,15 @@
 
 <h3 align="center">Tools for performing metagenomic analyses using HiFi sequencing data.</h3>
 
-Welcome! Here you can find a variety of tools and pipelines for HiFi metagenomics. In addition to the resources currently available, we will continue to add new tools as they are developed.
+Welcome! Here you can find a variety of tools and pipelines for HiFi metagenomics.
 
 The current version is v3.3.2. Please see the [**release notes**](https://github.com/PacificBiosciences/pb-metagenomics-tools/releases) for changes.
 
+Please note that `pb-metagenomics-tools` is no longer in active development and v3.3.2 is the final version available. 
+
 ## HiFi Metagenomic Datasets & Publications
 
-Several publicly available HiFi shotgun metagenomics datasets are listed on the   [**PacBio Datasets**](https://www.pacb.com/connect/datasets/#metagenomics-datasets) page. Please also browse the publications below, which contain a variety of other datasets.
+Several publicly available HiFi shotgun metagenomics datasets are listed on the [**PacBio Datasets**](https://www.pacb.com/connect/datasets/#metagenomics-datasets) page. Please also browse the publications below, which contain a variety of other datasets.
 
 A running list of publications using HiFi sequencing for metagenomics can be found on the [**HiFi Metagenomics Publications**](https://github.com/PacificBiosciences/pb-metagenomics-tools/blob/master/docs/HiFi-Metagenomics-Publications.md) page. 
 
