@@ -1,6 +1,6 @@
 name: pb-metagenomic-tools
 channels:
-  - conda-forge
+  - conda-gorge
   - bioconda
   - defaults
 dependencies:
